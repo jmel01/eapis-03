@@ -24,7 +24,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle cover" alt="User profile picture" src="/storage/avatar">
+                            <img class="profile-user-img img-fluid img-circle cover" alt="User profile picture" src="/storage/users-avatar">
                         </div>
 
                         <h3 class="profile-username text-center">{{ $userProfile->firstName ?? '' }} {{ $userProfile->middleName ?? '' }} {{ $userProfile->lastName ?? '' }}</h3>
@@ -174,32 +174,34 @@
                                         <th>Average Grade</th>
                                         <th>Rank</th>
                                     </tr>
-                                    @foreach($userProfile->user->educations as $education)
-                                        <tr>
-                                            <td><input name="schName[]" type="text" class="form-control" value="{{$education->school_name}}"></td>
-                                            <td><input name="schAddress[]" type="text" class="form-control" value="{{$education->address}}"></td>
-                                            <td>
-                                                <select name="schLevel[]" class="form-control">
-                                                    <option {{$education->level == 'Elementary' ? 'selected' : ''}} value="Elementary">Elementary</option>
-                                                    <option  {{$education->level == 'High School' ? 'selected' : ''}} value="High School">High School</option>
-                                                    <option {{$education->level == 'Vocational' ? 'selected' : ''}} value="Vocational">Vocational</option>
-                                                    <option  {{$education->level == 'College/Undergraduate' ? 'selected' : ''}} value="College/Undergraduate">College/Undergraduate</option>
-                                                    <option  {{$education->level == 'Post Graduate' ? 'selected' : ''}} value="Post Graduate">Post Graduate</option>
-                                                    <option  {{$education->level == 'Masteral' ? 'selected' : ''}} value="Masteral">Masteral</option>
-                                                    <option  {{$education->level == 'Doctorate' ? 'selected' : ''}} value="Doctorate">Doctorate</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <select name="schType[]" class="form-control">
-                                                    <option {{$education->school_type == 'Private' ? 'selected' : ''}} value="Private">Private</option>
-                                                    <option {{$education->school_type == 'Public' ? 'selected' : ''}} value="Public">Public</option>
-                                                </select>
-                                            </td>
-                                            <td><input name="schYear[]" type="number" step="1" min="1980" max="2030" class="form-control" value="{{$education->year_graduated}}"></td>
-                                            <td><input name="schAve[]" step=".01" min=".01" max="100" type="number" class="form-control" value="{{$education->average_grade}}"></td>
-                                            <td> <input name="schRank[]" type="text" class="form-control" value="{{$education->rank}}"></td>
-                                        </tr>
-                                    @endforeach
+                                    @if (isset($userProfile->user->educations))
+                                        @foreach($userProfile->user->educations as $education)
+                                            <tr>
+                                                <td><input name="schName[]" type="text" class="form-control" value="{{$education->school_name}}"></td>
+                                                <td><input name="schAddress[]" type="text" class="form-control" value="{{$education->address}}"></td>
+                                                <td>
+                                                    <select name="schLevel[]" class="form-control">
+                                                        <option {{$education->level == 'Elementary' ? 'selected' : ''}} value="Elementary">Elementary</option>
+                                                        <option  {{$education->level == 'High School' ? 'selected' : ''}} value="High School">High School</option>
+                                                        <option {{$education->level == 'Vocational' ? 'selected' : ''}} value="Vocational">Vocational</option>
+                                                        <option  {{$education->level == 'College/Undergraduate' ? 'selected' : ''}} value="College/Undergraduate">College/Undergraduate</option>
+                                                        <option  {{$education->level == 'Post Graduate' ? 'selected' : ''}} value="Post Graduate">Post Graduate</option>
+                                                        <option  {{$education->level == 'Masteral' ? 'selected' : ''}} value="Masteral">Masteral</option>
+                                                        <option  {{$education->level == 'Doctorate' ? 'selected' : ''}} value="Doctorate">Doctorate</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select name="schType[]" class="form-control">
+                                                        <option {{$education->school_type == 'Private' ? 'selected' : ''}} value="Private">Private</option>
+                                                        <option {{$education->school_type == 'Public' ? 'selected' : ''}} value="Public">Public</option>
+                                                    </select>
+                                                </td>
+                                                <td><input name="schYear[]" type="number" step="1" min="1980" max="2030" class="form-control" value="{{$education->year_graduated}}"></td>
+                                                <td><input name="schAve[]" step=".01" min=".01" max="100" type="number" class="form-control" value="{{$education->average_grade}}"></td>
+                                                <td> <input name="schRank[]" type="text" class="form-control" value="{{$education->rank}}"></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </table>
 
                             </div>
@@ -294,24 +296,25 @@
                                         <th>Scholarship (if any)</th>
                                         <th>Course and/or Year Level</th>
                                         <th>Present Status</th>
-                                        <th></th>
                                     </tr>
-                                    <tr>
-                                        <td><input type="text" name="siblingName[0]" class="form-control" /></td>
-                                        <td><input type="date" name="siblingBirthdate[0]" class="form-control" /></td>
-                                        <td><input type="text" name="siblingScholarship[0]" class="form-control" /></td>
-                                        <td><input type="text" name="siblingCourse[0]" class="form-control" /></td>
-                                        <td>
-                                            <select name="siblingStatus[0]" class="form-control">
-                                                <option disabled selected>Select Status</option>
-                                                <option value="Stopped/undergraduate">Stopped/undergraduate</option>
-                                                <option value="Undergraduate/married">Undergraduate/married</option>
-                                                <option value="Graduated/married">Graduated/married</option>
-                                                <option value="Graduated/working(Single)">Graduated/working(Single)</option>
-                                            </select>
-                                        </td>
-                                        <td></td>
-                                    </tr>
+                                    @if (isset($userProfile->user->siblings))
+                                        @foreach($userProfile->user->siblings as $siblings)
+                                            <tr>
+                                                <td><input type="text" name="siblingName[]" class="form-control" value="{{$siblings->name}}"/></td>
+                                                <td><input type="date" name="siblingBirthdate[]" class="form-control"  value="{{$siblings->birthdate}}"/></td>
+                                                <td><input type="text" name="siblingScholarship[]" class="form-control" value="{{$siblings->scholarship}}"/></td>
+                                                <td><input type="text" name="siblingCourse[]" class="form-control" value="{{$siblings->course_year_level}}"/></td>
+                                                <td>
+                                                    <select name="siblingStatus[]" class="form-control">
+                                                        <option {{$siblings->present_status == 'Stopped/undergraduate' ? 'selected' : ''}} value="Stopped/undergraduate">Stopped/undergraduate</option>
+                                                        <option {{$siblings->present_status == 'Undergraduate/married' ? 'selected' : ''}} value="Undergraduate/married">Undergraduate/married</option>
+                                                        <option {{$siblings->present_status == 'Graduated/married' ? 'selected' : ''}} value="Graduated/married">Graduated/married</option>
+                                                        <option {{$siblings->present_status == 'Graduated/working(Single)' ? 'selected' : ''}} value="Graduated/working(Single)">Graduated/working(Single)</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                 </table>
                             </div>
                         </div>

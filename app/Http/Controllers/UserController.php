@@ -19,7 +19,7 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response    
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -33,7 +33,7 @@ class UserController extends Controller
                 ->get();
 
             $roles = Role::pluck('name', 'name')->all();
-            
+
         } else {
             $data = User::with('profile')->where('region', Auth::user()->region)->orderBy('id', 'DESC')->get();
             $regions = Psgc::where('code', Auth::user()->region)->get();

@@ -29,7 +29,7 @@
                     </a>
                 </li>
 
-                
+
 
                 @unlessrole('Applicant')
 
@@ -132,6 +132,12 @@
                             </a>
                         </li>
                         @can('role-browse')
+                        <li class="nav-item">
+                            <a href="{{ route('ethnogroups.index') }}" class="nav-link">
+                                {{-- <i class="fas fa-user-lock nav-icon"></i> --}}
+                                <p>Ethnogroups</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
                                 <i class="fas fa-user-lock nav-icon"></i>

@@ -33,8 +33,7 @@
                 <tr>
                     <td>
                         <div class="user-block">
-                            <img src="@if(isset($user->avatar)) {{ asset('/storage/users-avatar/'. $user->avatar) }}
-                             @else {{ asset('/storage/users-avatar/avatar.png') }} @endif" class="img-circle img-bordered-sm cover" alt="User Image">
+                            <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
                         </div>
                     </td>
                     <td> {{ $user->name }}</td>

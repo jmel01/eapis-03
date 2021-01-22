@@ -29,7 +29,7 @@ class HomeController extends Controller
         } elseif (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             return redirect()->route('admin');
         } else {
-            return view('home');
+            return redirect('/dashboard/applicant');
         }
     }
 }

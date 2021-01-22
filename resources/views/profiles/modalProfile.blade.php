@@ -236,7 +236,7 @@
                                                         <label class="form-check-label mr-1">Living</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased" == ($userProfile->motherLiving ?? '')) checked @endif> 
+                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased" == ($userProfile->motherLiving ?? '')) checked @endif>
                                                         <label class="form-check-label mr-1">Deceased</label>
                                                     </div>
                                                     {!! $errors->profile->first('motherLiving', '<label class="mr-1 text-danger">Required</label>') !!}
@@ -296,22 +296,27 @@
                                             <th>Present Status</th>
                                             <th></th>
                                         </tr>
-                                        <tr>
-                                            <td><input type="text" name="siblingName[0]" class="form-control" /></td>
-                                            <td><input type="date" name="siblingBirthdate[0]" class="form-control" /></td>
-                                            <td><input type="text" name="siblingScholarship[0]" class="form-control" /></td>
-                                            <td><input type="text" name="siblingCourse[0]" class="form-control" /></td>
-                                            <td>
-                                                <select name="siblingStatus[0]" class="form-control">
-                                                    <option disabled selected>Select Status</option>
-                                                    <option value="Stopped/undergraduate">Stopped/undergraduate</option>
-                                                    <option value="Undergraduate/married">Undergraduate/married</option>
-                                                    <option value="Graduated/married">Graduated/married</option>
-                                                    <option value="Graduated/working(Single)">Graduated/working(Single)</option>
-                                                </select>
-                                            </td>
-                                            <td></td>
-                                        </tr>
+                                        @if (isset($userProfile->user->siblings))
+                                        @foreach($userProfile->user->siblings as $siblings)
+                                            <tr>
+                                                <td><input type="text" name="siblingName[]" class="form-control" value="{{$siblings->name}}"/></td>
+                                                <td><input type="date" name="siblingBirthdate[]" class="form-control"  value="{{$siblings->birthdate}}"/></td>
+                                                <td><input type="text" name="siblingScholarship[]" class="form-control" value="{{$siblings->scholarship}}"/></td>
+                                                <td><input type="text" name="siblingCourse[]" class="form-control" value="{{$siblings->course_year_level}}"/></td>
+                                                <td>
+                                                    <select name="siblingStatus[]" class="form-control">
+                                                        <option {{$siblings->present_status == 'Stopped/undergraduate' ? 'selected' : ''}} value="Stopped/undergraduate">Stopped/undergraduate</option>
+                                                        <option {{$siblings->present_status == 'Undergraduate/married' ? 'selected' : ''}} value="Undergraduate/married">Undergraduate/married</option>
+                                                        <option {{$siblings->present_status == 'Graduated/married' ? 'selected' : ''}} value="Graduated/married">Graduated/married</option>
+                                                        <option {{$siblings->present_status == 'Graduated/working(Single)' ? 'selected' : ''}} value="Graduated/working(Single)">Graduated/working(Single)</option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm remove-tr">Remove</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
                                     </table>
                                 </div>
                                 <button type="button" name="add" id="addSibling" class="btn btn-success btn-sm float-right">Add More</button>

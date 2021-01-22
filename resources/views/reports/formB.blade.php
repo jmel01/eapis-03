@@ -45,7 +45,7 @@
                     <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='Elementary') &#10003; @endif</td>
                     <td></td>
-                    <td>{{ $application->applicant->psgCode }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
                 </tr>
                 @endforeach
             </tbody>

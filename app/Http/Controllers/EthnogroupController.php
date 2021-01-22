@@ -45,7 +45,7 @@ class EthnogroupController extends Controller
         ]);
 
         $input = $request->all();
-       
+
         Ethnogroup::updateOrCreate(["id" => $request->id], $input);
 
         $notification = array(
@@ -97,6 +97,11 @@ class EthnogroupController extends Controller
      */
     public function destroy(Ethnogroup $ethnogroup)
     {
-        //
+        $notification = array(
+            'message' => 'Ethnolinguistic Group removed successfully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
 }

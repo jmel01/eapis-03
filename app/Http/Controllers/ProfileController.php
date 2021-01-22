@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Education;
 use App\Models\Profile;
 use App\Models\Psgc;
+use App\Models\Siblings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -79,8 +80,9 @@ class ProfileController extends Controller
         $input['psgCode'] = $request->barangay;
 
         Profile::updateOrCreate(["user_id" => $request->id], $input);
-       
+
         Education::insert($request);
+        Siblings::insert($request);
 
         $notification = array(
             'message' => 'Profile updated successfully',

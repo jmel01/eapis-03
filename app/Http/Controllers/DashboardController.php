@@ -56,7 +56,7 @@ class DashboardController extends Controller
         $province = Psgc::where('code', Str::substr($psgCode, 0, 4) . "00000")->first();
         $city = Psgc::where('code', Str::substr($psgCode, 0, 6) . "000")->first();
         $barangay = Psgc::where('code', $psgCode)->first();
-        
+
 
         $applications = Application::with('grant.psgCode')->where('user_id', Auth::id())->get();
 
@@ -139,7 +139,9 @@ class DashboardController extends Controller
     }
 
     public function getImage(Request $request){
-        $path = storage_path('app/public/users-avatar/' . Auth::user()->avatar ?? 'avatar.png');
+        $userAvatar = $request->userAvatar ?? (Auth::user()->avatar ?? 'avatar.png');
+
+        $path = storage_path('app/public/users-avatar/' . $userAvatar);
 
         if (!File::exists($path)) {
             return $path;

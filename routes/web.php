@@ -16,6 +16,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,9 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', function () {
+    if(Auth::check()){
+        return redirect('/dashboard/applicant');
+    }
     return view('welcome');
 });
 
@@ -68,6 +72,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
-});
 
-Route::get('storage/avatar', [DashboardController::class, 'getImage']);
+    Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
+});
