@@ -16,16 +16,9 @@
                with font-awesome or any other icon font library -->
 
                 <li class="nav-item">
-                    <a href="{{ route('applicant') }}" class="nav-link">
+                    <a href="{{ route('home') }}" class="nav-link">
                         <i class="fas fa-user-graduate nav-icon"></i>
                         <p>Dashboard</p>
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a href="/community" class="nav-link" target="_blank">
-                        <i class="nav-icon far fa-comments"></i>
-                        <p>Scholars Community</p>
                     </a>
                 </li>
 
@@ -33,12 +26,6 @@
 
                 @unlessrole('Applicant')
 
-                <li class="nav-item">
-                    <a href="{{ route('applicant') }}" class="nav-link">
-                        <i class="far fa-chart-bar nav-icon"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
 
                 @can('grant-browse')
                 <li class="nav-item">
