@@ -22,19 +22,19 @@ class Siblings extends Model
     ];
 
     static function insert($request){
-        // Siblings::where('user_id', Auth::id())->delete();
+        Siblings::where('user_id', Auth::id())->delete();
 
-        // if(isset($request->siblingName) &&  $request->siblingName[0] != null){
-        //     foreach($request->siblingName as $key => $value){
-        //         Siblings::create([
-        //             'user_id' => Auth::id(),
-        //             'name' => $request->siblingName[$key] ?? '',
-        //             'birthdate' => $request->siblingBirthdate[$key] ?? '',
-        //             'scholarship' => $request->siblingScholarship[$key] ?? '',
-        //             'course_year_level' => $request->siblingCourse[$key] ?? '',
-        //             'present_status' => $request->siblingStatus[$key] ?? '',
-        //         ]);
-        //     }
-        // }
+        if(isset($request->siblingName) &&  $request->siblingName[0] != null){
+            foreach($request->siblingName as $key => $value){
+                Siblings::create([
+                    'user_id' => Auth::id(),
+                    'name' => $request->siblingName[$key] ?? '',
+                    'birthdate' => $request->siblingBirthdate[$key] ?? '',
+                    'scholarship' => $request->siblingScholarship[$key] ?? '',
+                    'course_year_level' => $request->siblingCourse[$key] ?? '',
+                    'present_status' => $request->siblingStatus[$key] ?? '',
+                ]);
+            }
+        }
     }
 }
