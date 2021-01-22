@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'Admin Dashboard')
+@section('title', 'Community Service Officer Dashboard')
 
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">

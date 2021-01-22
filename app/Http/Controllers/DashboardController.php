@@ -24,6 +24,30 @@ class DashboardController extends Controller
         return view('dashboards.admin',compact('data'));
     }
 
+    public function executiveOfficer()
+    {
+        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        return view('dashboards.executive',compact('data'));
+    }
+
+    public function regionalOfficer()
+    {
+        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        return view('dashboards.regional',compact('data'));
+    }
+
+    public function provincialOfficer()
+    {
+        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        return view('dashboards.provincial',compact('data'));
+    }
+
+    public function communityOfficer()
+    {
+        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        return view('dashboards.community',compact('data'));
+    }
+
     public function applicant()
     {
         $userProfile = Profile::where('user_id', Auth::id())->first();
