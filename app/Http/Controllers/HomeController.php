@@ -41,10 +41,6 @@ class HomeController extends Controller
         }
         if (Auth::user()->hasAnyRole(["Applicant"])) {
             return redirect()->route('applicant');
-        } elseif (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            return redirect()->route('admin');
-        } else {
-            return redirect('/dashboard/applicant');
         }
     }
 }
