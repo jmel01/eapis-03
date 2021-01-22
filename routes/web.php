@@ -48,10 +48,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('applications', ApplicationController::class);
     Route::resource('costs', AdminCostController::class);
     Route::resource('calendars', CalendarController::class);
+
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('admin');
+    Route::get('/dashboard/executiveOfficer', [DashboardController::class, 'executiveOfficer'])->name('executiveOfficer');
+    Route::get('/dashboard/regionalOfficer', [DashboardController::class, 'regionalOfficer'])->name('regionalOfficer');
+    Route::get('/dashboard/provincialOfficer', [DashboardController::class, 'provincialOfficer'])->name('provincialOfficer');
+    Route::get('/dashboard/communityOfficer', [DashboardController::class, 'communityOfficer'])->name('communityOfficer');
     Route::get('/dashboard/applicant', [DashboardController::class, 'applicant'])->name('applicant');
-    Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('admin');
     Route::resource('dashboard', DashboardController::class);
+
     Route::resource('documents', DocumentController::class);
     Route::resource('ethnogroups', EthnogroupController::class);
     Route::resource('grants', GrantController::class);
