@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Profile extends Model
 {
@@ -52,6 +53,22 @@ class Profile extends Model
 
     public function psgcCities(){
         return $this->hasOne(Psgc::class, 'code' ,'psgCode')->where([[\DB::raw('substr(code, 1, 4)'), '=' , ],['level', 'City']]);
+    }
+
+    static function updatePicture($request){
+        if($request->hasFile('profilePicture')){
+            $ext = $request->profilePicture->getClientOriginalExtension();
+
+            $path = $request->profilePicture->storeAs(
+                'users-avatar', Auth::id().'.'.$ext, 'public'
+            );
+
+            $user = User::find(Auth::id());
+            $user->avatar = Auth::id().'.'.$ext;
+            $user->save();
+
+            return back();
+        }
     }
 
 }

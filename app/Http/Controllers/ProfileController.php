@@ -40,6 +40,14 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
+        if($request->hasFile('profilePicture')){
+            return Profile::updatePicture($request);
+        }
+
+        if(isset($request->forProfilePicture) && $request->forProfilePicture == 'picture'){
+            return back();
+        }
+
         $request->validateWithBag('profile', [
             'user_id',
             'lastName' => 'required',

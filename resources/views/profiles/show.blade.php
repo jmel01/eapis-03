@@ -33,6 +33,11 @@
                             username: {{ Auth::user()->name ?? '' }}<br>
                             email: {{ Auth::user()->email ?? '' }}
                         </p>
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <button class="btn btn-success rounded-0 py-1 px-2 btn-change-profile">change profile picture</button>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -329,6 +334,7 @@
     </div>
 </div>
 @include('profiles.modalProfile')
+@include('profiles.modalProfilePicture')
 @endsection
 
 @push('scripts')
@@ -372,6 +378,11 @@
                 $('#modalProfile').modal('show')
                 $('#region').trigger("change")
             })
+        })
+
+        $('.btn-change-profile').click(function(){
+            $('#modalProfilePicture').modal('show');
+            return false
         })
     });
 </script>
