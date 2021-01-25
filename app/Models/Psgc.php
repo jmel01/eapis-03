@@ -29,4 +29,9 @@ class Psgc extends Model
             return $province->name;
         }
     }
+
+    public function profile(){
+        return $this->hasMany(Profile::class, 'psgCode' , 'code');
+    }
+    
 }

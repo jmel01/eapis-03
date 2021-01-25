@@ -54,4 +54,8 @@ class Profile extends Model
         return $this->hasOne(Psgc::class, 'code' ,'psgCode')->where([[\DB::raw('substr(code, 1, 4)'), '=' , ],['level', 'City']]);
     }
 
+    public function application(){
+        return $this->hasOne(Profile::class, 'user_id' , 'user_id');
+    }
+    
 }
