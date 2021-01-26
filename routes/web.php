@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    if(Auth::check()){
+    if (Auth::check()) {
         return redirect('/dashboard/applicant');
     }
     return view('welcome');
@@ -49,7 +49,12 @@ Route::get('psgc/getCities', [PsgcController::class, 'getCities'])->name('getCit
 Route::get('psgc/getBrgy', [PsgcController::class, 'getBrgy'])->name('getBrgy');
 
 Route::group(['middleware' => ['auth']], function () {
+
+    Route::get('/applications/showApproved/{id}', [ApplicationController::class, 'showApproved'])->name('showApproved');
+    Route::get('/applications/showTerminated/{id}', [ApplicationController::class, 'showTerminated'])->name('showTerminated');
+    Route::get('/applications/showOnProcess/{id}', [ApplicationController::class, 'showOnProcess'])->name('showOnProcess');
     Route::resource('applications', ApplicationController::class);
+
     Route::resource('costs', AdminCostController::class);
     Route::resource('calendars', CalendarController::class);
 

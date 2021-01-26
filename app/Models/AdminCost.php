@@ -21,4 +21,9 @@ class AdminCost extends Model
         'checkNo',
         'province',
     ];
+
+    public function provname()
+    {
+        return $this->hasOne('App\Models\Psgc','code','province');
+    }
 }

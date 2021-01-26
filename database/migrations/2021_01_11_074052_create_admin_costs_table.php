@@ -22,7 +22,7 @@ class CreateAdminCostsTable extends Migration
             $table->string('particulars')->nullable();
             $table->float('amount', 10, 2);
             $table->string('checkNo')->nullable();
-            $table->string('province')->nullable();
+            $table->string('province');
             $table->timestamps();
         });
     }

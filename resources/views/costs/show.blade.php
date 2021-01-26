@@ -36,7 +36,7 @@
                     <td>{{ $cost->particulars }}</td>
                     <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
                     <td>{{ $cost->checkNo }}</td>
-                    <td>{{ $cost->province }}</td>
+                    <td>{{ $cost->provname->name }}</td>
 
                     <td>
 
@@ -143,6 +143,7 @@
                 $('[name="checkNo"]').val(data.cost.checkNo)
                 $('[name="province"]').val(data.cost.province)
                 $('[name="id"]').val(data.cost.id)
+                $('[name="user_id"]').val(data.cost.user_id)
 
                 $('#modalCost').modal('show')
             })

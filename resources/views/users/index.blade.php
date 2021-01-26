@@ -23,6 +23,7 @@
                     <th>Avatar</th>
                     <th>Username</th>
                     <th>Email</th>
+                    <th>Region</th>
                     <th>Role</th>
                     <th>Date Registered</th>
                     <th>Actions</th>
@@ -38,6 +39,7 @@
                     </td>
                     <td> {{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
                     <td>
                         @if(!empty($user->getRoleNames()))
                         @foreach($user->getRoleNames() as $userRole)

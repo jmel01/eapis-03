@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Profile extends Model
 {
@@ -58,4 +59,20 @@ class Profile extends Model
         return $this->hasOne(Profile::class, 'user_id' , 'user_id');
     }
     
+    static function updatePicture($request){
+        if($request->hasFile('profilePicture')){
+            $ext = $request->profilePicture->getClientOriginalExtension();
+
+            $path = $request->profilePicture->storeAs(
+                'users-avatar', Auth::id().'.'.$ext, 'public'
+            );
+
+            $user = User::find(Auth::id());
+            $user->avatar = Auth::id().'.'.$ext;
+            $user->save();
+
+            return back();
+        }
+    }
+
 }

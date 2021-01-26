@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\ChartArray\Regional;
+use App\Models\AdminCost;
 use App\Models\Application;
 use App\Models\Calendar;
 use App\Models\Dashboard;
@@ -111,6 +112,8 @@ class DashboardController extends Controller
             ->where('level', 'Elementary')
             ->count();
 
+        $totalAdminCost = AdminCost::whereNull('user_id')->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')->sum('amount');
 
         return view(
             'dashboards.admin',
@@ -136,7 +139,9 @@ class DashboardController extends Controller
                 'numberOfCollege',
                 'numberOfVocational',
                 'numberOfHighSchool',
-                'numberOfElementary'
+                'numberOfElementary',
+                'totalAdminCost',
+                'totalGrantDisburse'
             )
         );
     }
@@ -144,7 +149,127 @@ class DashboardController extends Controller
     public function executiveOfficer()
     {
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
-        return view('dashboards.executive', compact('data'));
+        $regions = Psgc::where('level', 'Reg')->get();
+
+        $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')->get();
+        $chartDataAll = Regional::regionsApplicant($regions, $userProfile);
+
+        $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Approved')
+            ->get();
+        $chartDataApproved = Regional::regionsApplicant($regions, $userProfileApproved);
+
+        $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-FSD')
+            ->orWhere('status', 'Terminated-FG')
+            ->orWhere('status', 'Terminated-DS')
+            ->orWhere('status', 'Terminated-NE')
+            ->orWhere('status', 'Terminated-FPD')
+            ->orWhere('status', 'Terminated-EOGS')
+            ->orWhere('status', 'Terminated-Others')
+            ->get();
+        $chartDataTerminated = Regional::regionsApplicant($regions, $userProfileTerminated);
+
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-FSD')
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-FG')
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-DS')
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-NE')
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-FPD')
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-EOGS')
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Terminated-Others')
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('gender', 'Male')
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('gender', 'Female')
+            ->count();
+
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('type', 'Regular')
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('type', 'Merit-Based')
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('type', 'PDAF')
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('level', 'Post Study')
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('level', 'College')
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('level', 'Vocational')
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('level', 'High School')
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('level', 'Elementary')
+            ->count();
+
+        $totalAdminCost = AdminCost::whereNull('user_id')->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')->sum('amount');
+
+        return view(
+            'dashboards.executive',
+            compact(
+                'data',
+                'regions',
+                'chartDataAll',
+                'chartDataApproved',
+                'chartDataTerminated',
+                'terminatedFSD',
+                'terminatedFG',
+                'terminatedDS',
+                'terminatedNE',
+                'terminatedFPD',
+                'terminatedEOGS',
+                'terminatedOthers',
+                'numberOfMales',
+                'numberOfFemales',
+                'numberOfEAP',
+                'numberOfMerit',
+                'numberOfPAMANA',
+                'numberOfPostStudy',
+                'numberOfCollege',
+                'numberOfVocational',
+                'numberOfHighSchool',
+                'numberOfElementary',
+                'totalAdminCost',
+                'totalGrantDisburse'
+            )
+        );
     }
 
     public function regionalOfficer()
@@ -263,6 +388,13 @@ class DashboardController extends Controller
             ->where('level', 'Elementary')
             ->count();
 
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->sum('amount');
+
         return view(
             'dashboards.regional',
             compact(
@@ -287,7 +419,9 @@ class DashboardController extends Controller
                 'numberOfCollege',
                 'numberOfVocational',
                 'numberOfHighSchool',
-                'numberOfElementary'
+                'numberOfElementary',
+                'totalAdminCost',
+                'totalGrantDisburse'
             )
         );
     }
@@ -324,18 +458,267 @@ class DashboardController extends Controller
             ->get();
         $chartDataTerminated = Regional::citiesApplicant($cities, $userProfileTerminated);
 
-        return view('dashboards.provincial', compact('data', 'cities', 'chartDataAll', 'chartDataApproved', 'chartDataTerminated'));
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FSD')
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FG')
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-DS')
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-NE')
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FPD')
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-EOGS')
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-Others')
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Male')
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Female')
+            ->count();
+
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Regular')
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Merit-Based')
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'PDAF')
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Post Study')
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'College')
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Vocational')
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'High School')
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Elementary')
+            ->count();
+
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+
+        return view('dashboards.provincial', compact(
+            'data',
+            'cities',
+            'chartDataAll',
+            'chartDataApproved',
+            'chartDataTerminated',
+            'terminatedFSD',
+            'terminatedFG',
+            'terminatedDS',
+            'terminatedNE',
+            'terminatedFPD',
+            'terminatedEOGS',
+            'terminatedOthers',
+            'numberOfMales',
+            'numberOfFemales',
+            'numberOfEAP',
+            'numberOfMerit',
+            'numberOfPAMANA',
+            'numberOfPostStudy',
+            'numberOfCollege',
+            'numberOfVocational',
+            'numberOfHighSchool',
+            'numberOfElementary',
+            'totalAdminCost',
+            'totalGrantDisburse'
+        ));
     }
 
     public function communityOfficer()
     {
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 
-        $cityId = Str::substr(Auth::user()->profile->psgCode, 0, 6);
-        $barangays = Psgc::where([[\DB::raw('substr(code, 1, 6)'), '=', $cityId], ['level', 'Bgy']])
+        $cities = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'City']])
+            ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'Mun']])
+            ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'SubMun']])
             ->get();
 
-        return view('dashboards.community', compact('data', 'barangays'));
+        $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])->get();
+        $chartDataAll = Regional::citiesApplicant($cities, $userProfile);
+
+        $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Approved')
+            ->get();
+        $chartDataApproved = Regional::citiesApplicant($cities, $userProfileApproved);
+
+        $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FSD')
+            ->orWhere('status', 'Terminated-FG')
+            ->orWhere('status', 'Terminated-DS')
+            ->orWhere('status', 'Terminated-NE')
+            ->orWhere('status', 'Terminated-FPD')
+            ->orWhere('status', 'Terminated-EOGS')
+            ->orWhere('status', 'Terminated-Others')
+            ->get();
+        $chartDataTerminated = Regional::citiesApplicant($cities, $userProfileTerminated);
+
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FSD')
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FG')
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-DS')
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-NE')
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FPD')
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-EOGS')
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-Others')
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Male')
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Female')
+            ->count();
+
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Regular')
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Merit-Based')
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'PDAF')
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Post Study')
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'College')
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Vocational')
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'High School')
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Elementary')
+            ->count();
+
+        return view('dashboards.community', compact(
+            'data',
+            'cities',
+            'chartDataAll',
+            'chartDataApproved',
+            'chartDataTerminated',
+            'terminatedFSD',
+            'terminatedFG',
+            'terminatedDS',
+            'terminatedNE',
+            'terminatedFPD',
+            'terminatedEOGS',
+            'terminatedOthers',
+            'numberOfMales',
+            'numberOfFemales',
+            'numberOfEAP',
+            'numberOfMerit',
+            'numberOfPAMANA',
+            'numberOfPostStudy',
+            'numberOfCollege',
+            'numberOfVocational',
+            'numberOfHighSchool',
+            'numberOfElementary'
+        ));
     }
 
     public function applicant()

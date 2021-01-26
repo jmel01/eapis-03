@@ -47,7 +47,7 @@ class AdminCostController extends Controller
             'particulars',
             'amount' => 'required',
             'checkNo',
-            'province',
+            'province' => 'required',
 
         ]);
 
@@ -70,7 +70,7 @@ class AdminCostController extends Controller
      */
     public function show($id)
     {
-        $data = AdminCost::where('grant_id', $id)->get();
+        $data = AdminCost::with('provname')->where('grant_id', $id)->get();
         $grant = Grant::where('id', $id)->first();
 
         $regionId = Str::substr($grant->region, 0, 2);

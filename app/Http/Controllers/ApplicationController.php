@@ -6,9 +6,63 @@ use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
+
+    public function showApproved($id)
+    {
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('grant_id', $id)
+            ->where('status', 'Approved')
+            ->get();
+
+        $grant = Grant::with('psgCode')->where('id', $id)->first();
+
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('applications.show', compact('data', 'grant', 'provinces'));
+    }
+
+    public function showTerminated($id)
+    {
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('grant_id', $id)
+            ->where('status','!=', 'Approved')
+            ->where('status','!=', 'On Process')
+            ->where('status','!=', 'Graduated')
+            ->whereNotNull('status')
+            ->get();
+
+        $grant = Grant::with('psgCode')->where('id', $id)->first();
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('applications.show', compact('data', 'grant', 'provinces'));
+    }
+
+    public function showOnProcess($id)
+    {
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('grant_id', $id)
+            ->where('status', 'On Process')
+            ->get();
+
+        $grant = Grant::with('psgCode')->where('id', $id)->first();
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('applications.show', compact('data', 'grant', 'provinces'));
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -78,8 +132,12 @@ class ApplicationController extends Controller
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
 
-        return view('applications.show', compact('data', 'grant'));
+        return view('applications.show', compact('data', 'grant', 'provinces'));
     }
 
     /**

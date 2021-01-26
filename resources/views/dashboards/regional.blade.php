@@ -19,24 +19,24 @@
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated budget</span>
-                                <span class="info-box-number text-center text-muted mb-0">2300</span>
+                            <span class="info-box-text text-center text-muted">Total Disbursement</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost + $totalGrantDisburse }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total amount spent</span>
-                                <span class="info-box-number text-center text-muted mb-0">2000</span>
+                            <span class="info-box-text text-center text-muted">Total Adminitrative Cost</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated project duration</span>
-                                <span class="info-box-number text-center text-muted mb-0">20 <span>
+                            <span class="info-box-text text-center text-muted">Total Grants Disbursement</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalGrantDisburse }}<span>
                             </div>
                         </div>
                     </div>
@@ -44,33 +44,53 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <canvas id="myChart"></canvas>
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
                         <canvas id="myChart2"></canvas>
+                        </div>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
                         <canvas id="myChart3"></canvas>
+                        </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
                         <canvas id="myChart4"></canvas>
+                        </div>
+                        </div>
                     </div>
 
                     <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
                         <canvas id="myChart5"></canvas>
+                        </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="col-12 col-md-12 col-lg-3 order-1 order-md-2 bg-light">
+            <div class="col-12 col-md-12 col-lg-3 order-1 order-md-2 bg-light mb-3">
 
                 <nav>
                     <div class="nav nav-tabs nav-fill" role="tablist">
@@ -90,7 +110,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="messageTab2" role="tabpanel">
-                        <iframe src="/community" style="display:block; min-height:600px; width:100%;" frameborder="0" marginwidth="0" marginheight="0" scrolling="yes" onload="" allowtransparency="false"></iframe>
+                        <iframe src="/community" style="display:block; min-height:700px; width:100%;" frameborder="0" marginwidth="0" marginheight="0" scrolling="yes" onload="" allowtransparency="false"></iframe>
                     </div>
 
                 </div>

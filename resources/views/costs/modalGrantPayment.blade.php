@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalCost">
+<div class="modal fade" id="modalGrantPayment">
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form role="form" method="POST" action="{{ route('costs.store') }}" id="formCost">
+            <form role="form" method="POST" action="{{ route('costs.store') }}" id="formGrantPayment">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">

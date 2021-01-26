@@ -13,7 +13,7 @@ class Psgc extends Model
     protected $table = 'psgc';
 
     static function getRegion($code){
-        $subtrOfRegion = Str::substr($code, 0, 3).'0000000';
+        $subtrOfRegion = Str::substr($code, 0, 2).'0000000';
         $region = Psgc::where([['level','Reg'],['code', $subtrOfRegion]])->first();
 
         if(isset($region)){

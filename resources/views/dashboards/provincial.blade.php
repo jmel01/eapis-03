@@ -19,24 +19,24 @@
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated budget</span>
-                                <span class="info-box-number text-center text-muted mb-0">2300</span>
+                                <span class="info-box-text text-center text-muted">Total Disbursement</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost + $totalGrantDisburse }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total amount spent</span>
-                                <span class="info-box-number text-center text-muted mb-0">2000</span>
+                                <span class="info-box-text text-center text-muted">Total Adminitrative Cost</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated project duration</span>
-                                <span class="info-box-number text-center text-muted mb-0">20 <span>
+                                <span class="info-box-text text-center text-muted">Total Grants Disbursement</span>
+                                <span class="info-box-number text-center text-muted mb-0">{{ $totalGrantDisburse }}<span>
                             </div>
                         </div>
                     </div>
@@ -44,19 +44,53 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <canvas id="myChart"></canvas>
+                        <div class="card">
+                            <div class="card-body">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
                         <canvas id="myChart2"></canvas>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
+                        <canvas id="myChart3"></canvas>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
+                        <canvas id="myChart4"></canvas>
+                        </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                    <div class="card">
+                            <div class="card-body">
+                        <canvas id="myChart5"></canvas>
+                        </div>
+                        </div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="col-12 col-md-12 col-lg-3 order-1 order-md-2 bg-light">
+            <div class="col-12 col-md-12 col-lg-3 order-1 order-md-2 bg-light mb-3">
 
                 <nav>
                     <div class="nav nav-tabs nav-fill" role="tablist">
@@ -76,7 +110,7 @@
                     </div>
 
                     <div class="tab-pane fade" id="messageTab2" role="tabpanel">
-                        <iframe src="/community" style="display:block; min-height:600px; width:100%;" frameborder="0" marginwidth="0" marginheight="0" scrolling="yes" onload="" allowtransparency="false"></iframe>
+                        <iframe src="/community" style="display:block; min-height:700px; width:100%;" frameborder="0" marginwidth="0" marginheight="0" scrolling="yes" onload="" allowtransparency="false"></iframe>
                     </div>
 
                 </div>
@@ -104,7 +138,7 @@
                 '{{$value->name}}',
                 @endforeach
             ],
-            datasets: [{
+            datasets: [ { 
                     label: 'Grantee',
                     data: [ @foreach($cities as $value)
                                 @foreach($chartDataApproved as $chartData)
@@ -175,19 +209,159 @@
 <script>
     var ctx = document.getElementById('myChart2').getContext('2d');
     var myChart2 = new Chart(ctx, {
-        type: 'polarArea',
+        type: 'pie',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['Regular EAP', 'Merit-based', 'PAMANA'],
             datasets: [{
                 label: '# of Votes',
-                data: [2, 10, 3, 5, 2, 3],
+                data: [{{ $numberOfEAP }},
+                {{ $numberOfMerit }}, 
+                {{ $numberOfPAMANA }}
+               ],
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                    
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Number of Grantee per Type of Scholarship/Grant'
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true
+            }
+        }
+    });
+</script>
+
+
+<script>
+var ctx = document.getElementById('myChart3').getContext('2d');
+var myChart3 = new Chart(ctx, {
+    type: 'horizontalBar',
+    data: {
+        labels:  ['Level'],
+        datasets: [{
+            label: 'Post Study',
+            data: [{{ $numberOfPostStudy }}],
+            backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+            borderColor: ['rgba(255, 99, 132, 1)'],
+            borderWidth: 1
+        },{
+            label: 'College',
+            data: [{{ $numberOfCollege  }}],
+            backgroundColor: ['rgba(54, 162, 235, 0.2)'],
+            borderColor: ['rgba(54, 162, 235, 1)'],
+            borderWidth: 1
+        },{
+            label: 'Vocational',
+            data: [{{ $numberOfVocational  }}],
+            backgroundColor: ['rgba(255, 206, 86, 0.2)'],
+            borderColor: ['rgba(255, 206, 86, 1)'],
+            borderWidth: 1
+        },{
+            label: 'High School',
+            data: [{{ $numberOfHighSchool  }}],
+            backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)'],
+            borderWidth: 1
+        },{
+            label: 'Elementary',
+            data: [{{ $numberOfElementary }}],
+            backgroundColor: ['rgba(153, 102, 255, 0.2)'],
+            borderColor: ['rgba(153, 102, 255, 1)'],
+            borderWidth: 1
+        },
+    ]
+    },
+    options: {
+        title: {
+                display: true,
+                text: 'Total Number of Grantee per Level of Scholarship/Grant'
+            },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
+    }
+});
+</script>
+
+<script>
+    var ctx = document.getElementById('myChart4').getContext('2d');
+    var myChart4 = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Female', 'Male'],
+            datasets: [{
+                label: '# of Votes',
+                data: [{{ $numberOfFemales }},
+                {{ $numberOfMales }}
+               ],
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Number of Male/Female Grantee'
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true
+            }
+        }
+    });
+</script>
+
+<script>
+    var ctx = document.getElementById('myChart5').getContext('2d');
+    var myChart5 = new Chart(ctx, {
+        type: 'polarArea',
+        data: {
+            labels: ['Terminated-FSD', 'Terminated-FG', 'Terminated-DS', 'Terminated-NE', 'Terminated-FPD', 'Terminated-EOGS','Terminated-Others'],
+            datasets: [{
+                label: '# of Votes',
+                data: [{{ $terminatedFSD }},
+                {{ $terminatedFG }}, 
+                {{ $terminatedDS }}, 
+                {{ $terminatedNE }}, 
+                {{ $terminatedFPD }},
+                {{ $terminatedEOGS }},
+                {{ $terminatedOthers }}],
+
                 backgroundColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(108, 117, 125, 1)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -195,7 +369,8 @@
                     'rgba(255, 206, 86, 1)',
                     'rgba(75, 192, 192, 1)',
                     'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(108, 117, 125, 1)'
                 ],
                 borderWidth: 1
             }]

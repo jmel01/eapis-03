@@ -36,7 +36,7 @@
                 </li>
                 @endcan
 
-                @can('user-browse')
+                @can('report-browse')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon far fa-file-alt"></i>
@@ -96,14 +96,14 @@
                 </li>
                 @endcan
 
-
+                @can('announcement-browse')
                 <li class="nav-item">
                     <a href="{{ route('calendars.index') }}" class="nav-link">
                         <i class="nav-icon far fa-calendar-alt"></i>
                         <p>Announcement</p>
                     </a>
                 </li>
-
+                @endcan
 
                 @can('user-browse')
                 <li class="nav-item has-treeview">
@@ -118,13 +118,17 @@
                                 <p>User List</p>
                             </a>
                         </li>
-                        @can('role-browse')
+                       
+                        @can('ethnogroups-browse')
                         <li class="nav-item">
                             <a href="{{ route('ethnogroups.index') }}" class="nav-link">
-                                {{-- <i class="fas fa-user-lock nav-icon"></i> --}}
+                                <i class="fas fa-users nav-icon"></i>
                                 <p>Ethnogroups</p>
                             </a>
                         </li>
+                        @endcan
+
+                        @can('role-browse')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
                                 <i class="fas fa-user-lock nav-icon"></i>
@@ -136,12 +140,14 @@
                 </li>
                 @endcan
 
+                @can('requirements-browse')
                 <li class="nav-item">
                     <a href="{{ route('requirements.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-toolbox"></i>
                         <p>Requirement Management</p>
                     </a>
                 </li>
+                @endcan
 
                 @endunlessrole
             </ul>
