@@ -17,15 +17,15 @@
         </div>
     </div>
     <div class="card-body">
+        @can('requirement-add')
         <div class="row">
-
             <div class="form-group col-md-12">
                 <button type="button" class="btn btn-primary btn-add-requirement float-right">
                     Add Requirement
                 </button>
             </div>
         </div>
-
+        @endcan
         <table id="reqList" class="table table-hover table-responsive-lg">
             <thead>
                 <tr>
@@ -38,12 +38,13 @@
                 <tr>
                     <td>{{ $requirement->description }}</td>
                     <td>
-                       
+                       @can('requirement-edit')
                         <button data-description="{{ $requirement->description }}" data-id="{{ $requirement->id }}" class="btn btn-primary btn-sm mr-1 btn-edit-requirement">Edit</button>
-                       
+                       @endcan
 
+                       @can('requirement-deletes')
                         <button data-url="{{ route('requirements.destroy', $requirement->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-requirement">Delete</button>
-
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

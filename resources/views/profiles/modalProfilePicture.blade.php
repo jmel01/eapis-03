@@ -9,10 +9,12 @@
             </div>
             <form method="POST" action="{{ route('profiles.store') }}" accept-charset="UTF-8" id="formProfilePicture" class="form-modal" enctype="multipart/form-data">
                 @csrf
+                <div class="modal-body">
                 <div class="row">
                     <div class="col-12 text-center">
                         <input type="file" class="form-control-file rounded-0" name="profilePicture" id="profilePicture">
                     </div>
+                </div>
                 </div>
                 <div class="modal-footer">
                     <input type="hidden" name="forProfilePicture" value="picture">

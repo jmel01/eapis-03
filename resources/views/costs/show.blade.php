@@ -14,7 +14,9 @@
     <div class="card-body">
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
+        @can('expenses-edit')
         <button class="btn btn-outline-primary btn-sm btn-add-cost float-right mr-1">ADD ADMIN COST</button>
+        @endcan
 
         <table id="costList" class="table table-sm table-hover table-responsive-lg">
             <thead>
@@ -39,11 +41,12 @@
                     <td>{{ $cost->provname->name }}</td>
 
                     <td>
-
+                    @can('expenses-edit')
                         <button data-url="{{ route('costs.edit',$cost->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-cost">Edit</button>
-
+                    @endcan
+                    @can('expenses-edit')
                         <button data-url="{{ route('costs.destroy', $cost->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-cost">Delete</button>
-
+                    @endcan
 
                     </td>
                 </tr>

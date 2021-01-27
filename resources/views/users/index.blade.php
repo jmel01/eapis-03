@@ -50,11 +50,13 @@
                     </td>
                     <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
                     <td>
+                        @can('application-add')
                         @if($user->hasRole('Applicant'))
                         @if($user->profile!='')
                         <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
                         @endif
                         @endif
+                        @endcan
 
                         @can('profile-edit')
                         <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
