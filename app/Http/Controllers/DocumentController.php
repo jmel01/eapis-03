@@ -8,6 +8,37 @@ use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
+    function myDocument()
+    {
+        $documents = Document::where('user_id', Auth::id())->get();
+
+        return view('documents.mydocument', compact('documents'));
+    }
+
+    public function myDocumentStore(Request $request)
+    {
+        $this->validate($request, [
+            'image' => 'required|max:2048',
+            //'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //=> required|file|max:5000|mimes:pdf,docx,doc
+        ]);
+
+        $image = $request->file('image');
+
+        $new_name = rand() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('uploads'), $new_name);
+        $form_data = array(
+            'user_id' => Auth::id(),
+            'filename' => $image->getClientOriginalName(),
+            'filepath' => $new_name
+        );
+
+        Document::create($form_data);
+
+        return back()
+            ->with('success', 'Document created successfully.');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -39,9 +70,10 @@ class DocumentController extends Controller
 
         $this->validate($request, [
             'grantID',
-            'requirementID',
+            'requirementID' => 'required',
             'image' => 'required|max:2048',
             //'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            //=> required|file|max:5000|mimes:pdf,docx,doc
             'schoolYear'
         ]);
 
@@ -52,10 +84,10 @@ class DocumentController extends Controller
         $form_data = array(
             'grantID' => $request->grantID,
             'user_id' => Auth::id(),
-            'filename' => $new_name,
-            'schoolYear' => '2021',
-            'requirementID' => $request->requirementID,
-            'filepath' => 'afgasgasga'
+            'filename' => $image->getClientOriginalName(),
+            'filepath' => $new_name,
+            'requirementID' => $request->requirementID
+            
         );
 
         Document::create($form_data);
@@ -70,11 +102,21 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id) //Show Student Document on Student Application
     {
         $documents = Document::with('grantDetails')
             ->with('requirementDetails')
+            ->where('grantID', $id)
             ->where('user_id', Auth::id())
+            ->get();
+
+        return view('documents.show', compact('documents'));
+    }
+
+    public function showAttachment($grantID,$userID) //Show Attached Document on Grant List
+    {
+        $documents = Document::where('grantID', $grantID)
+            ->where('user_id', $userID)
             ->get();
 
         return view('documents.show', compact('documents'));
@@ -109,8 +151,14 @@ class DocumentController extends Controller
      * @param  \App\Models\Document  $document
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Document $document)
+    public function destroy($id)
     {
-        //
+        Document::find($id)->delete();
+
+        $notification = array(
+            'message' => 'Document Deleted successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
     }
 }

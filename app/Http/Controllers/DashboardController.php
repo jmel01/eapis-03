@@ -7,6 +7,7 @@ use App\Models\AdminCost;
 use App\Models\Application;
 use App\Models\Calendar;
 use App\Models\Dashboard;
+use App\Models\Document;
 use App\Models\Grant;
 use App\Models\Psgc;
 use App\Models\Profile;
@@ -274,8 +275,7 @@ class DashboardController extends Controller
 
     public function regionalOfficer()
     {
-        $data = Calendar::where('region',Auth::user()->region)
-        ->orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
 
         $regionId = Str::substr(Auth::user()->region, 0, 2);
 
@@ -430,6 +430,16 @@ class DashboardController extends Controller
 
     public function provincialOfficer()
     {
+        /* Check if user updated profile else redirect */
+        $ProfileSet = Profile::firstWhere('user_id', Auth::id());
+        if ($ProfileSet == '') {
+            $notification = array(
+                'message' => 'Update your profile first.',
+                'alert-type' => 'info'
+            );
+            return redirect('profiles/'.Auth::id())->with($notification);
+        }
+
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 
@@ -582,6 +592,16 @@ class DashboardController extends Controller
 
     public function communityOfficer()
     {
+        /* Check if user updated profile else redirect */
+        $ProfileSet = Profile::firstWhere('user_id', Auth::id());
+        if ($ProfileSet == '') {
+            $notification = array(
+                'message' => 'Update your profile first.',
+                'alert-type' => 'info'
+            );
+            return redirect('profiles/'.Auth::id())->with($notification);
+        }
+        
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 
@@ -697,7 +717,14 @@ class DashboardController extends Controller
             ->where('level', 'Elementary')
             ->count();
 
-        return view('dashboards.community', compact(
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+
+        return view('dashboards.provincial', compact(
             'data',
             'cities',
             'chartDataAll',
@@ -719,7 +746,9 @@ class DashboardController extends Controller
             'numberOfCollege',
             'numberOfVocational',
             'numberOfHighSchool',
-            'numberOfElementary'
+            'numberOfElementary',
+            'totalAdminCost',
+            'totalGrantDisburse'
         ));
     }
 
@@ -759,7 +788,9 @@ class DashboardController extends Controller
 
         $applications = Application::with('grant.psgCode')->where('user_id', Auth::id())->get();
 
-        return view('dashboards.applicant', compact('grants', 'applications', 'psgCode', 'regions', 'userProfile', 'userRegion', 'data', 'region', 'province', 'city', 'barangay'));
+        $payments = AdminCost::where('user_id', Auth::id())->get();
+
+        return view('dashboards.applicant', compact('grants', 'applications', 'psgCode', 'regions', 'userProfile', 'userRegion', 'data', 'region', 'province', 'city', 'barangay', 'payments'));
     }
     /**
      * Display a listing of the resource.
