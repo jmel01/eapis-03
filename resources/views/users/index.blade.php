@@ -154,40 +154,50 @@
             var url_id = $(this).attr('data-url');
             $('[name="id"]').val(id)
 
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="lastName"]').val(data.lastName)
-                $('[name="firstName"]').val(data.firstName)
-                $('[name="middleName"]').val(data.middleName)
-                $('[name="birthdate"]').val(data.birthdate)
-                $('[name="placeOfBirth"]').val(data.placeOfBirth)
-                $('[name="gender"]').val(data.gender)
-                $('[name="civilStatus"]').val(data.civilStatus)
-                $('[name="ethnoGroup"]').val(data.ethnoGroup)
-                $('[name="contactNumber"]').val(data.contactNumber)
-                $('[name="email"]').val(data.email)
-                /*  document.getElementById('region').value = data.psgCode.substr(0, 2) + "0000000"
-                 document.getElementById('province').value = data.psgCode.substr(0, 4) + "00000"
-                 document.getElementById('city').value = data.psgCode.substr(0, 6) + "000"
-                 document.getElementById('barangay').value = data.psgCode */
-                $('[name="address"]').val(data.address)
-                $('[name="fatherName"]').val(data.fatherName)
-                $('[name="fatherAddress"]').val(data.fatherAddress)
-                $('[name="fatherOccupation"]').val(data.fatherOccupation)
-                $('[name="fatherOffice"]').val(data.fatherOffice)
-                $('[name="fatherEducation"]').val(data.fatherEducation)
-                $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
-                $('[name="fatherIncome"]').val(data.fatherIncome)
-                $('[name="motherName"]').val(data.motherName)
-                $('[name="motherAddress"]').val(data.motherAddress)
-                $('[name="motherOccupation"]').val(data.motherOccupation)
-                $('[name="motherOffice"]').val(data.motherOffice)
-                $('[name="motherEducation"]').val(data.motherEducation)
-                $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
-                $('[name="motherIncome"]').val(data.motherIncome)
-
+            $.ajax({
+                url : '/profile/update/show-modal',
+                type : 'GET',
+                data : {id: id},
+            }).done(result => {
+                $('#modalProfile .modal-body').empty()
+                $('#modalProfile .modal-body').append(result)
                 $('#modalProfile').modal('show')
             })
+            // $.get(url_id, function(data) {
+            //     console.log(url_id)
+            //     $('[name="lastName"]').val(data.lastName)
+            //     $('[name="firstName"]').val(data.firstName)
+            //     $('[name="middleName"]').val(data.middleName)
+            //     $('[name="birthdate"]').val(data.birthdate)
+            //     $('[name="placeOfBirth"]').val(data.placeOfBirth)
+            //     $('[name="gender"]').val(data.gender)
+            //     $('[name="civilStatus"]').val(data.civilStatus)
+            //     $('[name="ethnoGroup"]').val(data.ethnoGroup)
+            //     $('[name="contactNumber"]').val(data.contactNumber)
+            //     $('[name="email"]').val(data.email)
+            //     /*  document.getElementById('region').value = data.psgCode.substr(0, 2) + "0000000"
+            //      document.getElementById('province').value = data.psgCode.substr(0, 4) + "00000"
+            //      document.getElementById('city').value = data.psgCode.substr(0, 6) + "000"
+            //      document.getElementById('barangay').value = data.psgCode */
+            //     $('[name="address"]').val(data.address)
+            //     $('[name="fatherName"]').val(data.fatherName)
+            //     $('[name="fatherAddress"]').val(data.fatherAddress)
+            //     $('[name="fatherOccupation"]').val(data.fatherOccupation)
+            //     $('[name="fatherOffice"]').val(data.fatherOffice)
+            //     $('[name="fatherEducation"]').val(data.fatherEducation)
+            //     $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
+            //     $('[name="fatherIncome"]').val(data.fatherIncome)
+            //     $('[name="motherName"]').val(data.motherName)
+            //     $('[name="motherAddress"]').val(data.motherAddress)
+            //     $('[name="motherOccupation"]').val(data.motherOccupation)
+            //     $('[name="motherOffice"]').val(data.motherOffice)
+            //     $('[name="motherEducation"]').val(data.motherEducation)
+            //     $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
+            //     $('[name="motherIncome"]').val(data.motherIncome)
+
+            //     $('#modalProfile').modal('show')
+            // })
+
         })
     });
 </script>

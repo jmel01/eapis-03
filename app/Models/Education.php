@@ -24,12 +24,12 @@ class Education extends Model
     ];
 
     static function insert($request){
-        Education::where('user_id', Auth::id())->delete();
+        Education::where('user_id', $request->id)->delete();
 
         if(isset($request->schName)){
             foreach($request->schName as $key => $value){
                 Education::create([
-                    'user_id' => Auth::id(),
+                    'user_id' => $request->id,
                     'school_name' => $request->schName[$key] ?? '',
                     'address' => $request->schAddress[$key] ?? '',
                     'level' => $request->schLevel[$key] ?? '',

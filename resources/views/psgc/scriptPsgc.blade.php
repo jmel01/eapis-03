@@ -1,8 +1,9 @@
 <script type="text/javascript">
     jQuery(document).ready(function() {
+        $('select[name="region"]').trigger("change")
         /* To select provinces/district based on selected region */
         jQuery('select[name="region"]').on('change', function() {
-            var regionID = jQuery(this).val();
+            var regionID = $('#region').val();
             if (regionID) {
                 jQuery.ajax({
                     url: "{{ route('getProvinces') }}",

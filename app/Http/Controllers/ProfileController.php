@@ -165,4 +165,27 @@ class ProfileController extends Controller
     {
         //
     }
+
+    public function showProfileModal(Request $request){
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+        } else {
+            if (Auth::user()->region) {
+                $regions = Psgc::where('code', Auth::user()->region)->get();
+            } else {
+                $regions = Psgc::where('level', 'Reg')->get();
+            }
+        }
+
+        $userProfile = Profile::where('user_id', $request->id)->first();
+        $psgCode = $userProfile->psgCode ?? '';
+
+        $region = Psgc::where('code', Str::substr($psgCode, 0, 2) . "0000000")->first();
+        $province = Psgc::where('code', Str::substr($psgCode, 0, 4) . "00000")->first();
+        $city = Psgc::where('code', Str::substr($psgCode, 0, 6) . "000")->first();
+        $barangay = Psgc::where('code', $psgCode)->first();
+
+        return view('profiles.profile-content', compact('userProfile', 'regions', 'region', 'province', 'city', 'barangay'))->render();
+   
+    }
 }

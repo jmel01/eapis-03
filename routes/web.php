@@ -83,5 +83,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
 
+    Route::group(['prefix' => 'profile'], function () {
+        Route::group(['prefix' => 'update'], function () {
+            Route::get('show-modal', [ProfileController::class, 'showProfileModal']);
+        });
+    });
+
     Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
 });

@@ -22,12 +22,12 @@ class Siblings extends Model
     ];
 
     static function insert($request){
-        Siblings::where('user_id', Auth::id())->delete();
+        Siblings::where('user_id', $request->id)->delete();
 
         if(isset($request->siblingName) &&  $request->siblingName[0] != null){
             foreach($request->siblingName as $key => $value){
                 Siblings::create([
-                    'user_id' => Auth::id(),
+                    'user_id' => $request->id,
                     'name' => $request->siblingName[$key] ?? '',
                     'birthdate' => $request->siblingBirthdate[$key] ?? '',
                     'scholarship' => $request->siblingScholarship[$key] ?? '',
