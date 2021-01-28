@@ -166,10 +166,6 @@
                 $('[name="ethnoGroup"]').val(data.ethnoGroup)
                 $('[name="contactNumber"]').val(data.contactNumber)
                 $('[name="email"]').val(data.email)
-                /*  document.getElementById('region').value = data.psgCode.substr(0, 2) + "0000000"
-                 document.getElementById('province').value = data.psgCode.substr(0, 4) + "00000"
-                 document.getElementById('city').value = data.psgCode.substr(0, 6) + "000"
-                 document.getElementById('barangay').value = data.psgCode */
                 $('[name="address"]').val(data.address)
                 $('[name="fatherName"]').val(data.fatherName)
                 $('[name="fatherAddress"]').val(data.fatherAddress)
@@ -187,6 +183,7 @@
                 $('[name="motherIncome"]').val(data.motherIncome)
 
                 $('#modalProfile').modal('show')
+                $('#region').trigger("change")
             })
         })
     });

@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'Document Management')
+@section('title', 'My Document')
 
 @push('style')
 
@@ -10,45 +10,37 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">List of Documents</h3>
-        @can('document-add')
+
         <div class="card-tools">
-            <a class="btn btn-outline-primary btn-sm" href="{{ url()->previous() }}">BACK</a>
+            <button class="btn btn-outline-primary btn-sm btn-add-document">ADD FILE</button>
         </div>
-        @endcan
+
     </div>
     <div class="card-body">
-
-        @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p></p>
-        </div>
-        @endif
 
         <table id="documentList" class="table table-striped table-hover table-responsive-lg">
             <thead>
                 <tr>
-                    <th>Grant Name/Year</th>
-                    <th>Requirement Description</th>
+                    <th>Filename</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($documents as $document)
                 <tr>
-                    <td>{{ App\Models\Psgc::getRegion($document->grantDetails->region) }} ({{ $document->grantDetails->acadYr }}-{{ $document->grantDetails->acadYr + 1}})</td>
-                    <td>{{ $document->requirementDetails->description }}</td>
+                    <td>{{ $document->filename }}</td>
                     <td>
                         <a href="/uploads/{{ $document->filepath }}" target="_blank" class="btn btn-info btn-sm">View</a>
-                        @can('document-delete')
                         <button data-url="{{ route('documents.destroy', $document->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-document">Delete</button>
-                        @endcan
+
                     </td>
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="3" class="text-center">No Document Uploaded.</td>
+                    <td colspan="2" class="text-center">No Document Uploaded.</td>
                 </tr>
                 @endforelse
+
             </tbody>
         </table>
 
@@ -62,6 +54,7 @@
 </div>
 
 @include('layouts.adminlte.modalDelete')
+@include('documents.modalMyDocument')
 @endsection
 
 @push('scripts')
@@ -76,6 +69,12 @@
             "autoWidth": false,
             "responsive": true,
         });
+    });
+
+    $('.btn-add-document').click(function() {
+        document.getElementById("formDocument").reset();
+        $('#modalDocument').modal('show')
+
     });
 
     $('.btn-delete-document').click(function() {

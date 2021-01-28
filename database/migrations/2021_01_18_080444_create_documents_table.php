@@ -15,12 +15,11 @@ class CreateDocumentsTable extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('grantID');
-            $table->foreignId('requirementID');
+            $table->foreignId('grantID')->nullable();
+            $table->foreignId('requirementID')->nullable();
             $table->foreignId('user_id');
             $table->string('filename');
             $table->string('filepath');
-            $table->string('schoolYear');
             $table->timestamps();
         });
     }

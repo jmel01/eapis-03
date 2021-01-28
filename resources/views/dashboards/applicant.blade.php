@@ -4,6 +4,8 @@
 
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
+
 @endpush
 
 @section('content')
@@ -15,7 +17,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12 col-md-12 col-lg-9 order-2 order-md-1">
-                
+
                 <div class="row">
                     <div class="col-12">
                         @if($userProfile == '')
@@ -42,51 +44,80 @@
                         <button data-id="{{ Auth::id() }}" class="btn btn-outline-success btn-sm float-right btn-add-application">APPLY SCHOLARSHIP</button>
                         @endif
                         <h4>Scholarship/Grant</h4>
-                        <hr>
                     </div>
 
                     <div class="col-md-12">
 
-                        @forelse($applications as $application)
-                        <div class="post">
-                            <h5>{{ $application->grant->psgCode->name }}
-                                SY: {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1}}</h5>
-                            <p>
-                                Type: {{ $application->type }}<br>
-                                Level: {{ $application->level }}<br>
-                                School: {{ $application->school }}<br>
-                                Course: {{ $application->course }}<br>
-                                Status: {{ $application->status }}
-
-                            </p>
-
-                            <p>
-                                <button class="btn btn-outline-primary btn-sm btn-add-document" data-grantID="{{ $application->grant_id }}">ADD DOCUMENTS</button>
-                                <a href="{{ route('documents.show', Auth::id()) }}" class="btn btn-outline-info btn-sm">VIEW MY DOCUMENTS</a>
-                            </p>
-                        </div>
-
-                        @empty
-                        <p>No application yet!</p>
-                        @endforelse
+                        <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th>Scholarship/Grant</th>
+                                    <th>Type</th>
+                                    <th>Level</th>
+                                    <th>School</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($applications as $application)
+                                <tr>
+                                    <td>{{ $application->grant->psgCode->name }} SY: {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1}}</td>
+                                    <td>{{ $application->type }}</td>
+                                    <td>{{ $application->level }}</td>
+                                    <td>{{ $application->school }}</td>
+                                    <td>{{ $application->course }}</td>
+                                    <td>{{ $application->status }}</td>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm btn-add-document" data-grantID="{{ $application->grant_id }}">ADD FILE</button>
+                                        <a href="{{ route('documents.show', $application->grant_id) }}" class="btn btn-outline-info btn-sm">VIEW FILES</a>
+                                    </td>
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">No application yet!</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
                 <div class="row mt-3">
                     <div class="col-12">
                         <h4>Financial Assistance</h4>
-                        <hr>
-                        <div class="post">
-                            <p>
-                                Lorem ipsum represents a long-held tradition for designers,
-                                typographers and the like. Some people hate it and argue for
-                                its demise, but others ignore.
-                            </p>
 
-                            <p>
-                                <a href="#" class="link-black text-sm"><i class="fas fa-link mr-1"></i> Demo File 1 v2</a>
-                            </p>
-                        </div>
+                        <table id="paymentList" class="table table-sm table-hover table-responsive-lg">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Date Received</th>
+                                    <th class="text-center">Particulars</th>
+                                    <th class="text-center">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($payments as $payment)
+                                <tr>
+                                    <td class="text-center">{{ date('j F Y', strtotime($payment->dateRcvd)) }}</td>
+                                    <td>{{ $payment->particulars }}</td>
+                                    <td class="text-right">{{ number_format($payment->amount, 2, '.', ',') }}</td>
+
+                                </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">No assistance recieved</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-right"></th>
+                                </tr>
+                            </tfoot>
+                        </table>
 
                     </div>
                 </div>
@@ -133,8 +164,65 @@
 @push('scripts')
 @include('psgc.scriptPsgc')
 
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
+
 <script>
     $(document).ready(function() {
+
+        var table = $('#applicationList').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+
+        var table = $('#paymentList').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function(i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                        i : 0;
+                };
+
+                // Total over all pages
+                total = api
+                    .column(2)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Total over this page
+                pageTotal = api
+                    .column(2, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Update footer
+                $(api.column(2).footer()).html(
+                    'Total: ₱  ' + pageTotal.toLocaleString("en-US") + ' ( ₱ ' + total.toLocaleString("en-US") + ')'
+                );
+            },
+        });
 
         $('.btn-add-application').click(function() {
             document.getElementById("formApplication").reset();

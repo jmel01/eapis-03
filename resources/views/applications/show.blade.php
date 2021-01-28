@@ -54,6 +54,9 @@
                         <button data-url="{{ route('applications.destroy', $application->id) }}"
                             class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
                     @endcan
+
+                    <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">Files</a>
+
                     @can('expenses-add')
                         @if($application->status=='Approved')
                         <button data-payee="{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName,1,'1') }}." data-particular="Grant Payment"

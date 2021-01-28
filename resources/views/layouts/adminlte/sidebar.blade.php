@@ -25,7 +25,14 @@
 
 
                 @unlessrole('Applicant')
-
+                @can('grant-browse')
+                <li class="nav-item">
+                    <a href="{{ route('showAllApproved') }}" class="nav-link">
+                        <i class="far fa-thumbs-up nav-icon"></i>
+                        <p>Approved Applications</p>
+                    </a>
+                </li>
+                @endcan
 
                 @can('grant-browse')
                 <li class="nav-item">
@@ -43,7 +50,7 @@
                         <p>Reports<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                      <!--   <li class="nav-item">
+                        <!--   <li class="nav-item">
                             <a href="{{ route('formA') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Form A x</p>
@@ -61,7 +68,7 @@
                                 <p>Report of Termination</p>
                             </a>
                         </li>
-                       <!--  <li class="nav-item">
+                        <!--  <li class="nav-item">
                             <a href="{{ route('formD') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Form D x</p>
@@ -105,6 +112,13 @@
                 </li>
                 @endcan
 
+                <li class="nav-item">
+                    <a href="{{ route('myDocument') }}" class="nav-link">
+                        <i class="far fa-folder-open nav-icon"></i>
+                        <p>My Documents</p>
+                    </a>
+                </li>
+
                 @can('user-browse')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -141,13 +155,13 @@
                 @endcan
 
                 @can('ethnogroups-browse')
-                        <li class="nav-item">
-                            <a href="{{ route('ethnogroups.index') }}" class="nav-link">
-                                <i class="fas fa-users nav-icon"></i>
-                                <p>Ethnogroups</p>
-                            </a>
-                        </li>
-                        @endcan
+                <li class="nav-item">
+                    <a href="{{ route('ethnogroups.index') }}" class="nav-link">
+                        <i class="fas fa-users nav-icon"></i>
+                        <p>Ethnogroups</p>
+                    </a>
+                </li>
+                @endcan
 
                 @endunlessrole
             </ul>
