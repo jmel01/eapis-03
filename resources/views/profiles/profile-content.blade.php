@@ -15,7 +15,6 @@
 <div class="tab-content p-3" id="nav-tabContent">
     <!-- Basic Information -->
     <div class="tab-pane fade show active" id="tab1" role="tabpanel">
-
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
@@ -77,6 +76,7 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Region</label>
+                    <input type="hidden" id="regionCode" value="{{$region->code ?? ''}}">
                     <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
                         <option disabled>Select Region</option>
                         @foreach ($regions as $allRegion)
@@ -311,11 +311,12 @@
     </div>
 </div>
 
+@include('psgc.scriptPsgc')
+@include('profiles.scriptAddSchool')
+@include('profiles.scriptAddSibling')
+
 <script>
     $(function(){
         $('#region').trigger("change")
     })
 </script>
-@include('psgc.scriptPsgc')
-@include('profiles.scriptAddSchool')
-@include('profiles.scriptAddSibling')

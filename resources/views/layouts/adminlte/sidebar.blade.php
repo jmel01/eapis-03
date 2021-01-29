@@ -164,6 +164,14 @@
                 @endcan
 
                 @endunlessrole
+                @role('Admin')
+                <li class="nav-item">
+                    <a href="/user-logs" class="nav-link">
+                        <i class="fas fa-clipboard-list nav-icon"></i>
+                        <p>Audit Trail</p>
+                    </a>
+                </li>
+                @endrole
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

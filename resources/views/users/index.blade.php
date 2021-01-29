@@ -84,13 +84,13 @@
 
 @include('layouts.adminlte.modalDelete')
 @include('applications.modalApplication')
-@include('profiles.modalProfile')
 @include('users.modalUser')
 
 @endsection
 
 @push('scripts')
 @include('psgc.scriptPsgc')
+@include('profiles.modalProfile')
 @include('profiles.scriptAddSibling')
 @include('profiles.scriptAddSchool')
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
@@ -119,7 +119,6 @@
             document.getElementById("formUser").reset();
             $('[name="id"]').val('')
             $('#modalUser').modal('show')
-
         });
 
         $('.btn-edit-user').click(function() {
@@ -129,7 +128,6 @@
                 $('[name="id"]').val(data.user.id)
                 $('[name="name"]').val(data.user.name)
                 $('[name="email"]').val(data.user.email)
-
                 $('#modalUser').modal('show')
             })
         })
@@ -164,6 +162,7 @@
                 $('#modalProfile').modal('show')
                 $('#region').trigger("change")
             })
+
         })
     });
 </script>

@@ -2,7 +2,7 @@
     jQuery(document).ready(function() {
         /* To select provinces/district based on selected region */
         jQuery('select[name="region"]').on('change', function() {
-            var regionID = $('#region').val();
+            var regionID = $(this).val() ?? $('#regionCode').val();
             if (regionID) {
                 jQuery.ajax({
                     url: "{{ route('getProvinces') }}",

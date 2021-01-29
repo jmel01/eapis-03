@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\ChartArray\Regional;
 use App\Models\AdminCost;
 use App\Models\Application;
+use App\Models\AuditEvent;
 use App\Models\Calendar;
 use App\Models\Dashboard;
 use App\Models\Document;
@@ -885,5 +886,11 @@ class DashboardController extends Controller
         $response->header("Content-Type", $type);
 
         return $response;
+    }
+
+    public function userLogs(){
+        $auditEvents = AuditEvent::all();
+
+        return view('userlogs.index', compact('auditEvents'));
     }
 }
