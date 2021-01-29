@@ -12,6 +12,7 @@ class AdminCost extends Model
     protected $table = 'admin_costs';
 
     protected $fillable = [
+        'application_id',
         'grant_id',
         'user_id',
         'dateRcvd',
@@ -21,7 +22,7 @@ class AdminCost extends Model
         'checkNo',
         'province',
     ];
-
+    
     public function provname()
     {
         return $this->hasOne('App\Models\Psgc','code','province');

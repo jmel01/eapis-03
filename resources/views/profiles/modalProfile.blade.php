@@ -332,3 +332,8 @@
         </div>
     </div>
 </div>
+
+
+@include('psgc.scriptPsgc')
+@include('profiles.scriptAddSchool')
+@include('profiles.scriptAddSibling')

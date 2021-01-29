@@ -60,7 +60,7 @@
                     @can('expenses-add')
                         @if($application->status=='Approved')
                         <button data-payee="{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName,1,'1') }}." data-particular="Grant Payment"
-                            data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}"
+                            data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}"
                             class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
@@ -107,7 +107,7 @@ $(document).ready(function() {
     var table = $('#applicationList').DataTable({
         "paging": true,
         "lengthChange": true,
-        "searching": true,
+        "searchi    ng": true,
         "ordering": true,
         "info": true,
         "autoWidth": true,
@@ -121,11 +121,13 @@ $(document).ready(function() {
         var particular = $(this).attr('data-particular');
         var province = $(this).attr('data-province');
         var userId = $(this).attr('data-userId');
+        var applicationId = $(this).attr('data-applicationId');
 
         $('[name="payee"]').val(payee)
         $('[name="particulars"]').val(particular)
         $('[name="province"]').val(province)
         $('[name="user_id"]').val(userId)
+        $('[name="application_id"]').val(applicationId)
 
     });
 

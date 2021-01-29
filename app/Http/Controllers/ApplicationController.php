@@ -14,16 +14,18 @@ class ApplicationController extends Controller
     public function showAllApproved()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
             $data = Application::with('applicant.psgcBrgy')
                 ->where('status', 'Approved')
                 ->get();
         } else {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
             $data = Application::with('applicant.psgcBrgy')
                 ->where('status', 'Approved') //Add filter region
                 ->get();
         }
 
-        return view('applications.showAllApproved', compact('data'));
+        return view('applications.showAllApproved', compact('data','regions'));
     }
 
     public function showApproved($id)

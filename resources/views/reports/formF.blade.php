@@ -12,9 +12,10 @@
     </div>
     <div class="card-body">
 
-        <table id="costList" class="table table-sm table-hover table-responsive-lg">
+        <table id="costList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
+                    <th>Region</th>
                     <th>Province/District</th>
                     <th>Elementary</th>
                     <th>High School</th>
@@ -29,20 +30,64 @@
             <tbody>
                 @foreach ($data as $key => $cost)
                 <tr>
-                    <td>{{ $cost->province }}</td>
-                    <td class="text-right">1</td>
-                    <td class="text-right">1</td>
-                    <td class="text-right">1</td>
-                    <td class="text-right">1</td>
-                    <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
-                    <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
-                    <td class="text-right"></td>
+                    <td>{{ App\Models\Psgc::getRegion($cost->province) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($cost->province) }}</td>
+                    <td class="text-right">
+                        @foreach($level['elementary'] as $elementary)
+                        @if($elementary->province == $cost->province)
+                        {{ $elementary->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($level['highSchool'] as $highSchool)
+                        @if($highSchool->province == $cost->province)
+                        {{ $highSchool->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($level['vocational'] as $vocational)
+                        @if($vocational->province == $cost->province)
+                        {{ $vocational->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($level['college'] as $college)
+                        @if($college->province == $cost->province)
+                        {{ $college->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($adminCosts as $adminCost)
+                        @if($adminCost->province == $cost->province)
+                        {{ number_format($adminCost->amount, 2, '.', ',') }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($actualPayments as $actualPayment)
+                        @if($actualPayment->province == $cost->province)
+                        {{ number_format($actualPayment->amount, 2, '.', ',') }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-right">
+                        @foreach($level['total'] as $total)
+                        @if($total->province == $cost->province)
+                        {{ $total->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
                     <td></td>
                 </tr>
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
+                    <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
@@ -94,124 +139,139 @@
 
                 // computing column Total of the complete result 
                 var elemTotal = api
-                    .column(1)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var hsTotal = api
                     .column(2)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                var vocTotal = api
+                var hsTotal = api
                     .column(3)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                var collegeTotal = api
+                var vocTotal = api
                     .column(4)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                var adminCostTotal = api
+                var collegeTotal = api
                     .column(5)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                var disburseToGranteeTotal = api
+                var adminCostTotal = api
                     .column(6)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
-                var rowTotal = api
+                var disburseToGranteeTotal = api
                     .column(7)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
+                var rowTotal = api
+                    .column(8)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(0).footer()).html('Total');
-                $(api.column(1).footer()).html(elemTotal);
-                $(api.column(2).footer()).html(hsTotal);
-                $(api.column(3).footer()).html(vocTotal);
-                $(api.column(4).footer()).html(collegeTotal);
-                $(api.column(5).footer()).html(adminCostTotal);
-                $(api.column(6).footer()).html(disburseToGranteeTotal);
-                $(api.column(7).footer()).html(rowTotal);
+                $(api.column(1).footer()).html('Total');
+                $(api.column(2).footer()).html(elemTotal);
+                $(api.column(3).footer()).html(hsTotal);
+                $(api.column(4).footer()).html(vocTotal);
+                $(api.column(5).footer()).html(collegeTotal);
+                $(api.column(6).footer()).html(adminCostTotal);
+                $(api.column(7).footer()).html(disburseToGranteeTotal);
+                $(api.column(8).footer()).html(rowTotal);
             },
 
-            dom: 'Bfrtip',
-            buttons: [
-                'excel', {
-                    extend: 'print',
-                    autoPrint: false,
-                    title: '',
-                    footer: true,
-                    messageTop: '<p class="text-right">Form F</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>SUMMARY OF ACTUAL DISBURSEMENT<br>School Year ___<br>as of Date</p>',
-                    customize: function(win) {
-                        $(win.document.body).find('table thead th:nth-child(1)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(2)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
-                        $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
+            dom: 'BfrtipQ',
+            buttons: [{
+                title: 'SUMMARY OF ACTUAL DISBURSEMENT (FORM F)',
+                extend: 'excelHtml5',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
 
-                        $(win.document.body).find('table tbody td:nth-child(1)').css('text-align', 'center');
-                        $(win.document.body).find('table tbody td:nth-child(2)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(7)').css('text-align', 'right');
-                        $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'right');
-
-                        $(win.document.body).find('table tfoot th:nth-child(1)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'right');
-                        $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'right');
-                        var last = null;
-                        var current = null;
-                        var bod = [];
-
-                        var css = '@page { size: landscape; }',
-                            head = win.document.head || win.document.getElementsByTagName('head')[0],
-                            style = win.document.createElement('style');
-
-                        style.type = 'text/css';
-                        style.media = 'print';
-
-                        if (style.styleSheet) {
-                            style.styleSheet.cssText = css;
-                        } else {
-                            style.appendChild(win.document.createTextNode(css));
-                        }
-
-                        head.appendChild(style);
-
-                    }
                 }
-            ]
+            }, {
+                extend: 'print',
+                autoPrint: false,
+                title: '',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                },
+                messageTop: '<p class="text-right">Form F</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>SUMMARY OF ACTUAL DISBURSEMENT<br>School Year ___<br>as of Date</p>',
+                customize: function(win) {
+                    $(win.document.body).find('table thead th:nth-child(1)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(2)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tbody td:nth-child(1)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(2)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(7)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'right');
+
+                    $(win.document.body).find('table tfoot th:nth-child(1)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'right');
+                    var last = null;
+                    var current = null;
+                    var bod = [];
+
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+
+                }
+            },'colvis']
 
         });
 

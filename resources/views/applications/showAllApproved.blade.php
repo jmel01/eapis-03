@@ -42,6 +42,10 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        <!-- <a href="{{ url('profiles/' . $application->user_id)}}" class="btn btn-info btn-sm">Profile</a> -->
+                        @can('profile-edit')
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
+                        @endcan
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">Files</a>
                     </td>
                 </tr>
@@ -65,10 +69,12 @@
         Footer
     </div>
 </div>
-
 @endsection
 
 @push('scripts')
+
+@include('profiles.modalProfile')
+
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js">
 </script>
 
@@ -82,9 +88,32 @@
             "ordering": true,
             "info": true,
             "autoWidth": true,
-            "responsive": true,
+        });
+
+        $('.btn-edit-profile').click(function() {
+            var id = $(this).attr('data-id');
+            var url_id = $(this).attr('data-url');
+            $('[name="id"]').val(id)
+
+            $.ajax({
+                url : '/profile/update/show-modal',
+                type : 'GET',
+                data : {id: id},
+            }).done(result => {
+                $('#modalProfile .modal-body').empty()
+                $('#modalProfile .modal-body').append(result)
+                $('#modalProfile').modal('show')
+            })
         });
     });
 </script>
-
+@include('profiles.scriptAddSibling')
+@include('profiles.scriptAddSchool')
+@if (count($errors->profile) > 0)
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#modalProfile').modal('show');
+    });
+</script>
+@endif
 @endpush

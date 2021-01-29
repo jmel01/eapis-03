@@ -1,5 +1,5 @@
 @extends('layouts.adminlte.template')
-@section('title', 'Report on Disbursement')
+@section('title', 'Actual Payments of Grantees')
 
 @push('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
@@ -8,7 +8,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Report on Disbursement</h3>
+        <h3 class="card-title">Actual Payments of Grantees</h3>
     </div>
     <div class="card-body">
 
@@ -16,8 +16,9 @@
             <thead>
                 <tr>
                     <th>Payee</th>
-                    <th>Particulars (Administrative Cost)</th>
+                    <th>Date Received</th>
                     <th>Amount</th>
+                    <th>Check Number</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
@@ -26,8 +27,9 @@
                 @foreach ($data as $key => $cost)
                 <tr>
                     <td>{{ $cost->payee }}</td>
-                    <td>{{ $cost->particulars }}</td>
+                    <td>{{ $cost->dateRcvd }}</td>
                     <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
+                    <td>{{ $cost->checkNo }}</td>
                     <td>{{ App\Models\Psgc::getProvince($cost->province) }}</td>
                     <td>{{ App\Models\Psgc::getRegion($cost->province) }}</td>
                 </tr>
@@ -38,6 +40,7 @@
                     <th></th>
                     <th></th>
                     <th class="text-right"></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -105,7 +108,7 @@
             },
             dom: 'BfrtipQ',
             buttons: [{
-                title: 'Report on Disbursement-Administrative Cost (FORM E)',
+                title: 'Actual Payments of Grantees (FORM G)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
@@ -117,7 +120,7 @@
                 autoPrint: false,
                 title: '',
                 footer: true,
-                messageTop: '<p class="text-right">Form E</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS ON DISBURSEMENT*<br>NCIP-EAP ADMINISTRATIVE COST SY ___</p>',
+                messageTop: '<p class="text-right">Form G</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>ACTUAL PAYMENTS OF GRANTEES<br>SY ___</p>',
                 customize: function(win) {
                     $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
                     $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');

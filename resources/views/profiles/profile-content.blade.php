@@ -311,6 +311,11 @@
     </div>
 </div>
 
+<script>
+    $(function(){
+        $('#region').trigger("change")
+    })
+</script>
 @include('psgc.scriptPsgc')
 @include('profiles.scriptAddSchool')
 @include('profiles.scriptAddSibling')

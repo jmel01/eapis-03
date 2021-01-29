@@ -86,13 +86,13 @@
                                 <p>Actual Disbursement</p>
                             </a>
                         </li>
-                        <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ route('formG') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
-                                <p>Form G x</p>
+                                <p>Actual Payment of Grantees</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a href="{{ route('formH') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Form H x</p>

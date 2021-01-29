@@ -15,12 +15,13 @@ class CreateAdminCostsTable extends Migration
     {
         Schema::create('admin_costs', function (Blueprint $table) {
             $table->id();
+            $table->string('application_id')->nullable();
             $table->string('grant_id');
             $table->string('user_id')->nullable();
             $table->date('dateRcvd');
             $table->string('payee');
             $table->string('particulars')->nullable();
-            $table->float('amount', 10, 2);
+            $table->string('amount');
             $table->string('checkNo')->nullable();
             $table->string('province');
             $table->timestamps();

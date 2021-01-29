@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
 
-        <table id="graduateList" class="table table-sm table-hover table-responsive-lg">
+        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
                     <th>Kind of EAP/Name</th>
@@ -27,7 +27,8 @@
                     <th>High School</th>
                     <th>Elementary</th>
                     <th>No. of Years Availed</th>
-                    <th>Province</th>
+                    <th>Province/District</th>
+                    <th>Region</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,10 +46,29 @@
                     <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='Elementary') &#10003; @endif</td>
                     <td></td>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center text-bold"></th>
+                    <th class="text-center text-bold"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center text-bold"></th>
+                    <th class="text-center text-bold"></th>
+                    <th class="text-center text-bold"></th>
+                    <th class="text-center text-bold"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
 
     </div>
@@ -74,36 +94,109 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
-            dom: 'Bfrtip',
-            buttons: [
-                'excel', {
-                    extend: 'print',
-                    autoPrint: false,
-                    title: '',
-                    messageTop: '<p class="text-right">Form B</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF GRADUATES<br>SY ___<br>As of Month, Year</p>',
-                    customize: function(win) {
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
 
-                        var last = null;
-                        var current = null;
-                        var bod = [];
+                // Remove the formatting to get integer data for summation
+                var intVal = function(i) {
+                    return i != '' ? 1 : 0;
+                };
 
-                        var css = '@page { size: landscape; }',
-                            head = win.document.head || win.document.getElementsByTagName('head')[0],
-                            style = win.document.createElement('style');
+                // computing column Total of the complete result 
 
-                        style.type = 'text/css';
-                        style.media = 'print';
+                var male = api
+                    .column(2)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
 
-                        if (style.styleSheet) {
-                            style.styleSheet.cssText = css;
-                        } else {
-                            style.appendChild(win.document.createTextNode(css));
-                        }
+                var female = api
+                    .column(3)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
 
-                        head.appendChild(style);
-                    }
+                var college = api
+                    .column(7)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var vocational = api
+                    .column(8)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var highSchool = api
+                    .column(9)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var elementary = api
+                    .column(10)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                // Update footer by showing the total with the reference of the column index 
+                $(api.column(1).footer()).html('Total');
+                $(api.column(2).footer()).html(male);
+                $(api.column(3).footer()).html(female);
+                $(api.column(7).footer()).html(college);
+                $(api.column(8).footer()).html(vocational);
+                $(api.column(9).footer()).html(highSchool);
+                $(api.column(10).footer()).html(elementary);
+            },
+            dom: 'BfrtipQ',
+            buttons: [{
+                title: 'Report of Graduates (FORM B)',
+                extend: 'excelHtml5',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+
                 }
-            ]
+            }, {
+                extend: 'print',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+                },
+                autoPrint: false,
+                title: '',
+                messageTop: '<p class="text-right">Form B</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF GRADUATES<br>SY ___<br>As of Month, Year</p>',
+                customize: function(win) {
+
+                    var last = null;
+                    var current = null;
+                    var bod = [];
+
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+                }
+            }, 'colvis']
         });
 
     });

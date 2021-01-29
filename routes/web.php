@@ -33,7 +33,8 @@ Route::get('/', function () {
     if (Auth::check()) {
         return redirect('/dashboard/applicant');
     }
-    return view('welcome');
+    return view('auth/login');
+    //return view('welcome');
 });
 
 Auth::routes();

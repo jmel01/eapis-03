@@ -8,13 +8,14 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Report of Termination</h3>
+        <h3 class="card-title">Report of Termination (FORM C)</h3>
     </div>
     <div class="card-body">
 
-        <table id="teminatedList" class="table table-sm table-hover table-responsive-lg">
+        <table id="teminatedList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
+                    <th>Region</th>
                     <th>Province</th>
                     <th>Kind of EAP</th>
                     <th>Name</th>
@@ -30,6 +31,7 @@
             <tbody>
                 @foreach ($data as $key => $application)
                 <tr>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
@@ -43,6 +45,21 @@
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                    <th class="text-right"></th>
+                </tr>
+            </tfoot>
         </table>
 
     </div>
@@ -68,36 +85,119 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
-            dom: 'Bfrtip',
-            buttons: [
-                'excel', {
-                    extend: 'print',
-                    autoPrint: false,
-                    title: '',
-                    messageTop: '<p class="text-right">Form C</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF TERMINATION<br>SY ___<br>As of Month, Year</p>',
-                    customize: function(win) {
+           
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
 
-                        var last = null;
-                        var current = null;
-                        var bod = [];
+                // Remove the formatting to get integer data for summation
+                var intVal = function(i) {
+                    return i != '' ? 1 : 0;
+                };
 
-                        var css = '@page { size: landscape; }',
-                            head = win.document.head || win.document.getElementsByTagName('head')[0],
-                            style = win.document.createElement('style');
+                // computing column Total of the complete result 
 
-                        style.type = 'text/css';
-                        style.media = 'print';
+                var fsd = api
+                    .column(4)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
 
-                        if (style.styleSheet) {
-                            style.styleSheet.cssText = css;
-                        } else {
-                            style.appendChild(win.document.createTextNode(css));
-                        }
+                var fg = api
+                    .column(5)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
 
-                        head.appendChild(style);
-                    }
+                var ds = api
+                    .column(6)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var ne = api
+                    .column(7)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var fpd = api
+                    .column(8)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var eogs = api
+                    .column(9)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var others = api
+                    .column(10)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+                // Update footer by showing the total with the reference of the column index 
+                $(api.column(3).footer()).html('Total');
+                $(api.column(4).footer()).html(fsd);
+                $(api.column(5).footer()).html(fg);
+                $(api.column(6).footer()).html(ds);
+                $(api.column(7).footer()).html(ne);
+                $(api.column(8).footer()).html(fpd);
+                $(api.column(9).footer()).html(eogs);
+                $(api.column(10).footer()).html(others);
+            },
+            dom: 'BfrtipQ',
+            buttons: [{
+                title: 'Report of Termination (FORM C)',
+                extend: 'excelHtml5',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+
                 }
-            ]
+            }, {
+                extend: 'print',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible'
+
+                },
+                autoPrint: false,
+                title: '',
+                messageTop: '<p class="text-right">Form C</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF TERMINATION<br>SY ___<br>As of Month, Year</p>',
+                customize: function(win) {
+
+                    var last = null;
+                    var current = null;
+                    var bod = [];
+
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+                }
+            }, 'colvis']
         });
 
     });
