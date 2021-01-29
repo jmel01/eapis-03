@@ -601,7 +601,7 @@ class DashboardController extends Controller
             );
             return redirect('profiles/'.Auth::id())->with($notification);
         }
-        
+
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 

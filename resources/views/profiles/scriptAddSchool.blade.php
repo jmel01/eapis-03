@@ -1,6 +1,6 @@
 <script type="text/javascript">
     $("#addSchool").click(function() {
-      
+        
         $("#dynamicSchool").append('<tr> ' +
             '<td><input name="schName[]" type="text" class="form-control"></td>' +
             '<td><input name="schAddress[]" type="text" class="form-control"></td>' +

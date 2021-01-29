@@ -16,7 +16,7 @@
                         jQuery('select[name="city"]').empty();
                         jQuery('select[name="barangay"]').empty();
                         let provinceCode = $('#provinceCode').val()
-                        
+
                         if(provinceCode == ''){
                             $('select[name="province"]').append('<option disabled selected> Select Province/District </option>');
                         }
@@ -25,12 +25,14 @@
                             let isSelected = provinceCode == value.code ? 'selected' : ''
                             options = '<option '+isSelected+' value="' + value.code + '">' + value.name + '</option>'
                             $('select[name="province"]').append(options);
-                            $('#province').trigger("change")
+                            if(isSelected == 'selected'){
+                                $('#province').trigger("change")
+                            }
                         });
 
                     }
                 });
-                
+
             } else {
                 $('select[name="province"]').empty();
             }
@@ -58,7 +60,10 @@
                             let isSelected = cityCode == value.code ? 'selected' : ''
                             options = '<option '+isSelected+' value="' + value.code + '">' + value.name + '</option>'
                             $('select[name="city"]').append(options);
-                            $('#city').trigger("change")
+
+                            if(isSelected == 'selected'){
+                                $('#city').trigger("change")
+                            }
                         });
                     }
                 });
@@ -80,7 +85,7 @@
                     dataType: "json",
                     success: function(data) {
                         jQuery('select[name="barangay"]').empty();
-                        let brgyCode = $('#cityCode').val()
+                        let brgyCode = $('#barangayCode').val()
                         if(brgyCode == ''){
                             $('select[name="barangay"]').append('<option disabled selected>Select Barangay</option>');
                         }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AdminCost;
+use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -54,6 +55,12 @@ class AdminCostController extends Controller
         $input = $request->all();
 
         AdminCost::updateOrCreate(["id" => $request->id], $input);
+
+        if(isset($request->id)){
+            AuditEvent::insert('Update admin cost (Reference: '.$request->payee.')');
+        }else{
+            AuditEvent::insert('Create admin cost (Reference: '.$request->payee.')');
+        }
 
         $notification = array(
             'message' => 'Admin cost updated successfully',
@@ -114,7 +121,13 @@ class AdminCostController extends Controller
      */
     public function destroy($id)
     {
-        AdminCost::find($id)->delete();
+        $adminCost = AdminCost::find($id);
+
+        if(isset($id)){
+            AuditEvent::insert('Delete admin cost (Reference: '.$adminCost->payee.')');
+        }
+
+        $adminCost->delete();
 
         $notification = array(
             'message' => 'Record deleted successfully',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Requirement;
 use Illuminate\Http\Request;
 
@@ -41,6 +42,12 @@ class RequirementController extends Controller
         ]);
 
         $requirement =  Requirement::updateOrCreate(["id" => $request->id], $request->all());
+
+        if(isset($request->id)){
+            AuditEvent::insert('Update requirement');
+        }else{
+            AuditEvent::insert('Create requirement');
+        }
 
         $notification = array(
             'message' => 'Requirement updated successfully',
@@ -92,6 +99,10 @@ class RequirementController extends Controller
     public function destroy($id)
     {
         Requirement::find($id)->delete();
+
+        if(isset($id)){
+            AuditEvent::insert('Delete calendar');
+        }
 
         $notification = array(
             'message' => 'Requirement Deleted successfully',

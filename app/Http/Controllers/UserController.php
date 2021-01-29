@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use App\Models\User;
@@ -85,6 +86,13 @@ class UserController extends Controller
 
         $user =  User::updateOrCreate(["id" => $request->id], $input);
 
+        if(isset($request->id)){
+            AuditEvent::insert('Update user');
+        }else{
+            AuditEvent::insert('Create user');
+        }
+
+
         DB::table('model_has_roles')->where('model_id', $request->id)->delete();
         $user->assignRole($request->input('roles'));
 
@@ -140,7 +148,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        AuditEvent::insert('delete user');
+        $user->delete();
 
         $notification = array(
             'message' => 'User Deleted successfully',

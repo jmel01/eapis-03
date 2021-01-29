@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -60,6 +61,12 @@ class GrantController extends Controller
 
         Grant::updateOrCreate($grantid, $grantInformation);
 
+        if(isset($request->id)){
+            AuditEvent::insert('Update grant');
+        }else{
+            AuditEvent::insert('Create grant');
+        }
+
         $notification = array(
             'message' => 'Profile updated successfully',
             'alert-type' => 'success'
@@ -111,7 +118,13 @@ class GrantController extends Controller
      */
     public function destroy($id)
     {
-        Grant::find($id)->delete();
+        $grant = Grant::find($id);
+
+        if(isset($id)){
+            AuditEvent::insert('Delete grant');
+        }
+
+        $grant->delete();
 
         $notification = array(
             'message' => 'Scholarship/Grant deleted successfully',

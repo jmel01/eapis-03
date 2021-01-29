@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,6 +92,8 @@ class DocumentController extends Controller
         );
 
         Document::create($form_data);
+
+        AuditEvent::insert('Create document');
 
         return back()
             ->with('success', 'Document created successfully.');

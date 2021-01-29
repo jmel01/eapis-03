@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Ethnogroup;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -47,6 +48,12 @@ class EthnogroupController extends Controller
         $input = $request->all();
 
         Ethnogroup::updateOrCreate(["id" => $request->id], $input);
+
+        if(isset($request->id)){
+            AuditEvent::insert('Update ethnogroup');
+        }else{
+            AuditEvent::insert('Create ethnogroup');
+        }
 
         $notification = array(
             'message' => 'Ethnolinguistic Group updated successfully',
