@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Calendar;
 use App\Models\Psgc;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +67,12 @@ class CalendarController extends Controller
 
         Calendar::updateOrCreate($user, $input);
 
+        if(isset($request->id)){
+            AuditEvent::insert('Update calendar');
+        }else{
+            AuditEvent::insert('Create calendar');
+        }
+
         $notification = array(
             'message' => 'Announcement created successfully',
             'alert-type' => 'success'
@@ -94,7 +101,7 @@ class CalendarController extends Controller
     public function edit($id)
     {
         $announcement = Calendar::find($id);
-    
+
         return response()->json(['announcement' => $announcement]);
     }
 

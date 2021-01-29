@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditEvent;
 use App\Models\Education;
 use App\Models\Profile;
 use App\Models\Psgc;
@@ -88,6 +89,12 @@ class ProfileController extends Controller
         $input['psgCode'] = $request->barangay;
 
         Profile::updateOrCreate(["user_id" => $request->id], $input);
+
+        if(isset($request->id)){
+            AuditEvent::insert('Update profile');
+        }else{
+            AuditEvent::insert('Create profile');
+        }
 
         Education::insert($request);
         Siblings::insert($request);

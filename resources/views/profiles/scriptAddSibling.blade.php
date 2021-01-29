@@ -1,6 +1,6 @@
 <script type="text/javascript">
+
     $("#addSibling").click(function() {
-       
         $("#dynamicSibling").append('<tr>' +
             '<td><input type="text" name="siblingName[]" class="form-control" /></td>' +
             '<td><input type="date" name="siblingBirthdate[]" class="form-control" /></td>' +

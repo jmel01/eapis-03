@@ -29,12 +29,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    if (Auth::check()) {
-        return redirect('/dashboard/applicant');
-    }
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'checker']);
 
 Auth::routes();
 

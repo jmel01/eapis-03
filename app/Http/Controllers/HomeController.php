@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditTrail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -42,5 +44,20 @@ class HomeController extends Controller
         if (Auth::user()->hasAnyRole(["Applicant"])) {
             return redirect()->route('applicant');
         }
+    }
+
+    public function checker(){
+        if (Auth::check()) {
+            if( session('audit_trail_id') == '' ){
+                $auditTrail = AuditTrail::create([
+                    'user_id' => Auth::id()
+                ]);
+
+                session(['audit_trail_id' => $auditTrail->id]);
+            }
+            return redirect('/dashboard/applicant');
+        }
+        Session::flush();
+        return view('welcome');
     }
 }

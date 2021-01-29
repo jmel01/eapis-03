@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -62,7 +63,7 @@ class ApplicationController extends Controller
 
         return view('applications.show', compact('data', 'grant', 'provinces'));
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -111,6 +112,12 @@ class ApplicationController extends Controller
         $grantInformation = $request->all();
 
         Application::updateOrCreate($grantid, $grantInformation);
+
+        if(isset($request->id)){
+            AuditEvent::insert('Update application');
+        }else{
+            AuditEvent::insert('Create application');
+        }
 
         $notification = array(
             'message' => 'Profile updated successfully',
@@ -174,6 +181,10 @@ class ApplicationController extends Controller
     public function destroy($id)
     {
         Application::find($id)->delete();
+
+        if(isset($id)){
+            AuditEvent::insert('Delete application');
+        }
 
         $notification = array(
             'message' => 'Record deleted successfully',
