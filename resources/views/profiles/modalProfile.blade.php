@@ -10,7 +10,6 @@
             <form role="form" method="POST" action="{{ route('profiles.store') }}" id="formProfile">
                 @csrf
                 <div class="modal-body">
-
                     <nav>
                         <div class="nav nav-tabs" role="tablist">
                             <a class="nav-item nav-link active" data-toggle="tab" href="#tab1" role="tab">
@@ -323,7 +322,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <input name="id" value="{{old('id')}}" type="hidden">

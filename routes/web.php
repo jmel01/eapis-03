@@ -45,6 +45,7 @@ Route::get('psgc/getBrgy', [PsgcController::class, 'getBrgy'])->name('getBrgy');
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('/applications/showAllApproved', [ApplicationController::class, 'showAllApproved'])->name('showAllApproved');
     Route::get('/applications/showApproved/{id}', [ApplicationController::class, 'showApproved'])->name('showApproved');
     Route::get('/applications/showTerminated/{id}', [ApplicationController::class, 'showTerminated'])->name('showTerminated');
     Route::get('/applications/showOnProcess/{id}', [ApplicationController::class, 'showOnProcess'])->name('showOnProcess');
@@ -61,7 +62,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard/applicant', [DashboardController::class, 'applicant'])->name('applicant');
     Route::resource('dashboard', DashboardController::class);
 
+    Route::get('/showAttachment/{grantID}/{userID}', [DocumentController::class, 'showAttachment'])->name('showAttachment');
+    Route::post('/myDocumentUpload', [DocumentController::class, 'myDocumentStore'])->name('myDocumentUpload');
+    Route::get('/myDocument', [DocumentController::class, 'myDocument'])->name('myDocument');
     Route::resource('documents', DocumentController::class);
+
     Route::resource('ethnogroups', EthnogroupController::class);
     Route::resource('grants', GrantController::class);
     Route::resource('profiles', ProfileController::class);
@@ -77,6 +82,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+
+    Route::group(['prefix' => 'profile'], function () {
+        Route::group(['prefix' => 'update'], function () {
+            Route::get('show-modal', [ProfileController::class, 'showProfileModal']);
+        });
+    });
 
     Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
 });

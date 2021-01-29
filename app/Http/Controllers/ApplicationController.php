@@ -7,10 +7,25 @@ use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
+    public function showAllApproved()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $data = Application::with('applicant.psgcBrgy')
+                ->where('status', 'Approved')
+                ->get();
+        } else {
+            $data = Application::with('applicant.psgcBrgy')
+                ->where('status', 'Approved') //Add filter region
+                ->get();
+        }
+
+        return view('applications.showAllApproved', compact('data'));
+    }
 
     public function showApproved($id)
     {
@@ -18,6 +33,8 @@ class ApplicationController extends Controller
             ->where('grant_id', $id)
             ->where('status', 'Approved')
             ->get();
+
+
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
 
@@ -33,9 +50,9 @@ class ApplicationController extends Controller
     {
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
-            ->where('status','!=', 'Approved')
-            ->where('status','!=', 'On Process')
-            ->where('status','!=', 'Graduated')
+            ->where('status', '!=', 'Approved')
+            ->where('status', '!=', 'On Process')
+            ->where('status', '!=', 'Graduated')
             ->whereNotNull('status')
             ->get();
 
