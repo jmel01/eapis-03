@@ -13,18 +13,19 @@ class PsgcController extends Controller
         $cityId = Str::substr($request->cityID, 0, 6);
 
         $barangays = Psgc::where([[\DB::raw('substr(code, 1, 6)'), '=' , $cityId],['level', 'Bgy']])
-        ->get();
-       
+        ->orderBy('name', 'asc')->get();
+
         return json_encode($barangays);
     }
 
     public function getCities(Request $request)
     {
         $provinceId = Str::substr($request->provinceID, 0, 4);
-        
+
         $cities = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=' , $provinceId],['level', 'City']])
         ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=' , $provinceId],['level', 'Mun']])
         ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=' , $provinceId],['level', 'SubMun']])
+        ->orderBy('name', 'asc')
         ->get();
 
         return json_encode($cities);
@@ -36,6 +37,7 @@ class PsgcController extends Controller
 
         $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=' , $regionId],['level', 'Prov']])
         ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=' , $regionId],['level', 'Dist']])
+        ->orderBy('name', 'asc')
         ->get();
 
         return json_encode($provinces);
