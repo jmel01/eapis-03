@@ -32,9 +32,9 @@
         </div>
     </div>
     <div class="card-body">
+        @can('announcement-add')
         <div class="row">
             <div class="col-lg-12 mb-3">
-
                 <div class="float-right">
                     <button type="button" class="btn btn-primary addCalendar">
                         Create New Announcement
@@ -42,7 +42,7 @@
                 </div>
             </div>
         </div>
-
+        @endcan
         <div class="row">
             <div class="col-md-7">
                 <table id="calendarList" class="table table-sm table-hover table-responsive-lg">
@@ -89,6 +89,7 @@
 
 @include('calendars.modalAnnouncement')
 @include('calendars.modalShowAnnouncement')
+@include('layouts.adminlte.modalDelete')
 
 @endsection
 
@@ -128,6 +129,7 @@
         $('.addCalendar').click(function() {
             document.getElementById("formCalendar").reset();
             $('[name="id"]').val('')
+            $('[name="user_id"]').val('')
             $('#modalAnnouncement').modal('show')
         })
 
@@ -142,6 +144,7 @@
                     dateTo.setMinutes(dateTo.getMinutes() - dateTo.getTimezoneOffset());
 
                 $('[name="id"]').val(data.announcement.id)
+                $('[name="user_id"]').val(data.announcement.user_id)
                 $('[name="dateTimeStart"]').val(dateFrom.toISOString().slice(0,16))
                 $('[name="dateTimeEnd"]').val(dateTo.toISOString().slice(0,16))
                 
@@ -153,6 +156,13 @@
                 $('#modalAnnouncement').modal('show')
             })
         })
+
+        $('.btn-delete-calendar').click(function() {
+            var url_id = $(this).attr('data-url');
+            document.getElementById("formDelete").action = url_id;
+            $('#modalDelete').modal('show')
+
+        });
         
             function timestampToDatetimeInputString(timestamp) {
                 const date = new Date((timestamp + _getTimeZoneOffsetInMs()));

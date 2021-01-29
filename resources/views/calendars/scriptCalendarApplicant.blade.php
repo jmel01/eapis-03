@@ -14,7 +14,7 @@
             footerToolbar: {
                 left: '',
                 center: '',
-                right: 'dayGridMonth,today,listMonth'
+                right: 'today,dayGridMonth,listMonth'
             },
             slotMinTime: "8:00:00",
             slotMaxTime: "18:00:00",

@@ -46,18 +46,21 @@
                     <td>{{ $psgcProvince->name ?? '' }}</td>
 
                     <td>
-
+                    @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}"
                             class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
-
+                    @endcan
+                    @can('application-delete')
                         <button data-url="{{ route('applications.destroy', $application->id) }}"
                             class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
+                    @endcan
+                    @can('expenses-add')
                         @if($application->status=='Approved')
                         <button data-payee="{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName,1,'1') }}." data-particular="Grant Payment"
                             data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}"
                             class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
                         @endif
-
+                        @endcan
                     </td>
                 </tr>
                 @endforeach

@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'Dashboard')
+@section('title', 'Student Dashboard')
 
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">
@@ -15,32 +15,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12 col-md-12 col-lg-9 order-2 order-md-1">
-                <div class="row">
-                    <div class="col-12 col-sm-4">
-                        <div class="info-box bg-light">
-                            <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated budget</span>
-                                <span class="info-box-number text-center text-muted mb-0">2300</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <div class="info-box bg-light">
-                            <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total amount spent</span>
-                                <span class="info-box-number text-center text-muted mb-0">2000</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-sm-4">
-                        <div class="info-box bg-light">
-                            <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Estimated project duration</span>
-                                <span class="info-box-number text-center text-muted mb-0">20 <span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="row">
                     <div class="col-12">
                         @if($userProfile == '')
@@ -237,4 +212,5 @@
 <script src="{{ asset('/js/full-calendar.js') }}"></script>
 @include('calendars.scriptCalendarApplicant')
 @include('profiles.scriptAddSchool')
+@include('profiles.scriptAddSibling')
 @endpush

@@ -44,6 +44,8 @@ class HomeController extends Controller
         if (Auth::user()->hasAnyRole(["Applicant"])) {
             return redirect()->route('applicant');
         }
+        
+        return redirect()->route('applicant');
     }
 
     public function checker(){

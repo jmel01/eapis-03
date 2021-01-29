@@ -53,16 +53,20 @@ class CalendarController extends Controller
             'dateTimeEnd',
             'color',
             'region',
+            'user_id',
+            'id',
         ]);
 
         $user = [
             "id" => $request->id,
-            "user_id" => Auth::id(),
         ];
 
         $input = $request->all();
         if (empty($request->input('color'))) {
             $input['color'] = '#17a2b8'; // default color if nothing selected
+        }
+        if (empty($request->input('user_id'))) {
+            $input['user_id'] = Auth::id(); // default user if nothing selected
         }
 
         Calendar::updateOrCreate($user, $input);
@@ -123,8 +127,14 @@ class CalendarController extends Controller
      * @param  \App\Models\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Calendar $calendar)
+    public function destroy($id)
     {
-        //
+        Calendar::find($id)->delete();
+
+        $notification = array(
+            'message' => 'Announcement Deleted successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
     }
 }

@@ -8,7 +8,7 @@
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
-                right: 'dayGridMonth,listWeek'
+                right: 'dayGridMonth,listMonth'
             },
             slotMinTime: "8:00:00",
             slotMaxTime: "18:00:00",
@@ -26,7 +26,9 @@
 
                 $('[name="title"]').val(eventObj.title)
                 $('[name="description"]').val(eventObj.extendedProps.description)
-                $('[name="date"]').val(eventObj.start.toDateString())
+                $('[name="datestart"]').val(eventObj.start)
+                $('[name="dateend"]').val(eventObj.end)
+                $('[name="region"]').val(eventObj.extendedProps.region)
 
                 $('#modalShowAnnouncement').modal('show')
             },
@@ -36,6 +38,7 @@
                     start: '{{ $announcement->dateTimeStart }}',
                     end: '{{ $announcement->dateTimeEnd }}',
                     description: '{{ $announcement->description }}',
+                    region: '{{ $announcement->regionname->name }}',
                     @php
                     $date_now = date("Y-m-d");
                     $event_date = date($announcement -> dateTimeEnd);

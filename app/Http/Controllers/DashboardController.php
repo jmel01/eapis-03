@@ -274,7 +274,9 @@ class DashboardController extends Controller
 
     public function regionalOfficer()
     {
-        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::where('region',Auth::user()->region)
+        ->orderBy('dateTimeStart', 'DESC')->get();
+
         $regionId = Str::substr(Auth::user()->region, 0, 2);
 
         $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])

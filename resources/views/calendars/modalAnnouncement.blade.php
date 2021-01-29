@@ -30,7 +30,7 @@
 
                     <div class="row">
                         <div class="form-group col-md-6">
-                            @role('Admin')
+                            @hasanyrole('Admin|Executive Officer')
                             <div class="form-group">
                                 <label>Region</label>
                                 <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
@@ -42,7 +42,7 @@
                             </div>
                             @else
                             <input name="region" type="hidden" value="{{Auth::user()->region ?? ''}}">
-                            @endrole
+                            @endhasanyrole
 
                         </div>
 
@@ -76,7 +76,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input name="id" type="hidden">
+                    <input name="id" value="{{old('id')}}" type="hidden">
+                    <input name="user_id" value="{{old('user_id')}}" type="hidden">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>

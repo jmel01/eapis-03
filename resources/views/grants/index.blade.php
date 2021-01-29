@@ -53,7 +53,7 @@
                             @endif
                     </td>
                     <td>
-
+                        @can('application-browse')
                         <div class="btn-group mr-1" role="group">
                             <a href="{{ route('applications.show',$grant->id) }}" type="button"
                                 class="btn btn-info btn-sm">Applications</a>
@@ -70,9 +70,10 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        @endcan
+                        @can('expenses-browse')
                         <a href="{{ route('costs.show',$grant->id) }}" class="btn btn-primary btn-sm mr-1">Admin Cost</a>
-
+                        @endcan
                         @can('grant-edit')
                         <button data-url="{{ route('grants.edit',$grant->id) }}"
                             class="btn btn-primary btn-sm mr-1 btn-edit-grant">Edit</button>
