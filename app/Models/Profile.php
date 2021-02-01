@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Profile extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -41,6 +42,12 @@ class Profile extends Model
         'motherEthnoGroup',
         'motherIncome',
     ];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
+
+    protected static $logName = 'Profile';
 
     public function user()
     {

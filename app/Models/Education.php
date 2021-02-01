@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Education extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $table = 'education';
 
@@ -22,6 +23,12 @@ class Education extends Model
         'average_grade',
         'rank'
     ];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
+
+    protected static $logName = 'Education';
 
     static function insert($request){
         Education::where('user_id', $request->id)->delete();

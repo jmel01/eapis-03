@@ -112,12 +112,14 @@
                 </li>
                 @endcan
 
+                @hasanyrole('Admin|Executive Officer|Regional Officer|Provincial Officer|Community Service Officer')
                 <li class="nav-item">
                     <a href="{{ route('myDocument') }}" class="nav-link">
                         <i class="far fa-folder-open nav-icon"></i>
                         <p>My Documents</p>
                     </a>
                 </li>
+                @endhasanyrole
 
                 @can('user-browse')
                 <li class="nav-item has-treeview">
@@ -164,11 +166,12 @@
                 @endcan
 
                 @endunlessrole
+
                 @role('Admin')
                 <li class="nav-item">
-                    <a href="/user-logs" class="nav-link">
+                    <a href="/activity-logs" class="nav-link">
                         <i class="fas fa-clipboard-list nav-icon"></i>
-                        <p>Audit Trail</p>
+                        <p>Activity Logs</p>
                     </a>
                 </li>
                 @endrole

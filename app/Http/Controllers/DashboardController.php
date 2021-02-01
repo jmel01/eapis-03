@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
+use Spatie\Activitylog\Models\Activity;
 
 
 class DashboardController extends Controller
@@ -888,9 +889,9 @@ class DashboardController extends Controller
         return $response;
     }
 
-    public function userLogs(){
-        $auditEvents = AuditEvent::all();
+    public function activityLogs(){
+         $activity = Activity::orderBy('created_at', 'Desc')->get();
 
-        return view('userlogs.index', compact('auditEvents'));
+        return view('activity.index', compact('activity'));
     }
 }

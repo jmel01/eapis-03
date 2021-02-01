@@ -44,7 +44,7 @@ class HomeController extends Controller
         if (Auth::user()->hasAnyRole(["Applicant"])) {
             return redirect()->route('applicant');
         }
-        
+
         return redirect()->route('applicant');
     }
 
@@ -57,7 +57,7 @@ class HomeController extends Controller
 
                 session(['audit_trail_id' => $auditTrail->id]);
             }
-            return redirect('/dashboard/applicant');
+            return redirect('/home');
         }
         Session::flush();
         return view('welcome');

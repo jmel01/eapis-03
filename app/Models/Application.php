@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Application extends Model
 {
-    use HasFactory;
+    use HasFactory, LogsActivity;
 
     protected $fillable = [
         'id',
@@ -22,6 +23,12 @@ class Application extends Model
         'status',
         'remarks',
     ];
+
+    protected static $logFillable = true;
+
+    protected static $logOnlyDirty = true;
+
+    protected static $logName = 'Application';
 
     public function applicant()
     {

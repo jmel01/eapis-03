@@ -102,8 +102,10 @@ class EthnogroupController extends Controller
      * @param  \App\Models\Ethnogroup  $ethnogroup
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Ethnogroup $ethnogroup)
+    public function destroy($id)
     {
+        Ethnogroup::find($id)->delete();
+
         $notification = array(
             'message' => 'Ethnolinguistic Group removed successfully',
             'alert-type' => 'success'

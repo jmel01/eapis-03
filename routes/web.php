@@ -17,6 +17,7 @@ use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,9 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [HomeController::class, 'checker']);
+Route::get('/', function () {
+    return redirect('login');
+});
 
 Auth::routes();
 
@@ -38,6 +41,8 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('blank', function () {
     return view('blank');
 });
+
+Route::get('/userChecker', [HomeController::class, 'checker']);
 
 Route::get('psgc/getProvinces', [PsgcController::class, 'getProvinces'])->name('getProvinces');
 Route::get('psgc/getCities', [PsgcController::class, 'getCities'])->name('getCities');
@@ -82,7 +87,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
-    Route::get('/user-logs', [DashboardController::class, 'userLogs']);
+    Route::get('/activity-logs', [DashboardController::class, 'activityLogs']);
 
     Route::group(['prefix' => 'profile'], function () {
         Route::group(['prefix' => 'update'], function () {

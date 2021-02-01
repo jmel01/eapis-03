@@ -62,8 +62,13 @@ class RoleController extends Controller
         $role = Role::create(['name' => $request->input('name')]);
         $role->syncPermissions($request->input('permission'));
 
+        $notification = array(
+            'message' => 'Role created successfully',
+            'alert-type' => 'success'
+        );
+
         return redirect()->route('roles.index')
-            ->with('success', 'Role created successfully');
+            ->with($notification);
     }
     /**
      * Display the specified resource.
@@ -118,8 +123,13 @@ class RoleController extends Controller
 
         $role->syncPermissions($request->input('permission'));
 
+        $notification = array(
+            'message' => 'Role updated successfully',
+            'alert-type' => 'success'
+        );
+
         return redirect()->route('roles.index')
-            ->with('success', 'Role updated successfully');
+            ->with($notification);
     }
     /**
      * Remove the specified resource from storage.
@@ -130,7 +140,13 @@ class RoleController extends Controller
     public function destroy($id)
     {
         DB::table("roles")->where('id', $id)->delete();
+
+        $notification = array(
+            'message' => 'Role deleted successfully',
+            'alert-type' => 'success'
+        );
+
         return redirect()->route('roles.index')
-            ->with('success', 'Role deleted successfully');
+            ->with($notification);
     }
 }

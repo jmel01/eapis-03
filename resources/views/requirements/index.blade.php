@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="card-body">
-        @can('requirement-add')
+        @can('requirements-add')
         <div class="row">
             <div class="form-group col-md-12">
                 <button type="button" class="btn btn-primary btn-add-requirement float-right">
@@ -38,11 +38,11 @@
                 <tr>
                     <td>{{ $requirement->description }}</td>
                     <td>
-                       @can('requirement-edit')
+                       @can('requirements-edit')
                         <button data-description="{{ $requirement->description }}" data-id="{{ $requirement->id }}" class="btn btn-primary btn-sm mr-1 btn-edit-requirement">Edit</button>
                        @endcan
 
-                       @can('requirement-deletes')
+                       @can('requirements-delete')
                         <button data-url="{{ route('requirements.destroy', $requirement->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-requirement">Delete</button>
                         @endcan
                     </td>

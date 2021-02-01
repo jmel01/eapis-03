@@ -75,9 +75,6 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No application yet!</td>
-                                </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -105,9 +102,6 @@
 
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="3" class="text-center">No assistance recieved</td>
-                                </tr>
                                 @endforelse
                             </tbody>
                             <tfoot>
@@ -169,6 +163,59 @@
 <script>
     $(document).ready(function() {
 
+        $('.btn-add-application').click(function() {
+            document.getElementById("formApplication").reset();
+            var id = $(this).attr('data-id');
+            $('[name="user_id"]').val(id)
+            $('#modalApplication').modal('show')
+        });
+
+        $('.btn-add-document').click(function() {
+            document.getElementById("formDocument").reset();
+            var grantID = $(this).attr('data-grantID');
+            $('[name="grantID"]').val(grantID)
+            $('#modalDocument').modal('show')
+
+        });
+
+        $('.btn-edit-profile').click(function() {
+            var id = $(this).attr('data-id');
+            var url_id = $(this).attr('data-url');
+            $('[name="id"]').val(id)
+
+            $.get(url_id, function(data) {
+                console.log(data)
+                $('[name="lastName"]').val(data.lastName)
+                $('[name="firstName"]').val(data.firstName)
+                $('[name="middleName"]').val(data.middleName)
+                $('[name="birthdate"]').val(data.birthdate)
+                $('[name="placeOfBirth"]').val(data.placeOfBirth)
+                $('[name="gender"]').val(data.gender)
+                $('[name="civilStatus"]').val(data.civilStatus)
+                $('[name="ethnoGroup"]').val(data.ethnoGroup)
+                $('[name="contactNumber"]').val(data.contactNumber)
+                $('[name="email"]').val(data.email)
+                $('[name="address"]').val(data.address)
+                $('[name="fatherName"]').val(data.fatherName)
+                $('[name="fatherAddress"]').val(data.fatherAddress)
+                $('[name="fatherOccupation"]').val(data.fatherOccupation)
+                $('[name="fatherOffice"]').val(data.fatherOffice)
+                $('[name="fatherEducation"]').val(data.fatherEducation)
+                $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
+                $('[name="fatherIncome"]').val(data.fatherIncome)
+                $('[name="motherName"]').val(data.motherName)
+                $('[name="motherAddress"]').val(data.motherAddress)
+                $('[name="motherOccupation"]').val(data.motherOccupation)
+                $('[name="motherOffice"]').val(data.motherOffice)
+                $('[name="motherEducation"]').val(data.motherEducation)
+                $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
+                $('[name="motherIncome"]').val(data.motherIncome)
+
+                $('#modalProfile').modal('show')
+                $('#region').trigger("change")
+            })
+        })
+
         var table = $('#applicationList').DataTable({
             "paging": true,
             "lengthChange": true,
@@ -224,58 +271,7 @@
             },
         });
 
-        $('.btn-add-application').click(function() {
-            document.getElementById("formApplication").reset();
-            var id = $(this).attr('data-id');
-            $('[name="user_id"]').val(id)
-            $('#modalApplication').modal('show')
-        });
-
-        $('.btn-add-document').click(function() {
-            document.getElementById("formDocument").reset();
-            var grantID = $(this).attr('data-grantID');
-            $('[name="grantID"]').val(grantID)
-            $('#modalDocument').modal('show')
-
-        });
-
-        $('.btn-edit-profile').click(function() {
-            var id = $(this).attr('data-id');
-            var url_id = $(this).attr('data-url');
-            $('[name="id"]').val(id)
-
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="lastName"]').val(data.lastName)
-                $('[name="firstName"]').val(data.firstName)
-                $('[name="middleName"]').val(data.middleName)
-                $('[name="birthdate"]').val(data.birthdate)
-                $('[name="placeOfBirth"]').val(data.placeOfBirth)
-                $('[name="gender"]').val(data.gender)
-                $('[name="civilStatus"]').val(data.civilStatus)
-                $('[name="ethnoGroup"]').val(data.ethnoGroup)
-                $('[name="contactNumber"]').val(data.contactNumber)
-                $('[name="email"]').val(data.email)
-                $('[name="address"]').val(data.address)
-                $('[name="fatherName"]').val(data.fatherName)
-                $('[name="fatherAddress"]').val(data.fatherAddress)
-                $('[name="fatherOccupation"]').val(data.fatherOccupation)
-                $('[name="fatherOffice"]').val(data.fatherOffice)
-                $('[name="fatherEducation"]').val(data.fatherEducation)
-                $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
-                $('[name="fatherIncome"]').val(data.fatherIncome)
-                $('[name="motherName"]').val(data.motherName)
-                $('[name="motherAddress"]').val(data.motherAddress)
-                $('[name="motherOccupation"]').val(data.motherOccupation)
-                $('[name="motherOffice"]').val(data.motherOffice)
-                $('[name="motherEducation"]').val(data.motherEducation)
-                $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
-                $('[name="motherIncome"]').val(data.motherIncome)
-
-                $('#modalProfile').modal('show')
-                $('#region').trigger("change")
-            })
-        })
+        
 
     });
 </script>

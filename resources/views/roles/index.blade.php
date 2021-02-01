@@ -18,12 +18,6 @@
     </div>
     <div class="card-body">
 
-        @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p></p>
-        </div>
-        @endif
-
         <table id="roleList" class="table table-striped table-hover table-responsive-lg">
             <thead>
                 <tr>
