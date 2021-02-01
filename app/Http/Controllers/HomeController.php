@@ -26,6 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         if (Auth::user()->hasAnyRole(["Admin"])) {
             return redirect()->route('admin');
         }
@@ -44,20 +45,21 @@ class HomeController extends Controller
         if (Auth::user()->hasAnyRole(["Applicant"])) {
             return redirect()->route('applicant');
         }
-        
+
         return redirect()->route('applicant');
     }
 
     public function checker(){
         if (Auth::check()) {
-            if( session('audit_trail_id') == '' ){
+            if(session('audit_trail_id') == ''){
                 $auditTrail = AuditTrail::create([
                     'user_id' => Auth::id()
                 ]);
 
                 session(['audit_trail_id' => $auditTrail->id]);
             }
-            return redirect('/dashboard/applicant');
+
+            return redirect('/home');
         }
         Session::flush();
         return view('welcome');

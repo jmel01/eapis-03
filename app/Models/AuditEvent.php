@@ -22,7 +22,7 @@ class AuditEvent extends Model
     }
 
     static function insert($event){
-        if( session('audit_trail_id') == '' ){
+        if(session('audit_trail_id') == ''){
             $auditTrail = AuditTrail::create([
                 'user_id' => Auth::id()
             ]);

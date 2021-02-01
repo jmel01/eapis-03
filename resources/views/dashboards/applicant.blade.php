@@ -75,9 +75,7 @@
                                     </td>
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">No application yet!</td>
-                                </tr>
+
                                 @endforelse
                             </tbody>
                         </table>
@@ -105,9 +103,7 @@
 
                                 </tr>
                                 @empty
-                                <tr>
-                                    <td colspan="3" class="text-center">No assistance recieved</td>
-                                </tr>
+
                                 @endforelse
                             </tbody>
                             <tfoot>
