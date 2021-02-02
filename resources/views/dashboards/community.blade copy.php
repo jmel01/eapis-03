@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'Community Service Officer Dashboard')
+@section('title', 'Admin Dashboard')
 
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">
@@ -19,24 +19,24 @@
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Disbursement</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost + $totalGrantDisburse }}</span>
+                                <span class="info-box-text text-center text-muted">Estimated budget</span>
+                                <span class="info-box-number text-center text-muted mb-0">2300</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Administrative Cost</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ $totalAdminCost }}</span>
+                                <span class="info-box-text text-center text-muted">Total amount spent</span>
+                                <span class="info-box-number text-center text-muted mb-0">2000</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Grants Disbursement</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ $totalGrantDisburse }}<span>
+                                <span class="info-box-text text-center text-muted">Estimated project duration</span>
+                                <span class="info-box-number text-center text-muted mb-0">20 <span>
                             </div>
                         </div>
                     </div>

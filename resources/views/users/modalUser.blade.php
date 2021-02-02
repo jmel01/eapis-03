@@ -13,7 +13,7 @@
                     @role('Admin')
                     <div class="form-group">
                         <label>Region</label>
-                        <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
+                        <select name="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
                             <option disabled selected>Select Region</option>
                             @foreach ($regions as $region)
                             <option value="{{ $region->code }}" {{ old('region')==$region->code ? 'selected' : ''}}>{{ $region->name }}</option>

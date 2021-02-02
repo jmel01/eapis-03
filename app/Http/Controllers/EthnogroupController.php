@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class EthnogroupController extends Controller
 {
+    public function getEthnogroups(Request $request)
+    {
+        $ethnoGroups = Ethnogroup::where('region', $request->regionID)->get();
+
+        return json_encode($ethnoGroups);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -48,12 +55,6 @@ class EthnogroupController extends Controller
         $input = $request->all();
 
         Ethnogroup::updateOrCreate(["id" => $request->id], $input);
-
-        if(isset($request->id)){
-            AuditEvent::insert('Update ethnogroup');
-        }else{
-            AuditEvent::insert('Create ethnogroup');
-        }
 
         $notification = array(
             'message' => 'Ethnolinguistic Group updated successfully',

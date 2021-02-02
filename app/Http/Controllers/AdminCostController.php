@@ -56,12 +56,6 @@ class AdminCostController extends Controller
 
         AdminCost::updateOrCreate(["id" => $request->id], $input);
 
-        if(isset($request->id)){
-            AuditEvent::insert('Update admin cost (Reference: '.$request->payee.')');
-        }else{
-            AuditEvent::insert('Create admin cost (Reference: '.$request->payee.')');
-        }
-
         $notification = array(
             'message' => 'Admin cost updated successfully',
             'alert-type' => 'success'
@@ -122,10 +116,6 @@ class AdminCostController extends Controller
     public function destroy($id)
     {
         $adminCost = AdminCost::find($id);
-
-        if(isset($id)){
-            AuditEvent::insert('Delete admin cost (Reference: '.$adminCost->payee.')');
-        }
 
         $adminCost->delete();
 

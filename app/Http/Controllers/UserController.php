@@ -86,13 +86,6 @@ class UserController extends Controller
 
         $user =  User::updateOrCreate(["id" => $request->id], $input);
 
-        if(isset($request->id)){
-            AuditEvent::insert('Update user');
-        }else{
-            AuditEvent::insert('Create user');
-        }
-
-
         DB::table('model_has_roles')->where('model_id', $request->id)->delete();
         $user->assignRole($request->input('roles'));
 
@@ -149,7 +142,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
-        AuditEvent::insert('delete user');
         $user->delete();
 
         $notification = array(

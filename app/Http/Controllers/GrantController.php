@@ -61,12 +61,6 @@ class GrantController extends Controller
 
         Grant::updateOrCreate($grantid, $grantInformation);
 
-        if(isset($request->id)){
-            AuditEvent::insert('Update grant');
-        }else{
-            AuditEvent::insert('Create grant');
-        }
-
         $notification = array(
             'message' => 'Profile updated successfully',
             'alert-type' => 'success'
@@ -119,10 +113,6 @@ class GrantController extends Controller
     public function destroy($id)
     {
         $grant = Grant::find($id);
-
-        if(isset($id)){
-            AuditEvent::insert('Delete grant');
-        }
 
         $grant->delete();
 

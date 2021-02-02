@@ -78,12 +78,12 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
 @include('layouts.adminlte.modalDelete')
-@include('applications.modalApplication')
+@include('applications.modalApplication')s
 @include('users.modalUser')
 
 @endsection

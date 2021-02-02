@@ -71,7 +71,7 @@
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "ordering": true,
+            "order": [[ 0, "desc" ]],
             "info": true,
             "autoWidth": true,
             "responsive": true,
@@ -109,7 +109,7 @@
 @if (count($errors->ethnoGroup) > 0)
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#modalethnoGroup').modal('show');
+        $('#modalEthnoGroup').modal('show');
     });
 </script>
 @endif

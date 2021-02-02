@@ -12,6 +12,7 @@
         <h3 class="card-title">Activity Logs</h3>
     </div>
     <div class="card-body">
+    <a href="/activity-logs/clear" class="btn btn-outline-danger btn-sm btn-add-user float-right">DELETE ALL LOGS</a>
         <table id="activityLogList" class="table table-sm table-hover table-responsive-lg">
             <thead>
                 <tr>
@@ -62,7 +63,7 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
@@ -80,7 +81,7 @@
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "ordering": false,
+            "order": [[ 6, "desc" ]],
             "info": true,
             "autoWidth": true,
             "responsive": true,

@@ -41,13 +41,7 @@ class RequirementController extends Controller
             'description' => 'required',
         ]);
 
-        $requirement =  Requirement::updateOrCreate(["id" => $request->id], $request->all());
-
-        if(isset($request->id)){
-            AuditEvent::insert('Update requirement');
-        }else{
-            AuditEvent::insert('Create requirement');
-        }
+        Requirement::updateOrCreate(["id" => $request->id], $request->all());
 
         $notification = array(
             'message' => 'Requirement updated successfully',
@@ -99,10 +93,6 @@ class RequirementController extends Controller
     public function destroy($id)
     {
         Requirement::find($id)->delete();
-
-        if(isset($id)){
-            AuditEvent::insert('Delete calendar');
-        }
 
         $notification = array(
             'message' => 'Requirement Deleted successfully',

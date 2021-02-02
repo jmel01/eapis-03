@@ -726,7 +726,7 @@ class DashboardController extends Controller
             ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
             ->sum('amount');
 
-        return view('dashboards.provincial', compact(
+        return view('dashboards.community', compact(
             'data',
             'cities',
             'chartDataAll',
@@ -894,4 +894,14 @@ class DashboardController extends Controller
 
         return view('activity.index', compact('activity'));
     }
+
+    public function clearActivityLogs(){
+        $activity = Activity::truncate();
+
+        $notification = array(
+            'message' => 'Logs cleared successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+   }
 }

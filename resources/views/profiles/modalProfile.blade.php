@@ -133,7 +133,8 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Ethnolinguistic Group</label>
-                                        <input name="ethnoGroup" type="text" value="{{old('ethnoGroup')}}" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}">
+                                        <input type="hidden" id="ethnoGroupID" value="{{$userProfile->ethnoGroup ?? ''}}">
+                                        <select name="ethnoGroup" id="ethnoGroup" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}"></select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">

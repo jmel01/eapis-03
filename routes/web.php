@@ -42,11 +42,10 @@ Route::get('blank', function () {
     return view('blank');
 });
 
-Route::get('/userChecker', [HomeController::class, 'checker']);
-
 Route::get('psgc/getProvinces', [PsgcController::class, 'getProvinces'])->name('getProvinces');
 Route::get('psgc/getCities', [PsgcController::class, 'getCities'])->name('getCities');
 Route::get('psgc/getBrgy', [PsgcController::class, 'getBrgy'])->name('getBrgy');
+Route::get('ethnogroups/getEthnoGroups', [EthnogroupController::class, 'getEthnoGroups'])->name('getEthnoGroups');
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -75,6 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('ethnogroups', EthnogroupController::class);
     Route::resource('grants', GrantController::class);
     Route::resource('profiles', ProfileController::class);
+
     Route::get('/reports/formA', [ReportController::class, 'formA'])->name('formA');
     Route::get('/reports/formB', [ReportController::class, 'formB'])->name('formB');
     Route::get('/reports/formC', [ReportController::class, 'formC'])->name('formC');
@@ -84,10 +84,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/reports/formG', [ReportController::class, 'formG'])->name('formG');
     Route::get('/reports/formH', [ReportController::class, 'formH'])->name('formH');
     Route::resource('reports', ReportController::class);
+    
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
+
     Route::get('/activity-logs', [DashboardController::class, 'activityLogs']);
+    Route::get('/activity-logs/clear', [DashboardController::class, 'clearActivityLogs']);
 
     Route::group(['prefix' => 'profile'], function () {
         Route::group(['prefix' => 'update'], function () {

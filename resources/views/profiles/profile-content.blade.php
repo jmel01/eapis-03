@@ -80,9 +80,9 @@
                     <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
                         <option disabled>Select Region</option>
                         @foreach ($regions as $allRegion)
-                            <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' : '' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
-                                {{ $allRegion->name }}
-                            </option>
+                        <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' : '' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
+                            {{ $allRegion->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
@@ -121,7 +121,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     <label>Ethnolinguistic Group</label>
-                    <input name="ethnoGroup" type="text" value="{{old('ethnoGroup') ?? ($userProfile->ethnoGroup ?? '')}}" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}">
+                    <input type="hidden" id="ethnoGroupID" value="{{$userProfile->ethnoGroup ?? ''}}">
+                    <select name="ethnoGroup" id="ethnoGroup" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}"></select>
                 </div>
             </div>
             <div class="col-md-4">
@@ -156,33 +157,33 @@
                         <th>Action</th>
                     </tr>
                     @if(isset($userProfile->user->educations))
-                        @foreach($userProfile->user->educations as $education)
-                            <tr>
-                                <td><input name="schName[]" type="text" class="form-control" value="{{$education->school_name}}"></td>
-                                <td><input name="schAddress[]" type="text" class="form-control" value="{{$education->address}}"></td>
-                                <td>
-                                    <select name="schLevel[]" class="form-control">
-                                        <option {{$education->level == 'Elementary' ? 'selected' : ''}} value="Elementary">Elementary</option>
-                                        <option  {{$education->level == 'High School' ? 'selected' : ''}} value="High School">High School</option>
-                                        <option {{$education->level == 'Vocational' ? 'selected' : ''}} value="Vocational">Vocational</option>
-                                        <option  {{$education->level == 'College/Undergraduate' ? 'selected' : ''}} value="College/Undergraduate">College/Undergraduate</option>
-                                        <option  {{$education->level == 'Post Graduate' ? 'selected' : ''}} value="Post Graduate">Post Graduate</option>
-                                        <option  {{$education->level == 'Masteral' ? 'selected' : ''}} value="Masteral">Masteral</option>
-                                        <option  {{$education->level == 'Doctorate' ? 'selected' : ''}} value="Doctorate">Doctorate</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <select name="schType[]" class="form-control">
-                                        <option {{$education->school_type == 'Private' ? 'selected' : ''}} value="Private">Private</option>
-                                        <option {{$education->school_type == 'Public' ? 'selected' : ''}} value="Public">Public</option>
-                                    </select>
-                                </td>
-                                <td><input name="schYear[]" type="number" step="1" min="1980" max="2030" class="form-control" value="{{$education->year_graduated}}"></td>
-                                <td><input name="schAve[]" step=".01" min=".01" max="100" type="number" class="form-control" value="{{$education->average_grade}}"></td>
-                                <td> <input name="schRank[]" type="text" class="form-control" value="{{$education->rank}}"></td>
-                                <td> <button type="button" class="btn btn-danger btn-sm remove-tr-school">Remove</button></td>
-                            </tr>
-                        @endforeach
+                    @foreach($userProfile->user->educations as $education)
+                    <tr>
+                        <td><input name="schName[]" type="text" class="form-control" value="{{$education->school_name}}"></td>
+                        <td><input name="schAddress[]" type="text" class="form-control" value="{{$education->address}}"></td>
+                        <td>
+                            <select name="schLevel[]" class="form-control">
+                                <option {{$education->level == 'Elementary' ? 'selected' : ''}} value="Elementary">Elementary</option>
+                                <option {{$education->level == 'High School' ? 'selected' : ''}} value="High School">High School</option>
+                                <option {{$education->level == 'Vocational' ? 'selected' : ''}} value="Vocational">Vocational</option>
+                                <option {{$education->level == 'College/Undergraduate' ? 'selected' : ''}} value="College/Undergraduate">College/Undergraduate</option>
+                                <option {{$education->level == 'Post Graduate' ? 'selected' : ''}} value="Post Graduate">Post Graduate</option>
+                                <option {{$education->level == 'Masteral' ? 'selected' : ''}} value="Masteral">Masteral</option>
+                                <option {{$education->level == 'Doctorate' ? 'selected' : ''}} value="Doctorate">Doctorate</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="schType[]" class="form-control">
+                                <option {{$education->school_type == 'Private' ? 'selected' : ''}} value="Private">Private</option>
+                                <option {{$education->school_type == 'Public' ? 'selected' : ''}} value="Public">Public</option>
+                            </select>
+                        </td>
+                        <td><input name="schYear[]" type="number" step="1" min="1980" max="2030" class="form-control" value="{{$education->year_graduated}}"></td>
+                        <td><input name="schAve[]" step=".01" min=".01" max="100" type="number" class="form-control" value="{{$education->average_grade}}"></td>
+                        <td> <input name="schRank[]" type="text" class="form-control" value="{{$education->rank}}"></td>
+                        <td> <button type="button" class="btn btn-danger btn-sm remove-tr-school">Remove</button></td>
+                    </tr>
+                    @endforeach
 
                     @endif
                 </table>
@@ -205,11 +206,11 @@
                             <div class="form-group form-inline">
                                 <label class="mr-2">FATHER:</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="fatherLiving" value="Living" @if("Living" == ($userProfile->fatherLiving ?? '')) checked @endif>
+                                    <input class="form-check-input" type="radio" name="fatherLiving" value="Living" @if("Living"==($userProfile->fatherLiving ?? '')) checked @endif>
                                     <label class="form-check-label mr-1">Living</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="fatherLiving" value="Deceased" @if("Deceased" == ($userProfile->fatherLiving ?? '')) checked @endif>
+                                    <input class="form-check-input" type="radio" name="fatherLiving" value="Deceased" @if("Deceased"==($userProfile->fatherLiving ?? '')) checked @endif>
                                     <label class="form-check-label mr-1">Deceased</label>
                                 </div>
                                 {!! $errors->profile->first('fatherLiving', '<label class="mr-1 text-danger">Required</label>') !!}
@@ -219,11 +220,11 @@
                             <div class="form-group form-inline">
                                 <label class="mr-2">MOTHER:</label>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="motherLiving" value="Living" @if("Living" == ($userProfile->motherLiving ?? '')) checked @endif>
+                                    <input class="form-check-input" type="radio" name="motherLiving" value="Living" @if("Living"==($userProfile->motherLiving ?? '')) checked @endif>
                                     <label class="form-check-label mr-1">Living</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased" == ($userProfile->motherLiving ?? '')) checked @endif>
+                                    <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased"==($userProfile->motherLiving ?? '')) checked @endif>
                                     <label class="form-check-label mr-1">Deceased</label>
                                 </div>
                                 {!! $errors->profile->first('motherLiving', '<label class="mr-1 text-danger">Required</label>') !!}
@@ -285,25 +286,25 @@
                     </tr>
                     @if (isset($userProfile->user->siblings))
                     @foreach($userProfile->user->siblings as $siblings)
-                        <tr>
-                            <td><input type="text" name="siblingName[]" class="form-control" value="{{$siblings->name}}"/></td>
-                            <td><input type="date" name="siblingBirthdate[]" class="form-control"  value="{{$siblings->birthdate}}"/></td>
-                            <td><input type="text" name="siblingScholarship[]" class="form-control" value="{{$siblings->scholarship}}"/></td>
-                            <td><input type="text" name="siblingCourse[]" class="form-control" value="{{$siblings->course_year_level}}"/></td>
-                            <td>
-                                <select name="siblingStatus[]" class="form-control">
-                                    <option {{$siblings->present_status == 'Stopped/undergraduate' ? 'selected' : ''}} value="Stopped/undergraduate">Stopped/undergraduate</option>
-                                    <option {{$siblings->present_status == 'Undergraduate/married' ? 'selected' : ''}} value="Undergraduate/married">Undergraduate/married</option>
-                                    <option {{$siblings->present_status == 'Graduated/married' ? 'selected' : ''}} value="Graduated/married">Graduated/married</option>
-                                    <option {{$siblings->present_status == 'Graduated/working(Single)' ? 'selected' : ''}} value="Graduated/working(Single)">Graduated/working(Single)</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-sm remove-tr">Remove</button>
-                            </td>
-                        </tr>
+                    <tr>
+                        <td><input type="text" name="siblingName[]" class="form-control" value="{{$siblings->name}}" /></td>
+                        <td><input type="date" name="siblingBirthdate[]" class="form-control" value="{{$siblings->birthdate}}" /></td>
+                        <td><input type="text" name="siblingScholarship[]" class="form-control" value="{{$siblings->scholarship}}" /></td>
+                        <td><input type="text" name="siblingCourse[]" class="form-control" value="{{$siblings->course_year_level}}" /></td>
+                        <td>
+                            <select name="siblingStatus[]" class="form-control">
+                                <option {{$siblings->present_status == 'Stopped/undergraduate' ? 'selected' : ''}} value="Stopped/undergraduate">Stopped/undergraduate</option>
+                                <option {{$siblings->present_status == 'Undergraduate/married' ? 'selected' : ''}} value="Undergraduate/married">Undergraduate/married</option>
+                                <option {{$siblings->present_status == 'Graduated/married' ? 'selected' : ''}} value="Graduated/married">Graduated/married</option>
+                                <option {{$siblings->present_status == 'Graduated/working(Single)' ? 'selected' : ''}} value="Graduated/working(Single)">Graduated/working(Single)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm remove-tr">Remove</button>
+                        </td>
+                    </tr>
                     @endforeach
-                @endif
+                    @endif
                 </table>
             </div>
             <button type="button" name="add" id="addSibling" class="btn btn-success btn-sm float-right">Add More</button>
@@ -312,11 +313,12 @@
 </div>
 
 @include('psgc.scriptPsgc')
+@include('ethnogroups.scriptEthno')
 @include('profiles.scriptAddSchool')
 @include('profiles.scriptAddSibling')
 
 <script>
-    $(function(){
+    $(function() {
         $('#region').trigger("change")
     })
 </script>

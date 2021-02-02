@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditEvent;
 use App\Models\Education;
+use App\Models\Ethnogroup;
 use App\Models\Profile;
 use App\Models\Psgc;
 use App\Models\Siblings;
@@ -41,11 +42,11 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('profilePicture')){
+        if ($request->hasFile('profilePicture')) {
             return Profile::updatePicture($request);
         }
 
-        if(isset($request->forProfilePicture) && $request->forProfilePicture == 'picture'){
+        if (isset($request->forProfilePicture) && $request->forProfilePicture == 'picture') {
             return back();
         }
 
@@ -90,12 +91,6 @@ class ProfileController extends Controller
 
         Profile::updateOrCreate(["user_id" => $request->id], $input);
 
-        if(isset($request->id)){
-            AuditEvent::insert('Update profile');
-        }else{
-            AuditEvent::insert('Create profile');
-        }
-
         Education::insert($request);
         Siblings::insert($request);
 
@@ -127,14 +122,16 @@ class ProfileController extends Controller
 
         $userProfile = Profile::where('user_id', $id)->first();
         $psgCode = $userProfile->psgCode ?? '';
+        $ethnoGroupID = $userProfile->ethnoGroup ?? '';
         //$psgCode = Auth::user()->profile->psgCode;
 
         $region = Psgc::where('code', Str::substr($psgCode, 0, 2) . "0000000")->first();
         $province = Psgc::where('code', Str::substr($psgCode, 0, 4) . "00000")->first();
         $city = Psgc::where('code', Str::substr($psgCode, 0, 6) . "000")->first();
         $barangay = Psgc::where('code', $psgCode)->first();
+        $ethnoGroup = Ethnogroup::where('id', $ethnoGroupID)->first();
 
-        return view('profiles.show', compact('userProfile', 'regions', 'region', 'province', 'city', 'barangay'));
+        return view('profiles.show', compact('userProfile', 'ethnoGroup', 'regions', 'region', 'province', 'city', 'barangay'));
     }
 
     /**
@@ -173,7 +170,8 @@ class ProfileController extends Controller
         //
     }
 
-    public function showProfileModal(Request $request){
+    public function showProfileModal(Request $request)
+    {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             $regions = Psgc::where('level', 'Reg')->get();
         } else {
@@ -193,6 +191,5 @@ class ProfileController extends Controller
         $barangay = Psgc::where('code', $psgCode)->first();
 
         return view('profiles.profile-content', compact('userProfile', 'regions', 'region', 'province', 'city', 'barangay'))->render();
-   
     }
 }

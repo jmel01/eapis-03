@@ -71,12 +71,6 @@ class CalendarController extends Controller
 
         Calendar::updateOrCreate($user, $input);
 
-        if(isset($request->id)){
-            AuditEvent::insert('Update calendar');
-        }else{
-            AuditEvent::insert('Create calendar');
-        }
-
         $notification = array(
             'message' => 'Announcement created successfully',
             'alert-type' => 'success'

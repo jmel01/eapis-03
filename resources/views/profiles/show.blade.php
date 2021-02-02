@@ -111,7 +111,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Ethnolinguistic Group</label>
-                                    <input type="text" value="{{ $userProfile->ethnoGroup ?? '' }}" class="form-control" readonly>
+                                    <input type="text" value="{{ $ethnoGroup->ipgroup ?? '' }}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -339,6 +339,7 @@
 
 @push('scripts')
 @include('psgc.scriptPsgc')
+@include('ethnogroups.scriptEthno')
 
 <script>
     $(document).ready(function() {
