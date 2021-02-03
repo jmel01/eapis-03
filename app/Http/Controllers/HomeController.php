@@ -26,6 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         if (Auth::user()->hasAnyRole(["Admin"])) {
             return redirect()->route('admin');
         }
@@ -50,7 +51,7 @@ class HomeController extends Controller
 
     public function checker(){
         if (Auth::check()) {
-            if( session('audit_trail_id') == '' ){
+            if(session('audit_trail_id') == ''){
                 $auditTrail = AuditTrail::create([
                     'user_id' => Auth::id()
                 ]);

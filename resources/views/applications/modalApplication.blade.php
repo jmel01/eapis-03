@@ -17,7 +17,7 @@
                         <select name="grant_id" class="form-control {{$errors->profile->first('civilStatus') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Scholarship/Grant</option>
                             @foreach ($grants as $grant)
-                            <option value="{{ $grant->id}}" {{ old('grant_id')=='$grant->id' ? 'selected' : ''}}>Region: {{ $grant->region}} SY {{ $grant->acadYr}}-{{ $grant->acadYr+1}}</option>
+                            <option value="{{ $grant->id}}" {{ old('grant_id')=='$grant->id' ? 'selected' : ''}}>Region: {{ $grant->psgCode->name}} SY {{ $grant->acadYr}}-{{ $grant->acadYr+1}}</option>
                             @endforeach
                         </select>
                     </div>
