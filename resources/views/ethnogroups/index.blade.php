@@ -12,9 +12,9 @@
         <h3 class="card-title">List of Ethnolinguistic Group</h3>
     </div>
     <div class="card-body">
-    @can('ethnogroups-add')
+        @can('ethnogroups-add')
         <button class="btn btn-outline-primary btn-sm btn-add-ethnoGroup float-right">ADD GROUP</button>
-    @endcan
+        @endcan
         <table id="ethnoGroupList" class="table table-sm table-hover table-responsive-lg">
             <thead>
                 <tr>
@@ -35,12 +35,12 @@
                     </td>
                     <td>{{ $ethnoGroup->ipgroup }}</td>
                     <td>
-                    @can('ethnogroups-edit')
+                        @can('ethnogroups-edit')
                         <button class="btn btn-primary btn-sm mr-1 btn-edit-ethnoGroup" data-id="{{ $ethnoGroup->id }}" data-region="{{ $ethnoGroup->region }}" data-ipgroup="{{ $ethnoGroup->ipgroup }}">Edit</button>
-                    @endcan
-                    @can('ethnogroups-delete')
+                        @endcan
+                        @can('ethnogroups-delete')
                         <button data-url="{{ route('ethnogroups.destroy', $ethnoGroup->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-ethnoGroup">Delete</button>
-                    @endcan
+                        @endcan
 
                     </td>
                 </tr>
@@ -71,31 +71,33 @@
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "order": [[ 0, "desc" ]],
+            "order": [
+                [0, "desc"]
+            ],
             "info": true,
             "autoWidth": true,
             "responsive": true,
         });
-
-        $('.btn-add-ethnoGroup').click(function() {
-            document.getElementById("formEthnoGroup").reset();
-            $('[name="id"]').val('')
-            $('#modalEthnoGroup').modal('show')
-
-        });
-
-        $('.btn-edit-ethnoGroup').click(function() {
-            var id = $(this).attr('data-id');
-            var region = $(this).attr('data-region');
-            var ipgroup = $(this).attr('data-ipgroup');
-
-            $('[name="id"]').val(id)
-            $('[name="region"]').val(region)
-            $('[name="ipgroup"]').val(ipgroup)
-
-            $('#modalEthnoGroup').modal('show')
-        });
     })
+
+    $('.btn-add-ethnoGroup').click(function() {
+        document.getElementById("formEthnoGroup").reset();
+        $('[name="id"]').val('')
+        $('#modalEthnoGroup').modal('show')
+
+    });
+
+    $('.btn-edit-ethnoGroup').click(function() {
+        var id = $(this).attr('data-id');
+        var region = $(this).attr('data-region');
+        var ipgroup = $(this).attr('data-ipgroup');
+
+        $('[name="id"]').val(id)
+        $('[name="region"]').val(region)
+        $('[name="ipgroup"]').val(ipgroup)
+
+        $('#modalEthnoGroup').modal('show')
+    });
 
     $('.btn-delete-ethnoGroup').click(function() {
         var url_id = $(this).attr('data-url');

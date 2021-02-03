@@ -116,38 +116,29 @@
         $('.my-colorpicker2').on('colorpickerChange', function(event) {
             $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
         });
-        $('#calendarList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": false,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
 
         $('.addCalendar').click(function() {
             document.getElementById("formCalendar").reset();
             $('[name="id"]').val('')
             $('[name="user_id"]').val('')
             $('#modalAnnouncement').modal('show')
-        })
+        });
 
         $('.btn-edit-calendar').click(function() {
             var url_id = $(this).attr('data-url');
             $.get(url_id, function(data) {
                 console.log(data)
-              
+
                 var dateFrom = new Date(data.announcement.dateTimeStart);
-                    dateFrom.setMinutes(dateFrom.getMinutes() - dateFrom.getTimezoneOffset());
+                dateFrom.setMinutes(dateFrom.getMinutes() - dateFrom.getTimezoneOffset());
                 var dateTo = new Date(data.announcement.dateTimeEnd);
-                    dateTo.setMinutes(dateTo.getMinutes() - dateTo.getTimezoneOffset());
+                dateTo.setMinutes(dateTo.getMinutes() - dateTo.getTimezoneOffset());
 
                 $('[name="id"]').val(data.announcement.id)
                 $('[name="user_id"]').val(data.announcement.user_id)
-                $('[name="dateTimeStart"]').val(dateFrom.toISOString().slice(0,16))
-                $('[name="dateTimeEnd"]').val(dateTo.toISOString().slice(0,16))
-                
+                $('[name="dateTimeStart"]').val(dateFrom.toISOString().slice(0, 16))
+                $('[name="dateTimeEnd"]').val(dateTo.toISOString().slice(0, 16))
+
                 $('[name="title"]').val(data.announcement.title)
                 $('[name="description"]').val(data.announcement.description)
                 $('[name="color"]').val(data.announcement.color)
@@ -155,7 +146,7 @@
 
                 $('#modalAnnouncement').modal('show')
             })
-        })
+        });
 
         $('.btn-delete-calendar').click(function() {
             var url_id = $(this).attr('data-url');
@@ -163,16 +154,28 @@
             $('#modalDelete').modal('show')
 
         });
-        
-            function timestampToDatetimeInputString(timestamp) {
-                const date = new Date((timestamp + _getTimeZoneOffsetInMs()));
-                // slice(0, 19) includes seconds
-                return date.toISOString().slice(0, 19);
-            }
-            
-            function _getTimeZoneOffsetInMs() {
-                return new Date().getTimezoneOffset() * -60 * 1000;
-            }
+
+        $('#calendarList').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "order": [
+                [3, "asc"]
+            ],
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+
+        function timestampToDatetimeInputString(timestamp) {
+            const date = new Date((timestamp + _getTimeZoneOffsetInMs()));
+            // slice(0, 19) includes seconds
+            return date.toISOString().slice(0, 19);
+        }
+
+        function _getTimeZoneOffsetInMs() {
+            return new Date().getTimezoneOffset() * -60 * 1000;
+        }
 
     });
 </script>

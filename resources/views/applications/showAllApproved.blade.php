@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
         <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
-        <thead>
+            <thead>
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
@@ -42,7 +42,7 @@
                         <!-- <a href="{{ url('profiles/' . $application->user_id)}}" class="btn btn-info btn-sm">Profile</a> -->
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
-                        
+
                         @endcan
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">Files</a>
                     </td>
@@ -53,7 +53,7 @@
 
     </div>
     <div class="card-footer">
-        
+
     </div>
 </div>
 
@@ -67,16 +67,6 @@
 
 <script>
     $(document).ready(function() {
-        // Create DataTable
-        var table = $('#applicationList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "order": [[ 1, "desc" ]],
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
 
         $('.btn-edit-profile').click(function() {
             var id = $(this).attr('data-id');
@@ -84,15 +74,31 @@
             $('[name="id"]').val(id)
 
             $.ajax({
-                url : '/profile/update/show-modal',
-                type : 'GET',
-                data : {id: id},
+                url: '/profile/update/show-modal',
+                type: 'GET',
+                data: {
+                    id: id
+                },
             }).done(result => {
                 $('#modalProfile .modal-body').empty()
                 $('#modalProfile .modal-body').append(result)
                 $('#modalProfile').modal('show')
             })
         });
+
+        // Create DataTable
+        var table = $('#applicationList').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "order": [
+                [1, "desc"]
+            ],
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
+
     });
 </script>
 

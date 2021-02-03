@@ -83,7 +83,7 @@
 </div>
 
 @include('layouts.adminlte.modalDelete')
-@include('applications.modalApplication')s
+@include('applications.modalApplication')
 @include('users.modalUser')
 
 @endsection
@@ -101,19 +101,9 @@
 
 <script>
     $(document).ready(function() {
-        // Create DataTable
-        var table = $('#userList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-        });
 
         //Initialize Select2 Elements
-        $('.select2').select2()
+        $('.select2').select2();
 
         $('.btn-add-user').click(function() {
             document.getElementById("formUser").reset();
@@ -130,7 +120,7 @@
                 $('[name="email"]').val(data.user.email)
                 $('#modalUser').modal('show')
             })
-        })
+        });
 
         $('.btn-delete-user').click(function() {
             var url_id = $(this).attr('data-url');
@@ -163,7 +153,18 @@
                 $('#region').trigger("change")
             })
 
-        })
+        });
+
+        // Create DataTable
+        var table = $('#userList').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": true,
+            "responsive": true,
+        });
     });
 </script>
 
