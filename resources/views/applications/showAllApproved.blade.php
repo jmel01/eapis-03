@@ -27,26 +27,26 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $application)
-                <tr>
-                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }}
-                        {{ substr($application->applicant->middleName,1,'1') }}.
-                    </td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+                    @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $regionId || Auth::user()->hasAnyRole(["Admin", 'Executive Officer']))
+                        <tr>
+                            <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }}
+                                {{ substr($application->applicant->middleName,1,'1') }}.
+                            </td>
+                            <td>{{ $application->type }}</td>
+                            <td>{{ $application->level }}</td>
+                            <td>{{ $application->status }}</td>
+                            <td>{{ $application->remarks }}</td>
+                            <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                            <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
-                    <td>
-                        <!-- <a href="{{ url('profiles/' . $application->user_id)}}" class="btn btn-info btn-sm">Profile</a> -->
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
-
-                        @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">Files</a>
-                    </td>
-                </tr>
+                            <td>
+                                @can('profile-edit')
+                                <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
+                                @endcan
+                                <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">Files</a>
+                            </td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

@@ -43,8 +43,7 @@
                     <td>
                         @if(!empty($user->getRoleNames()))
                         @foreach($user->getRoleNames() as $userRole)
-
-                        <span class="badge badge-primary">{{ $userRole }}</span>
+                        <span class="badge badge-info">{{ $userRole }}</span><br>
                         @endforeach
                         @endif
                     </td>
@@ -85,12 +84,13 @@
 @include('layouts.adminlte.modalDelete')
 @include('applications.modalApplication')
 @include('users.modalUser')
+@include('profiles.modalProfile')
 
 @endsection
 
 @push('scripts')
 @include('psgc.scriptPsgc')
-@include('profiles.modalProfile')
+@include('ethnogroups.scriptEthno')
 @include('profiles.scriptAddSibling')
 @include('profiles.scriptAddSchool')
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
@@ -116,8 +116,11 @@
             $.get(url_id, function(data) {
                 console.log(data)
                 $('[name="id"]').val(data.user.id)
+                $('[name="region"]').val(data.user.region)
                 $('[name="name"]').val(data.user.name)
                 $('[name="email"]').val(data.user.email)
+                $('[name="roles[]"]').val(data.user.roles)
+                
                 $('#modalUser').modal('show')
             })
         });
@@ -160,7 +163,7 @@
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "ordering": true,
+            "order": [[ 5, "desc" ]],
             "info": true,
             "autoWidth": true,
             "responsive": true,

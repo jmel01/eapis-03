@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
-use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -19,14 +18,17 @@ class ApplicationController extends Controller
             $data = Application::with('applicant.psgcBrgy')
                 ->where('status', 'Approved')
                 ->get();
+            $regionId = '';
         } else {
+            $regionId = Str::substr(Auth::user()->region, 0, 2);
+
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $data = Application::with('applicant.psgcBrgy')
                 ->where('status', 'Approved') //Add filter region
                 ->get();
         }
 
-        return view('applications.showAllApproved', compact('data','regions'));
+        return view('applications.showAllApproved', compact('data','regions', 'regionId'));
     }
 
     public function showApproved($id)

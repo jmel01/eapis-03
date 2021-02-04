@@ -7,10 +7,33 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-           
+
             <form role="form" method="POST" action="{{ route('applications.store') }}" id="formApplicationEdit">
                 @csrf
                 <div class="modal-body">
+
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select name="status" class="form-control {{$errors->profile->first('status') == null ? '' : 'is-invalid'}}">
+                            <option disabled selected>Select Status</option>
+
+                            <option value="On Process" {{ old('type') == "On Process" ? 'selected' : ''}}>On Process</option>
+                            <option value="Approved" {{ old('type')== "Approved" ? 'selected' : ''}}>Approved</option>
+                            <option value="Graduated" {{ old('type') == "Graduated" ? 'selected' : ''}}>Graduated</option>
+                            <option value="Terminated-FSD" {{ old('type')== "Terminated-FSD" ? 'selected' : ''}}>Terminated-FSD</option>
+                            <option value="Terminated-FG" {{ old('type')== "Terminated-FG" ? 'selected' : ''}}>Terminated-FG</option>
+                            <option value="Terminated-DS" {{ old('type')== "Terminated-DS" ? 'selected' : ''}}>Terminated-DS</option>
+                            <option value="Terminated-NE" {{ old('type')== "Terminated-NE" ? 'selected' : ''}}>Terminated-NE</option>
+                            <option value="Terminated-FPD" {{ old('type')== "Terminated-FPD" ? 'selected' : ''}}>Terminated-FPD</option>
+                            <option value="Terminated-EOGS" {{ old('type')== "Terminated-EOGS" ? 'selected' : ''}}>Terminated-EOGS</option>
+                            <option value="Terminated-Others" {{ old('type')== "Terminated-Others" ? 'selected' : ''}}>Terminated-Others</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Remarks</label>
+                        <input name="remarks" type="text" value="{{old('remarks')}}" class="form-control {{$errors->application->first('remarks') == null ? '' : 'is-invalid'}}">
+                    </div>
 
                     <div class="form-group">
                         <label>Type</label>
@@ -54,29 +77,6 @@
                         <input name="plans" type="text" value="{{old('province')}}" class="form-control {{$errors->application->first('province') == null ? '' : 'is-invalid'}}">
                     </div>
 
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select name="status" class="form-control {{$errors->profile->first('status') == null ? '' : 'is-invalid'}}">
-                            <option disabled selected>Select Status</option>
-                            
-                            <option value="On Process" {{ old('type') == "On Process" ? 'selected' : ''}}>On Process</option>
-                            <option value="Approved" {{ old('type')== "Approved" ? 'selected' : ''}}>Approved</option>
-                            <option value="Graduated" {{ old('type') == "Graduated" ? 'selected' : ''}}>Graduated</option>
-                            <option value="Terminated-FSD" {{ old('type')== "Terminated-FSD" ? 'selected' : ''}}>Terminated-FSD</option>
-                            <option value="Terminated-FG" {{ old('type')== "Terminated-FG" ? 'selected' : ''}}>Terminated-FG</option>
-                            <option value="Terminated-DS" {{ old('type')== "Terminated-DS" ? 'selected' : ''}}>Terminated-DS</option>
-                            <option value="Terminated-NE" {{ old('type')== "Terminated-NE" ? 'selected' : ''}}>Terminated-NE</option>
-                            <option value="Terminated-FPD" {{ old('type')== "Terminated-FPD" ? 'selected' : ''}}>Terminated-FPD</option>
-                            <option value="Terminated-EOGS" {{ old('type')== "Terminated-EOGS" ? 'selected' : ''}}>Terminated-EOGS</option>
-                            <option value="Terminated-Others" {{ old('type')== "Terminated-Others" ? 'selected' : ''}}>Terminated-Others</option>
-                            
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Remarks</label>
-                        <input name="remarks" type="text" value="{{old('remarks')}}" class="form-control {{$errors->application->first('remarks') == null ? '' : 'is-invalid'}}">
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <input name="user_id" value="{{old('user_id')}}" type="hidden">
@@ -86,7 +86,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
-           
+
         </div>
     </div>
 </div>

@@ -12,7 +12,7 @@
         <h3 class="card-title">Activity Logs</h3>
     </div>
     <div class="card-body">
-    <a href="/activity-logs/clear" class="btn btn-outline-danger btn-sm btn-add-user float-right">DELETE ALL LOGS</a>
+        <button class="btn btn-outline-danger btn-sm btn-delete-logs float-right">DELETE ALL LOGS</button>
         <table id="activityLogList" class="table table-sm table-hover table-responsive-lg">
             <thead>
                 <tr>
@@ -39,7 +39,7 @@
                         <span class="badge badge-danger">{{ $log->description }}</span>
                         @endif
                     </td>
-                   
+
                     <td>
                         @if(isset($log->properties['old']))
                         @foreach($log->properties['old'] as $keyOld => $valueOld)
@@ -53,7 +53,7 @@
                         <span class="badge badge-light mr-2">{{$keyAttribute}}:</span>{{$valueAttribute}} <br>
                         @endforeach
                     </td>
-                    
+
                     <td>{{\App\Models\User::find($log->causer_id)->name ?? ''}}</td>
                     <td>{{date('F d, Y - h:i A', strtotime($log->created_at))}}</td>
                 </tr>
@@ -63,10 +63,29 @@
 
     </div>
     <div class="card-footer">
-        
+
     </div>
 </div>
 
+{{-- !-- Delete Warning Activity Modal -->  --}}
+<div class="modal fade" id="modalDeleteActivity">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <p>Are you sure you want to delete all logs?</p>
+                <button type="button" class="btn btn-default btn-sm float-right" data-dismiss="modal">Cancel</button>
+                <a href="/activity-logs/clear" class="btn btn-outline-danger btn-sm btn-add-user mr-1 float-right">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -76,12 +95,18 @@
 
 <script>
     $(document).ready(function() {
+        $('.btn-delete-logs').click(function() {
+            $('#modalDeleteActivity').modal('show')
+        });
+
         // Create DataTable
         var table = $('#activityLogList').DataTable({
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "order": [[ 6, "desc" ]],
+            "order": [
+                [6, "desc"]
+            ],
             "info": true,
             "autoWidth": true,
             "responsive": true,
@@ -89,5 +114,4 @@
 
     })
 </script>
-
 @endpush

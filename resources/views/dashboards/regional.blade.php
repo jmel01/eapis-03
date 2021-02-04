@@ -139,6 +139,21 @@
                 @endforeach
             ],
             datasets: [ { 
+                    label: 'On Process',
+                    data: [ @foreach($provinces as $value)
+                                @foreach($chartDataOnProcess as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+
+                }, { 
                     label: 'Grantee',
                     data: [ @foreach($provinces as $value)
                                 @foreach($chartDataApproved as $chartData)
@@ -192,13 +207,9 @@
                 text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Province'
             },
             scales: {
-                xAxes: [{
-                    stacked: true
-                }],
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        stacked: true
                     }
                 }]
             }

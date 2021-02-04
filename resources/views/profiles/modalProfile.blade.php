@@ -90,7 +90,7 @@
                                     <div class="form-group">
                                         <label>Region</label>
                                         <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
-                                            <option disabled selected>Select Region</option>
+                                            <option selected>Select Region</option>
                                             @foreach ($regions as $allRegion)
                                                 <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' :'' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
                                                     {{ $allRegion->name }}

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AuditEvent;
 use App\Models\Requirement;
 use Illuminate\Http\Request;
 

@@ -139,49 +139,63 @@
 
                 // computing column Total of the complete result 
                 var elemTotal = api
-                    .column(2)
+                    .column(2, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var hsTotal = api
-                    .column(3)
+                    .column(3, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var vocTotal = api
-                    .column(4)
+                    .column(4, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var collegeTotal = api
-                    .column(5)
+                    .column(5, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var adminCostTotal = api
-                    .column(6)
+                    .column(6, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var disburseToGranteeTotal = api
-                    .column(7)
+                    .column(7, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
                     }, 0);
 
                 var rowTotal = api
-                    .column(8)
+                    .column(8, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -207,10 +221,12 @@
                 footer: true,
                 exportOptions: {
                     columns: ':visible'
-
                 }
             }, {
                 extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                },
                 autoPrint: false,
                 title: '',
                 footer: true,
@@ -271,7 +287,7 @@
                     head.appendChild(style);
 
                 }
-            },'colvis']
+            }, 'colvis']
 
         });
 

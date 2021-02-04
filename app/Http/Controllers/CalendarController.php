@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AuditEvent;
 use App\Models\Calendar;
 use App\Models\Psgc;
 use Illuminate\Support\Facades\Auth;

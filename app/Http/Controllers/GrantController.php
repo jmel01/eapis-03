@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AuditEvent;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;

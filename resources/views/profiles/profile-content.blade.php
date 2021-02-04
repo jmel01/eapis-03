@@ -78,7 +78,7 @@
                     <label>Region</label>
                     <input type="hidden" id="regionCode" value="{{$region->code ?? ''}}">
                     <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
-                        <option disabled>Select Region</option>
+                        <option>Select Region</option>
                         @foreach ($regions as $allRegion)
                         <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' : '' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
                             {{ $allRegion->name }}

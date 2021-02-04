@@ -85,7 +85,9 @@
 
                 // Total over all pages
                 total = api
-                    .column(2)
+                    .column(2, {
+                        page: 'current'
+                    })
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -117,6 +119,9 @@
                 }
             }, {
                 extend: 'print',
+                exportOptions: {
+                    columns: ':visible'
+                },
                 autoPrint: false,
                 title: '',
                 footer: true,
@@ -144,7 +149,7 @@
                     head.appendChild(style);
 
                 }
-            },'colvis']
+            }, 'colvis']
 
         });
 

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\ChartArray\Regional;
 use App\Models\AdminCost;
 use App\Models\Application;
-use App\Models\AuditEvent;
 use App\Models\Calendar;
 use App\Models\Dashboard;
 use App\Models\Document;
@@ -35,6 +34,11 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::regionsApplicant($regions, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'On Process')
+            ->get();
+        $chartDataOnProcess = Regional::regionsApplicant($regions, $userProfileOnProcess);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'Terminated-FSD')
@@ -77,42 +81,52 @@ class DashboardController extends Controller
 
         $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('gender', 'Male')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('gender', 'Female')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'Regular')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'PDAF')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Post Study')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'College')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Vocational')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'High School')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Elementary')
+            ->where('status', 'Approved')
             ->count();
 
         $totalAdminCost = AdminCost::whereNull('user_id')->sum('amount');
@@ -125,6 +139,7 @@ class DashboardController extends Controller
                 'regions',
                 'chartDataAll',
                 'chartDataApproved',
+                'chartDataOnProcess',
                 'chartDataTerminated',
                 'terminatedFSD',
                 'terminatedFG',
@@ -162,6 +177,11 @@ class DashboardController extends Controller
             ->get();
         $chartDataApproved = Regional::regionsApplicant($regions, $userProfileApproved);
 
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'On Process')
+            ->get();
+        $chartDataOnProcess = Regional::regionsApplicant($regions, $userProfileOnProcess);
+
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'Terminated-FSD')
             ->orWhere('status', 'Terminated-FG')
@@ -203,42 +223,52 @@ class DashboardController extends Controller
 
         $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('gender', 'Male')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('gender', 'Female')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'Regular')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'PDAF')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Post Study')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'College')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Vocational')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'High School')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('level', 'Elementary')
+            ->where('status', 'Approved')
             ->count();
 
         $totalAdminCost = AdminCost::whereNull('user_id')->sum('amount');
@@ -251,6 +281,7 @@ class DashboardController extends Controller
                 'regions',
                 'chartDataAll',
                 'chartDataApproved',
+                'chartDataOnProcess',
                 'chartDataTerminated',
                 'terminatedFSD',
                 'terminatedFG',
@@ -277,7 +308,8 @@ class DashboardController extends Controller
 
     public function regionalOfficer()
     {
-        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::where('region', Auth::user()->region)
+            ->orderBy('dateTimeStart', 'DESC')->get();
 
         $regionId = Str::substr(Auth::user()->region, 0, 2);
 
@@ -294,6 +326,13 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::provincesApplicant($provinces, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'On Process')
+            ->get();
+
+        $chartDataOnProcess = Regional::provincesApplicant($provinces, $userProfileOnProcess);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
@@ -345,51 +384,61 @@ class DashboardController extends Controller
         $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('gender', 'Male')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('gender', 'Female')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('type', 'Regular')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('type', 'PDAF')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('level', 'Post Study')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('level', 'College')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('level', 'Vocational')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('level', 'High School')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('level', 'Elementary')
+            ->where('status', 'Approved')
             ->count();
 
         $totalAdminCost = AdminCost::whereNull('user_id')
@@ -406,6 +455,7 @@ class DashboardController extends Controller
                 'provinces',
                 'chartDataAll',
                 'chartDataApproved',
+                'chartDataOnProcess',
                 'chartDataTerminated',
                 'terminatedFSD',
                 'terminatedFG',
@@ -439,10 +489,12 @@ class DashboardController extends Controller
                 'message' => 'Update your profile first.',
                 'alert-type' => 'info'
             );
-            return redirect('profiles/'.Auth::id())->with($notification);
+            return redirect('profiles/' . Auth::id())->with($notification);
         }
 
-        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::where('region', Auth::user()->region)
+            ->orderBy('dateTimeStart', 'DESC')->get();
+
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 
         $cities = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'City']])
@@ -459,6 +511,13 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::citiesApplicant($cities, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'On Process')
+            ->get();
+
+        $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -510,51 +569,61 @@ class DashboardController extends Controller
         $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('gender', 'Male')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('gender', 'Female')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'Regular')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'PDAF')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Post Study')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'College')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Vocational')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'High School')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Elementary')
+            ->where('status', 'Approved')
             ->count();
 
         $totalAdminCost = AdminCost::whereNull('user_id')
@@ -568,6 +637,7 @@ class DashboardController extends Controller
             'data',
             'cities',
             'chartDataAll',
+            'chartDataOnProcess',
             'chartDataApproved',
             'chartDataTerminated',
             'terminatedFSD',
@@ -601,10 +671,12 @@ class DashboardController extends Controller
                 'message' => 'Update your profile first.',
                 'alert-type' => 'info'
             );
-            return redirect('profiles/'.Auth::id())->with($notification);
+            return redirect('profiles/' . Auth::id())->with($notification);
         }
 
-        $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::where('region', Auth::user()->region)
+            ->orderBy('dateTimeStart', 'DESC')->get();
+
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
 
         $cities = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'City']])
@@ -621,6 +693,13 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::citiesApplicant($cities, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'On Process')
+            ->get();
+
+        $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -672,51 +751,61 @@ class DashboardController extends Controller
         $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('gender', 'Male')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('gender', 'Female')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'Regular')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('type', 'PDAF')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Post Study')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'College')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Vocational')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'High School')
+            ->where('status', 'Approved')
             ->count();
 
         $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('level', 'Elementary')
+            ->where('status', 'Approved')
             ->count();
 
         $totalAdminCost = AdminCost::whereNull('user_id')
@@ -730,6 +819,7 @@ class DashboardController extends Controller
             'data',
             'cities',
             'chartDataAll',
+            'chartDataOnProcess',
             'chartDataApproved',
             'chartDataTerminated',
             'terminatedFSD',
@@ -768,7 +858,10 @@ class DashboardController extends Controller
             }
         }
 
-        $data = Calendar::with('regionname')->orderBy('dateTimeStart', 'DESC')->get();
+        $data = Calendar::with('regionname')
+            ->where('region', Auth::user()->region)
+            ->orderBy('dateTimeStart', 'DESC')->get();
+
         $psgCode = $userProfile->psgCode ?? '';
         //$psgCode = Auth::user()->profile->psgCode;
         $grants = array();
@@ -889,19 +982,21 @@ class DashboardController extends Controller
         return $response;
     }
 
-    public function activityLogs(){
-         $activity = Activity::orderBy('created_at', 'Desc')->get();
+    public function activityLogs()
+    {
+        $activity = Activity::orderBy('created_at', 'Desc')->get();
 
         return view('activity.index', compact('activity'));
     }
 
-    public function clearActivityLogs(){
-        $activity = Activity::truncate();
+    public function clearActivityLogs()
+    {
+        Activity::truncate();
 
         $notification = array(
             'message' => 'Logs cleared successfully',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
-   }
+    }
 }
