@@ -23,7 +23,7 @@ class CreateApplicationsTable extends Migration
             $table->string('course');
             $table->string('contribution');
             $table->string('plans');
-            $table->string('status')->nullable();
+            $table->string('status')->default('On Process');
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

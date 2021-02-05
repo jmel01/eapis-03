@@ -28,7 +28,7 @@ class ApplicationController extends Controller
                 ->get();
         }
 
-        return view('applications.showAllApproved', compact('data','regions', 'regionId'));
+        return view('applications.showAllApproved', compact('data', 'regions', 'regionId'));
     }
 
     public function showApproved($id)

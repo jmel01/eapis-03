@@ -98,5 +98,11 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
+    Route::group(['prefix' => 'user'], function () {
+        Route::group(['prefix' => 'validate'], function () {
+            Route::get('apply', [UserController::class, 'validateApply']);
+        });
+    });
+
     Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
 });

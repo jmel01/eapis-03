@@ -151,6 +151,7 @@
 @include('layouts.adminlte.modalDelete')
 @include('profiles.modalProfile')
 @include('applications.modalApplication')
+@include('applications.modalApplicationNotAvailable')
 @include('documents.modalDocument')
 @include('calendars.modalShowAnnouncement')
 @endsection
@@ -167,8 +168,22 @@
         $('.btn-add-application').click(function() {
             document.getElementById("formApplication").reset();
             var id = $(this).attr('data-id');
-            $('[name="user_id"]').val(id)
-            $('#modalApplication').modal('show')
+             
+            $.ajax({
+                url : '/user/validate/apply',
+                type : 'GET',
+                data : {id: id},
+            }).done(result => {
+                if(result.message == 'success'){
+                    $('[name="user_id"]').val(id)
+                    $('#modalApplication').modal('show')
+                }
+
+                if(result.message == 'notAvailable'){
+                    $('#modalApplicationNotAvailable').modal('show')
+                }
+            })
+
         });
 
         $('.btn-add-document').click(function() {

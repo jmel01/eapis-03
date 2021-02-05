@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
 use App\Models\User;
@@ -32,7 +33,6 @@ class UserController extends Controller
                 ->get();
 
             $roles = Role::pluck('name', 'name')->all();
-
         } else {
             $data = User::with('profile')->where('region', Auth::user()->region)->orderBy('id', 'DESC')->get();
             $regions = Psgc::where('code', Auth::user()->region)->get();
@@ -147,5 +147,40 @@ class UserController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
+    }
+
+    public function validateApply(Request $request)
+    {
+        $application = Application::where([
+            ['user_id', $request->id],
+            ['status', '!=', 'Graduated']
+        ])->first();
+
+        if (isset($application)) {
+            return response()->json([
+                'message' => 'notAvailable'
+            ]);
+        }
+        return response()->json([
+            'message' => 'success'
+        ]);
+    }
+
+    public function COPYvalidateApply(Request $request)
+    {
+        $application = Application::where([
+            ['user_id', $request->id]
+        ])->where(function ($query) {
+            $query->orWhere('status', '!=', 'On Process')->orWhere('status', '!=', 'Graduated');
+        })->first();
+
+        if (isset($application)) {
+            return response()->json([
+                'message' => 'notAvailable'
+            ]);
+        }
+        return response()->json([
+            'message' => 'success'
+        ]);
     }
 }

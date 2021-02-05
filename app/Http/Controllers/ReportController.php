@@ -48,6 +48,11 @@ class ReportController extends Controller
         return view('reports.formC', compact('data'));
     }
 
+    public function formD()
+    {
+        return view('reports.formD');
+    }
+
     public function formE()
     {
         $data = AdminCost::whereNull('user_id')->get();

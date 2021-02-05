@@ -69,6 +69,8 @@
                         <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
                         @endcan
 
+                       
+
                     </td>
                 </tr>
                 @endforeach
@@ -83,6 +85,7 @@
 
 @include('layouts.adminlte.modalDelete')
 @include('applications.modalApplication')
+@include('applications.modalApplicationNotAvailable')
 @include('users.modalUser')
 @include('profiles.modalProfile')
 
@@ -135,8 +138,21 @@
         $('.btn-add-application').click(function() {
             document.getElementById("formApplication").reset();
             var id = $(this).attr('data-id');
-            $('[name="user_id"]').val(id)
-            $('#modalApplication').modal('show')
+            
+            $.ajax({
+                url : '/user/validate/apply',
+                type : 'GET',
+                data : {id: id},
+            }).done(result => {
+                if(result.message == 'success'){
+                    $('[name="user_id"]').val(id)
+                    $('#modalApplication').modal('show')
+                }
+
+                if(result.message == 'notAvailable'){
+                    $('#modalApplicationNotAvailable').modal('show')
+                }
+            })
 
         });
 
