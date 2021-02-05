@@ -38,7 +38,7 @@
                     <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
-                    <td>{{ $application->applicant->birthdate }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }}</td>
                     <td>{{ $application->school }}</td>
                     <td>{{ $application->course }}</td>
                     <td class="text-center text-bold">@if ($application->level=='College') &#10003; @endif</td>
