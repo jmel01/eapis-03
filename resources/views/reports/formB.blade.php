@@ -35,7 +35,7 @@
                 @foreach ($data as $key => $application)
                 <tr>
                     <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  1) }}.</td>
-                    <td>{{ $application->applicant->ethnoGroup }}</td>
+                    <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
                     <td>{{ $application->applicant->birthdate }}</td>
@@ -100,51 +100,64 @@
 
                 // Remove the formatting to get integer data for summation
                 var intVal = function(i) {
-                    return i != '' ? 1 : 0;
+                    return typeof i != '' ? 1 : 0;
                 };
 
                 // computing column Total of the complete result 
 
+                let countmale = 0;
                 var male = api
                     .column(2)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countmale++;
+                        return countmale;
                     }, 0);
 
+                let countfemale = 0;
                 var female = api
                     .column(3)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countfemale++;
+                        return countfemale;
                     }, 0);
 
+                let countcollege = 0;
                 var college = api
                     .column(7)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countcollege++;
+                        return countcollege;
                     }, 0);
 
+                let countvocational = 0;    
                 var vocational = api
                     .column(8)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countvocational++;
+                        return countvocational;
                     }, 0);
 
+                
+                let counthighSchool = 0; 
                 var highSchool = api
                     .column(9)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : counthighSchool++;
+                        return counthighSchool;
                     }, 0);
 
+                let countelementary = 0; 
                 var elementary = api
                     .column(10)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countelementary++;
+                        return countelementary;
                     }, 0);
 
 

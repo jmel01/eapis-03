@@ -92,58 +92,71 @@
 
                 // Remove the formatting to get integer data for summation
                 var intVal = function(i) {
-                    return i != '' ? 1 : 0;
+                    return typeof i != '' ? 1 : 0;
                 };
 
                 // computing column Total of the complete result 
-
+                let countfsd = 0;
                 var fsd = api
                     .column(4)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countfsd++;
+                        return countfsd;
                     }, 0);
 
+                let countfg = 0;
                 var fg = api
                     .column(5)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countfg++;
+                        return countfg;
                     }, 0);
 
+                let countds = 0;
                 var ds = api
                     .column(6)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countds++;
+                        return countds;
                     }, 0);
 
+                let countne = 0;
                 var ne = api
                     .column(7)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countne++;
+                        return countne;
                     }, 0);
 
+                let countfpd = 0;
                 var fpd = api
                     .column(8)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countfpd++;
+                        return countfpd;
                     }, 0);
 
+                let counteogs = 0;
                 var eogs = api
                     .column(9)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : counteogs++;
+                        return counteogs;
                     }, 0);
 
+                let countothers = 0;
                 var others = api
                     .column(10)
                     .data()
                     .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
+                        b == '' ? '' : countothers++;
+                        return countothers;
                     }, 0);
 
 
