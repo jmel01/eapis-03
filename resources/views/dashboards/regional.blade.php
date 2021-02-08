@@ -182,6 +182,21 @@
                     borderColor: 'rgba(255, 99, 132,1)',
                     borderWidth: 1
 
+                }, { 
+                    label: 'Graduated',
+                    data: [ @foreach($provinces as $value)
+                                @foreach($chartDataGraduated as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+
                 }, {
                     label: 'Total Number of Applicant',
                     data: [ @foreach($provinces as $value)

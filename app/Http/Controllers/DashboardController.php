@@ -7,7 +7,6 @@ use App\Models\AdminCost;
 use App\Models\Application;
 use App\Models\Calendar;
 use App\Models\Dashboard;
-use App\Models\Document;
 use App\Models\Grant;
 use App\Models\Psgc;
 use App\Models\Profile;
@@ -34,6 +33,11 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::regionsApplicant($regions, $userProfileApproved);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::regionsApplicant($regions, $userProfileGraduated);
 
         $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'On Process')
@@ -141,6 +145,7 @@ class DashboardController extends Controller
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
+                'chartDataGraduated',
                 'terminatedFSD',
                 'terminatedFG',
                 'terminatedDS',
@@ -176,6 +181,11 @@ class DashboardController extends Controller
             ->where('status', 'Approved')
             ->get();
         $chartDataApproved = Regional::regionsApplicant($regions, $userProfileApproved);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::regionsApplicant($regions, $userProfileGraduated);
 
         $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'On Process')
@@ -283,6 +293,7 @@ class DashboardController extends Controller
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
+                'chartDataGraduated',
                 'terminatedFSD',
                 'terminatedFG',
                 'terminatedDS',
@@ -333,6 +344,12 @@ class DashboardController extends Controller
             ->get();
 
         $chartDataOnProcess = Regional::provincesApplicant($provinces, $userProfileOnProcess);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::provincesApplicant($provinces, $userProfileGraduated);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
@@ -457,6 +474,7 @@ class DashboardController extends Controller
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
+                'chartDataGraduated',
                 'terminatedFSD',
                 'terminatedFG',
                 'terminatedDS',
@@ -518,6 +536,12 @@ class DashboardController extends Controller
             ->get();
 
         $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::citiesApplicant($cities, $userProfileGraduated);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -639,6 +663,7 @@ class DashboardController extends Controller
             'chartDataAll',
             'chartDataOnProcess',
             'chartDataApproved',
+            'chartDataGraduated',
             'chartDataTerminated',
             'terminatedFSD',
             'terminatedFG',
@@ -700,6 +725,12 @@ class DashboardController extends Controller
             ->get();
 
         $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::citiesApplicant($cities, $userProfileGraduated);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -821,6 +852,7 @@ class DashboardController extends Controller
             'chartDataAll',
             'chartDataOnProcess',
             'chartDataApproved',
+            'chartDataGraduated',
             'chartDataTerminated',
             'terminatedFSD',
             'terminatedFG',
