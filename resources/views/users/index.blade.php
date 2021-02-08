@@ -69,7 +69,7 @@
                         <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
                         @endcan
 
-                       
+
 
                     </td>
                 </tr>
@@ -79,7 +79,7 @@
 
     </div>
     <div class="card-footer">
-        
+
     </div>
 </div>
 
@@ -123,7 +123,7 @@
                 $('[name="name"]').val(data.user.name)
                 $('[name="email"]').val(data.user.email)
                 $('[name="roles[]"]').val(data.user.roles)
-                
+
                 $('#modalUser').modal('show')
             })
         });
@@ -138,18 +138,20 @@
         $('.btn-add-application').click(function() {
             document.getElementById("formApplication").reset();
             var id = $(this).attr('data-id');
-            
+
             $.ajax({
-                url : '/user/validate/apply',
-                type : 'GET',
-                data : {id: id},
+                url: '/user/validate/apply',
+                type: 'GET',
+                data: {
+                    id: id
+                },
             }).done(result => {
-                if(result.message == 'success'){
+                if (result.message == 'success') {
                     $('[name="user_id"]').val(id)
                     $('#modalApplication').modal('show')
                 }
 
-                if(result.message == 'notAvailable'){
+                if (result.message == 'notAvailable') {
                     $('#modalApplicationNotAvailable').modal('show')
                 }
             })
@@ -162,9 +164,11 @@
             $('[name="id"]').val(id)
 
             $.ajax({
-                url : '/profile/update/show-modal',
-                type : 'GET',
-                data : {id: id},
+                url: '/profile/update/show-modal',
+                type: 'GET',
+                data: {
+                    id: id
+                },
             }).done(result => {
                 $('#modalProfile .modal-body').empty()
                 $('#modalProfile .modal-body').append(result)
@@ -179,7 +183,9 @@
             "paging": true,
             "lengthChange": true,
             "searching": true,
-            "order": [[ 5, "desc" ]],
+            "order": [
+                [5, "desc"]
+            ],
             "info": true,
             "autoWidth": true,
             "responsive": true,

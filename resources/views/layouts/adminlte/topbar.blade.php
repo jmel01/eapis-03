@@ -29,6 +29,43 @@
         </li>
         @endif
         @else
+        @if(App\Models\Message::where([['to_id',Auth::id()],['seen',0]])->count() != 0)
+        <!-- Messages Dropdown Menu -->
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#">
+                <i class="far fa-comments"></i>
+                <span class="badge badge-danger navbar-badge">{{ App\Models\Message::where([['to_id',Auth::id()],['seen',0]])->count() }}</span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+
+                @forelse(App\Models\Message::where([['to_id',Auth::id()],['seen',0]])->orderBy('created_at','DESC')->limit(5)->get() as $message)
+                <a href="#" class="dropdown-item">
+                    <!-- Message Start -->
+                    <div class="media">
+                        <img src="/storage/users-avatar/{{ App\Models\User::find($message->from_id)->avatar }}" alt="User Avatar" class="img-size-50 mr-3 img-circle cover" style="width:50px;height:50px;">
+                        <div class="media-body">
+                            <h3 class="dropdown-item-title text-primary">
+                                {{ App\Models\User::find($message->from_id)->name }}
+                                @if($message->attachment)
+                                <span class="float-right text-sm text-muted"><i class="fas fa-paperclip"></i></span>
+                                @endif
+                            </h3>
+                            <p class="text-sm">{{ $message->body }}</p>
+                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>
+                                {{ \Carbon\Carbon::parse($message->created_at)->diffForHumans() }}
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Message End -->
+                </a>
+                <div class="dropdown-divider"></div>
+                @empty
+                @endforelse
+                <a href="/community" target="_blank" class="dropdown-item dropdown-footer">See All Messages</a>
+            </div>
+        </li>
+        @endif
+
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                 <img class="user-image img-circle cover" alt="User Image" src="/storage/users-avatar">
