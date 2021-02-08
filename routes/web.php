@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/applications/showOnProcess/{id}', [ApplicationController::class, 'showOnProcess'])->name('showOnProcess');
     Route::resource('applications', ApplicationController::class);
 
+    Route::get('adminCost/{id}', [AdminCostController::class, 'showAdminCost'])->name('adminCost');
+    Route::get('paymentToGrantee/{id}', [AdminCostController::class, 'showPaymentToGrantee'])->name('paymentToGrantee');
     Route::resource('costs', AdminCostController::class);
     Route::resource('calendars', CalendarController::class);
 
@@ -84,7 +86,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/reports/formG', [ReportController::class, 'formG'])->name('formG');
     Route::get('/reports/formH', [ReportController::class, 'formH'])->name('formH');
     Route::resource('reports', ReportController::class);
-    
+
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);

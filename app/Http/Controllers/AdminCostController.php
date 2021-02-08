@@ -10,6 +10,38 @@ use Illuminate\Support\Str;
 
 class AdminCostController extends Controller
 {
+    public function showAdminCost($id)
+    {
+        $data = AdminCost::with('provname')
+            ->where('grant_id', $id)
+            ->whereNull('user_id')
+            ->get();
+        $grant = Grant::where('id', $id)->first();
+
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('costs.showAdminCost', compact('data', 'grant', 'provinces'));
+    }
+
+    public function showPaymentToGrantee($id)
+    {
+        $data = AdminCost::with('provname')
+            ->where('grant_id', $id)
+            ->whereNotNull('user_id')
+            ->get();
+        $grant = Grant::where('id', $id)->first();
+
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('costs.showPaymentToGrantee', compact('data', 'grant', 'provinces'));
+    }
+
     /**
      * Display a listing of the resource.
      *

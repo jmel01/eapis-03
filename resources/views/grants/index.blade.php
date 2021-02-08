@@ -63,9 +63,23 @@
                             </div>
                         </div>
                         @endcan
+
                         @can('expenses-browse')
-                        <a href="{{ route('costs.show',$grant->id) }}" class="btn btn-primary btn-sm mr-1">Admin Cost</a>
+                        <div class="btn-group mr-1" role="group">
+                            <a href="{{ route('costs.show',$grant->id) }}" type="button" class="btn btn-primary btn-sm">Expenses</a>
+
+                            <div class="btn-group" role="group">
+                                <button id="btnGroupDrop2" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnGroupDrop2">
+                                    <a class="dropdown-item" href="{{ route('adminCost',$grant->id) }}">Administrative Cost</a>
+                                    <a class="dropdown-item" href="{{ route('paymentToGrantee',$grant->id) }}">Payment to Grantee</a>
+                                </div>
+                            </div>
+                        </div>
                         @endcan
+
                         @can('grant-edit')
                         <button data-url="{{ route('grants.edit',$grant->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-grant">Edit</button>
                         @endcan
