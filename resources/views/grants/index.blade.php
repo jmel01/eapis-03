@@ -57,6 +57,7 @@
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     <a class="dropdown-item" href="{{ route('showApproved',$grant->id) }}">Approved</a>
+                                    <a class="dropdown-item" href="{{ route('showGraduated',$grant->id) }}">Graduated</a>
                                     <a class="dropdown-item" href="{{ route('showOnProcess',$grant->id) }}">On Process</a>
                                     <a class="dropdown-item" href="{{ route('showTerminated',$grant->id) }}">Terminated</a>
                                 </div>

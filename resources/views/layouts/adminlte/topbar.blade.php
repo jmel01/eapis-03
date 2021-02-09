@@ -68,13 +68,13 @@
 
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img class="user-image img-circle cover" alt="User Image" src="/storage/users-avatar">
+                <img class="user-image img-circle cover" alt="User Image" src="/storage/users-avatar/{{Auth::user()->avatar ?? '' }}">
                 <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
                 <li class="user-header bg-primary">
-                    <img src="/storage/users-avatar" class="img-circle elevation-2 cover" alt="User Image">
+                    <img src="/storage/users-avatar/{{Auth::user()->avatar ?? '' }}" class="img-circle elevation-2 cover" alt="User Image">
                     <p>
                         {{ Auth::user()->profile->firstName ?? '' }} {{ Auth::user()->profile->middleName ?? '' }} {{ Auth::user()->profile->lastName ?? '' }}
                         <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>

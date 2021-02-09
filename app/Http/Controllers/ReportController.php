@@ -12,6 +12,15 @@ use Illuminate\Support\Str;
 
 class ReportController extends Controller
 {
+    public function formA()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+        } else {
+        }
+
+        return view('reports.formA');
+    }
+
     public function formB()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
@@ -127,6 +136,14 @@ class ReportController extends Controller
                 ->get();
         }
         return view('reports.formG', compact('data'));
+    }
+
+    public function formH()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+        } else {
+        }
+        return view('reports.formH');
     }
 
     /**

@@ -85,6 +85,22 @@ class ApplicationController extends Controller
         return view('applications.show', compact('data', 'grant', 'provinces'));
     }
 
+    public function showGraduated($id)
+    {
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('grant_id', $id)
+            ->where('status', 'Graduated')
+            ->get();
+
+        $grant = Grant::with('psgCode')->where('id', $id)->first();
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('applications.show', compact('data', 'grant', 'provinces'));
+    }
+
     /**
      * Display a listing of the resource.
      *

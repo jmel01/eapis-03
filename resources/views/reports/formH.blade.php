@@ -1,5 +1,5 @@
 @extends('layouts.adminlte.template')
-@section('title', 'Report of Graduates - Where Abouts')
+@section('title', 'Monitoring of EAP Documents')
 
 @push('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
@@ -8,37 +8,35 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Report of Graduates</h3>
+        <h3 class="card-title">Monitoring of EAP Documents</h3>
     </div>
     <div class="card-body">
 
-        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-lg">
+        <table id="documentList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Kind of EAP</th>
                     <th>Region</th>
+                    <th>Province</th>
+                    <th>Name</th>
                     <th>Ethno Group</th>
-                    <th>Male</th>
-                    <th>Female</th>
-                    <th>Course</th>
-                    <th>Year Employed</th>
-                    <th>FE</th>
-                    <th>PE</th>
-                    <th>SE</th>
-                    <th>GO/NGO/CSO</th>
-                    <th>Position</th>
-                    <th>Place of Employment</th>
+                    <th>CTM/COC</th>
+                    <th>ITR</th>
+                    <th>Application Form</th>
+                    <th>CE (1st Sem)</th>
+                    <th>COG (1st Sem)</th>
+                    <th>CE (2nd Sem)</th>
+                    <th>COG (2nd Sem)</th>
+                    <th>Remarks</th>
                 </tr>
             </thead>
             <tbody>
-                
+
             </tbody>
         </table>
 
     </div>
     <div class="card-footer">
-        Footer
+      
     </div>
 </div>
 @endsection
@@ -51,7 +49,7 @@
 <script>
     $(document).ready(function() {
         // Create DataTable
-        var table = $('#graduateList').DataTable({
+        var table = $('#documentList').DataTable({
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -59,10 +57,10 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
-           
+
             dom: 'BfrtipQ',
             buttons: [{
-                title: 'Report of Graduates (FORM B)',
+                title: 'Monitoring of EAP Documents (FORM H)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
@@ -77,7 +75,7 @@
                 },
                 autoPrint: false,
                 title: '',
-                messageTop: '<p class="text-right">Form B</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF GRADUATES<br>SY ___<br>As of Month, Year</p>',
+                messageTop: '<p class="text-right">Form H</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>Monitoring of EAP Documents<br>School Year ____</p>',
                 customize: function(win) {
 
                     var last = null;

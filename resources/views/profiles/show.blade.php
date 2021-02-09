@@ -24,7 +24,7 @@
                 <div class="card card-primary card-outline">
                     <div class="card-body box-profile">
                         <div class="text-center">
-                            <img class="profile-user-img img-fluid img-circle cover" alt="User profile picture" src="/storage/users-avatar">
+                            <img class="profile-user-img img-fluid img-circle cover" alt="User profile picture" src="/storage/users-avatar/{{ Auth::user()->avatar ?? '' }}">
                         </div>
 
                         <h3 class="profile-username text-center">{{ $userProfile->firstName ?? '' }} {{ $userProfile->middleName ?? '' }} {{ $userProfile->lastName ?? '' }}</h3>
