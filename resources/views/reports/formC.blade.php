@@ -30,19 +30,21 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $application)
-                <tr>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-FSD') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-FG') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-DS') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-NE') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-FPD') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-EOGS') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->status=='Terminated-Others') &#10003; @endif</td>
-                </tr>
+                    @if(isset($application->applicant))
+                    <tr>
+                        <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
+                        <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
+                        <td>{{ $application->type }}</td>
+                        <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-FSD') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-FG') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-DS') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-NE') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-FPD') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-EOGS') &#10003; @endif</td>
+                        <td class="text-center text-bold">@if ($application->status=='Terminated-Others') &#10003; @endif</td>
+                    </tr>
+                    @endif
                 @endforeach
             </tbody>
             <tfoot>
@@ -85,7 +87,7 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
-           
+
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;

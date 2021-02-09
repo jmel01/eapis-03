@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
 
-        <table id="costList" class="table table-sm table-bordered table-hover table-responsive-lg">
+        <table id="expensesList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
                     <th>Region</th>
@@ -28,55 +28,55 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $cost)
+                @foreach ($data as $key => $expense)
                 <tr>
-                    <td>{{ App\Models\Psgc::getRegion($cost->province) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($cost->province) }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($expense->province) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($expense->province) }}</td>
                     <td class="text-right">
                         @foreach($level['elementary'] as $elementary)
-                        @if($elementary->province == $cost->province)
+                        @if($elementary->province == $expense->province)
                         {{ $elementary->levelCount }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($level['highSchool'] as $highSchool)
-                        @if($highSchool->province == $cost->province)
+                        @if($highSchool->province == $expense->province)
                         {{ $highSchool->levelCount }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($level['vocational'] as $vocational)
-                        @if($vocational->province == $cost->province)
+                        @if($vocational->province == $expense->province)
                         {{ $vocational->levelCount }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($level['college'] as $college)
-                        @if($college->province == $cost->province)
+                        @if($college->province == $expense->province)
                         {{ $college->levelCount }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($adminCosts as $adminCost)
-                        @if($adminCost->province == $cost->province)
+                        @if($adminCost->province == $expense->province)
                         {{ number_format($adminCost->amount, 2, '.', ',') }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($actualPayments as $actualPayment)
-                        @if($actualPayment->province == $cost->province)
+                        @if($actualPayment->province == $expense->province)
                         {{ number_format($actualPayment->amount, 2, '.', ',') }}
                         @endif
                         @endforeach
                     </td>
                     <td class="text-right">
                         @foreach($level['total'] as $total)
-                        @if($total->province == $cost->province)
+                        @if($total->province == $expense->province)
                         {{ $total->levelCount }}
                         @endif
                         @endforeach
@@ -116,7 +116,7 @@
 <script>
     $(document).ready(function() {
         // Create DataTable
-        var table = $('#costList').DataTable({
+        var table = $('#expensesList').DataTable({
             "paging": true,
             "lengthChange": true,
             "searching": true,
@@ -209,8 +209,8 @@
                 $(api.column(3).footer()).html(hsTotal);
                 $(api.column(4).footer()).html(vocTotal);
                 $(api.column(5).footer()).html(collegeTotal);
-                $(api.column(6).footer()).html(adminCostTotal);
-                $(api.column(7).footer()).html(disburseToGranteeTotal);
+                $(api.column(6).footer()).html(adminCostTotal.toLocaleString("en-US"));
+                $(api.column(7).footer()).html(disburseToGranteeTotal.toLocaleString("en-US"));
                 $(api.column(8).footer()).html(rowTotal);
             },
 

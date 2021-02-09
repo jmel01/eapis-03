@@ -44,17 +44,17 @@ class ReportController extends Controller
                 ->get();
         } else {
             $regionId = Str::substr(Auth::user()->region, 0, 2);
-            $data = Application::with(['applicant' => function ($query) use ($regionId) {
-                $query->where([[\DB::raw('substr(psgCode, 1, 2)'), '=', $regionId]]);
-            }])
-                ->orWhere('status', 'Terminated-FSD')
-                ->orWhere('status', 'Terminated-FG')
-                ->orWhere('status', 'Terminated-DS')
-                ->orWhere('status', 'Terminated-NE')
-                ->orWhere('status', 'Terminated-FPD')
-                ->orWhere('status', 'Terminated-EOGS')
-                ->orWhere('status', 'Terminated-Others')
-                ->get();
+            $data = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+                ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+                ->where(function($query){
+                    $query->orWhere('status', 'Terminated-FSD')
+                    ->orWhere('status', 'Terminated-FG')
+                    ->orWhere('status', 'Terminated-DS')
+                    ->orWhere('status', 'Terminated-NE')
+                    ->orWhere('status', 'Terminated-FPD')
+                    ->orWhere('status', 'Terminated-EOGS')
+                    ->orWhere('status', 'Terminated-Others');
+                })->get();
         }
         return view('reports.formC', compact('data'));
     }
@@ -66,28 +66,13 @@ class ReportController extends Controller
 
     public function formE()
     {
-        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = AdminCost::whereNull('user_id')->get();
-        } else {
-            $regionId = Str::substr(Auth::user()->region, 0, 2);
-            $data = AdminCost::whereNull('user_id')
-                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
-                ->get();
-        }
+        $data = AdminCost::whereNull('user_id')->get();
         return view('reports.formE', compact('data'));
     }
 
     public function formF()
     {
-        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = AdminCost::select(DB::raw('province'))->groupBy('province')->get();
-        } else {
-            $regionId = Str::substr(Auth::user()->region, 0, 2);
-            $data = AdminCost::select(DB::raw('province'))
-                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
-                ->groupBy('province')
-                ->get();
-        }
+        $data = AdminCost::select(DB::raw('province'))->groupBy('province')->get();
         $adminCosts = AdminCost::select(DB::raw('sum(amount) as amount, province'))->whereNull('user_id')->groupBy('province')->get();
         $actualPayments = AdminCost::select(DB::raw('sum(amount) as amount, province'))->whereNotNull('user_id')->groupBy('province')->get();
 
@@ -118,14 +103,7 @@ class ReportController extends Controller
 
     public function formG()
     {
-        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = AdminCost::whereNotNull('user_id')->get();
-        } else {
-            $regionId = Str::substr(Auth::user()->region, 0, 2);
-            $data = AdminCost::whereNotNull('user_id')
-                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
-                ->get();
-        }
+        $data = AdminCost::whereNotNull('user_id')->get();
         return view('reports.formG', compact('data'));
     }
 
