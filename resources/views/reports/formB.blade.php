@@ -33,39 +33,39 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $application)
-                    @if(isset($application->applicant))
-                        <tr>
-                            <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  1) }}.</td>
-                            <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
-                            <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
-                            <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
-                            <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }}</td>
-                            <td>{{ $application->school }}</td>
-                            <td>{{ $application->course }}</td>
-                            <td class="text-center text-bold">@if ($application->level=='College') &#10003; @endif</td>
-                            <td class="text-center text-bold">@if ($application->level=='Vocational') &#10003; @endif</td>
-                            <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
-                            <td class="text-center text-bold">@if ($application->level=='Elementary') &#10003; @endif</td>
-                            <td></td>
-                            <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
-                            <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
-                        </tr>
-                    @endif
+                @if(isset($application->applicant))
+                <tr>
+                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  1) }}.</td>
+                    <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
+                    <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }}</td>
+                    <td>{{ $application->school }}</td>
+                    <td>{{ $application->course }}</td>
+                    <td class="text-center text-bold">@if ($application->level=='College') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->level=='Vocational') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->level=='Elementary') &#10003; @endif</td>
+                    <td></td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
+                </tr>
+                @endif
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
                     <th></th>
+                    <th class="text-right"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
                     <th></th>
-                    <th class="text-center text-bold"></th>
-                    <th class="text-center text-bold"></th>
                     <th></th>
                     <th></th>
-                    <th></th>
-                    <th class="text-center text-bold"></th>
-                    <th class="text-center text-bold"></th>
-                    <th class="text-center text-bold"></th>
-                    <th class="text-center text-bold"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -134,7 +134,7 @@
                         return countcollege;
                     }, 0);
 
-                let countvocational = 0;    
+                let countvocational = 0;
                 var vocational = api
                     .column(8)
                     .data()
@@ -143,8 +143,8 @@
                         return countvocational;
                     }, 0);
 
-                
-                let counthighSchool = 0; 
+
+                let counthighSchool = 0;
                 var highSchool = api
                     .column(9)
                     .data()
@@ -153,7 +153,7 @@
                         return counthighSchool;
                     }, 0);
 
-                let countelementary = 0; 
+                let countelementary = 0;
                 var elementary = api
                     .column(10)
                     .data()
@@ -164,7 +164,7 @@
 
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(1).footer()).html('Total');
+                $(api.column(1).footer()).html('Total:');
                 $(api.column(2).footer()).html(male);
                 $(api.column(3).footer()).html(female);
                 $(api.column(7).footer()).html(college);
@@ -199,6 +199,33 @@
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
+
+                    $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(11)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(12)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(11)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(12)').css('text-align', 'center');
 
                     style.type = 'text/css';
                     style.media = 'print';

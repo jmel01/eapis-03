@@ -30,21 +30,21 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $application)
-                    @if(isset($application->applicant))
-                    <tr>
-                        <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
-                        <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
-                        <td>{{ $application->type }}</td>
-                        <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-FSD') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-FG') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-DS') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-NE') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-FPD') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-EOGS') &#10003; @endif</td>
-                        <td class="text-center text-bold">@if ($application->status=='Terminated-Others') &#10003; @endif</td>
-                    </tr>
-                    @endif
+                @if(isset($application->applicant))
+                <tr>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
+                    <td>{{ $application->type }}</td>
+                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-FSD') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-FG') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-DS') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-NE') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-FPD') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-EOGS') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->status=='Terminated-Others') &#10003; @endif</td>
+                </tr>
+                @endif
                 @endforeach
             </tbody>
             <tfoot>
@@ -52,7 +52,7 @@
                     <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
-                    <th class="text-right"></th>
+                    <th class="text-right">Total:</th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
@@ -163,7 +163,6 @@
 
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(3).footer()).html('Total');
                 $(api.column(4).footer()).html(fsd);
                 $(api.column(5).footer()).html(fg);
                 $(api.column(6).footer()).html(ds);
@@ -191,6 +190,7 @@
                 autoPrint: false,
                 title: '',
                 messageTop: '<p class="text-right">Form C</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF TERMINATION<br>SY ___<br>As of Month, Year</p>',
+
                 customize: function(win) {
 
                     var last = null;
@@ -200,6 +200,31 @@
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
+
+                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th:nth-child(11)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(7)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table tfoot th:nth-child(11)').css('text-align', 'center');
 
                     style.type = 'text/css';
                     style.media = 'print';

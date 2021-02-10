@@ -37,26 +37,131 @@
                 </tr>
             </thead>
             <tbody>
-                <td>1</td>
-                <td>2</td>
-                <td class="text-center">3</td>
-                <td class="text-center">4</td>
-                <td class="text-center">5</td>
-                <td class="text-center">6</td>
-                <td class="text-center">7</td>
-                <td class="text-center">8</td>
-                <td class="text-center">9</td>
-                <td class="text-center">8</td>
-                <td class="text-center">7</td>
-                <td class="text-center">5</td>
-                <td class="text-center">6</td>
-                <td class="text-center">4</td>
-                <td class="text-center">3</td>
-                <td class="text-center">2</td>
-                <td class="text-center">1</td>
-                <td class="text-center">1</td>
-                <td>1</td>
+                @foreach($data['applicant'] as $key => $value)
+                @php $total=0 @endphp
+                    <tr>
+                        <td>{{App\Models\Psgc::getRegion($value->code)}}</td>
+                        <td>{{App\Models\Psgc::getProvince($value->code)}}</td>
 
+                        <td class="text-center">
+                            @foreach($level['mbs'] as $mbs)
+                                @if($mbs->code == $value->code)
+                                    {{ $mbs->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['regular'] as $regular)
+                                @if($regular->code == $value->code)
+                                    {{ $regular->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['pamana'] as $pamana)
+                                @if($pamana->code == $value->code)
+                                    {{ $pamana->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <td class="text-center">
+                            @foreach($level['elementary'] as $elementary)
+                                @if($elementary->code == $value->code)
+                                    {{ $elementary->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['highSchool'] as $highSchool)
+                                @if($highSchool->code == $value->code)
+                                    {{ $highSchool->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['vocational'] as $vocational)
+                                @if($vocational->code == $value->code)
+                                    {{ $vocational->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['college'] as $college)
+                                @if($college->code == $value->code)
+                                    {{ $college->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['postStudy'] as $postStudy)
+                                @if($postStudy->code == $value->code)
+                                    {{ $postStudy->levelCount }}
+                                @endif
+                            @endforeach
+                        </td>
+                        
+                        <td class="text-center">
+                            @foreach($level['FSD'] as $FSD)
+                                @if($FSD->code == $value->code)
+                                    {{ $FSD->levelCount }}
+                                    @php $total += $FSD->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['FG'] as $FG)
+                                @if($FG->code == $value->code)
+                                    {{ $FG->levelCount }}
+                                    @php $total += $FG->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['DS'] as $DS)
+                                @if($DS->code == $value->code)
+                                    {{ $DS->levelCount }}
+                                    @php $total += $DS->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['NE'] as $NE)
+                                @if($NE->code == $value->code)
+                                    {{ $NE->levelCount }}
+                                    @php $total += $NE->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['FPD'] as $FPD)
+                                @if($FPD->code == $value->code)
+                                    {{ $FPD->levelCount }}
+                                    @php $total += $FPD->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['EOGS'] as $EOGS)
+                                @if($EOGS->code == $value->code)
+                                    {{ $EOGS->levelCount }}
+                                    @php $total += $EOGS->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+                        <td class="text-center">
+                            @foreach($level['OTHER'] as $OTHER)
+                                @if($OTHER->code == $value->code)
+                                    {{ $OTHER->levelCount }}
+                                    @php $total += $OTHER->levelCount @endphp
+                                @endif
+                            @endforeach
+                        </td>
+
+                        <td class="text-center">{{$total}}</td>
+                        <td></td>
+                    </tr>
+                @endforeach
             </tbody>
             <tfoot>
                 <tr>
@@ -275,11 +380,11 @@
                 $(api.column(6).footer()).html(hsTotal);
                 $(api.column(7).footer()).html(vocTotal);
                 $(api.column(8).footer()).html(collegeTotal);
-                $(api.column(9).footer()).html(fsdTotal);
-                $(api.column(10).footer()).html(fgTotal);
-                $(api.column(11).footer()).html(dsTotal);
-                $(api.column(12).footer()).html(neTotal);
-                $(api.column(13).footer()).html(fpdTotal);
+                $(api.column(9).footer()).html(postTotal);
+                $(api.column(10).footer()).html(fsdTotal);
+                $(api.column(11).footer()).html(fgTotal);
+                $(api.column(12).footer()).html(dsTotal);
+                $(api.column(13).footer()).html(neTotal);
                 $(api.column(14).footer()).html(fpdTotal);
                 $(api.column(15).footer()).html(eogsTotal);
                 $(api.column(16).footer()).html(otherTotal);
@@ -303,9 +408,42 @@
                 autoPrint: false,
                 title: '',
                 footer: true,
-                messageTop: '<p class="text-right">Form A</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>Summary of Grant/Award Status<br> School Year ____</p>',
+                messageTop: 
+                    '<div class="row">' +
+                        '<div class="col-4">' +
+                            '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                            '<p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>' +
+                            'Regional Office No. ____<br><br>' +
+                            'Summary of Grant/Award Status<br> ' +
+                            'School Year ____</p>' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                            '<p class="text-right">Form A</p>' +
+                        '</div>' +
+                    '</div>',
+
+                    messageBottom: 
+                    '<div class="row mt-5">' +
+                        '<div class="col-1">' +
+                        '</div>' +
+                        '<div class="col-3">' +
+                            '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                            'Position<br><br>' +
+                        '</div>' +
+                        '<div class="col-3">' +
+                        '</div>' +
+                        '<div class="col-3">' +
+                            '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                            'Position<br><br>' +
+                        '</div>' +
+                        '<div class="col-2">' +
+                        '</div>' +
+                    '</div>',
+
                 customize: function(win) {
-                   
+
                     $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
                     $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
                     $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');

@@ -36,7 +36,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th></th>
+                    <th class="text-right">Total:</th>
                     <th class="text-right"></th>
                     <th></th>
                     <th></th>
@@ -83,7 +83,7 @@
                 // Total over all pages
                 total = api
                     .column(2, {
-                        page: 'current'
+                        page: 'all'
                     })
                     .data()
                     .reduce(function(a, b) {
@@ -102,7 +102,7 @@
 
                 // Update footer
                 $(api.column(2).footer()).html(
-                    'Total: ₱  ' + pageTotal.toLocaleString("en-US") + ' ( ₱ ' + total.toLocaleString("en-US") + ')'
+                    pageTotal.toLocaleString("en-US") + ' ( ' + total.toLocaleString("en-US") + ')'
                 );
             },
             dom: 'BfrtipQ',
@@ -123,9 +123,9 @@
                 title: '',
                 footer: true,
                 messageTop: '<p class="text-right">Form E</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS ON DISBURSEMENT*<br>NCIP-EAP ADMINISTRATIVE COST SY ___</p>',
+                
                 customize: function(win) {
-                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
+
                     var last = null;
                     var current = null;
                     var bod = [];
@@ -133,6 +133,10 @@
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
+
+                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
 
                     style.type = 'text/css';
                     style.media = 'print';
@@ -144,8 +148,8 @@
                     }
 
                     head.appendChild(style);
-
                 }
+                
             }, 'colvis']
 
         });

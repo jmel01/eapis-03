@@ -38,7 +38,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th></th>
+                    <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th></th>
                     <th></th>
@@ -104,8 +104,12 @@
                     }, 0);
 
                 // Update footer
+                $(api.column(1).footer()).html(
+                    'Total:'
+                );
+
                 $(api.column(2).footer()).html(
-                    'Total: ₱  ' + pageTotal.toLocaleString("en-US") + ' ( ₱ ' + total.toLocaleString("en-US") + ')'
+                    pageTotal.toLocaleString("en-US") + ' (' + total.toLocaleString("en-US") + ')'
                 );
             },
             dom: 'BfrtipQ',
@@ -128,6 +132,7 @@
                 messageTop: '<p class="text-right">Form G</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>ACTUAL PAYMENTS OF GRANTEES<br>SY ___</p>',
                 customize: function(win) {
                     $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
                     $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
                     var last = null;
                     var current = null;

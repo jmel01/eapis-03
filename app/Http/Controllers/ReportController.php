@@ -15,10 +15,73 @@ class ReportController extends Controller
     public function formA()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $data = array(
+                'applicant' => Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+                                        ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
+                                        ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
+                                        ->get()
+            );
+
+            $userType = 'admin';
         } else {
+            $regionId = Str::substr(Auth::user()->region, 0, 2);
+            $userType = 'user';
+
+            $data = array (
+                'applicant' => Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+                                        ->where(DB::raw('substr(profiles.psgCode, 1, 2)'), $regionId)
+                                        ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
+                                        ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
+                                        ->get()
+            );
         }
 
-        return view('reports.formA');
+        $level = array(
+            'college' => $this->granteesGraduate('College', $regionId ?? '', 'Graduated', $userType),
+            'highSchool' => $this->granteesGraduate('High School', $regionId ?? '', 'Graduated', $userType),
+            'elementary' => $this->granteesGraduate('Elementary', $regionId ?? '', 'Graduated', $userType),
+            'vocational' => $this->granteesGraduate('Vocational', $regionId ?? '', 'Graduated', $userType),
+            'postStudy' => $this->granteesGraduate('Post Study', $regionId ?? '', 'Graduated', $userType),
+
+            'FSD' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-FSD', $userType),
+            'FG' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-FG', $userType),
+            'DS' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-DS', $userType),
+            'NE' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-NE', $userType),
+            'FPD' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-FPD', $userType),
+            'EOGS' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-EOGS', $userType),
+            'OTHER' => $this->granteesGraduate('noWhere', $regionId ?? '', 'Terminated-Others', $userType),
+
+            'pamana' => $this->granteesGraduate('type', $regionId ?? '', 'PDAF', $userType),
+            'regular' => $this->granteesGraduate('type', $regionId ?? '', 'Regular', $userType),
+            'mbs' => $this->granteesGraduate('type', $regionId ?? '', 'Merit-Based', $userType),
+        );
+
+        return view('reports.formA', compact('level', 'data'));
+    }
+
+    
+    public function granteesGraduate($level, $regionId, $status, $userType)
+    {
+        return Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where(function($query) use ($regionId, $userType){
+                if($userType != 'admin'){
+                    $query->where(DB::raw('substr(profiles.psgCode, 1, 2)'), $regionId);
+                }
+            })
+            ->where(function ($query) use ($level, $status, $userType) {
+                // if($userType != 'admin'){
+                    if ($level != 'noWhere' && $level != 'type') {
+                        $query->where('applications.level', $level)->where('status', $status);
+                    }else if($level == 'noWhere'){
+                        $query->where('status', $status);
+                    }else if($level == 'type'){
+                        $query->where('applications.type', $status)->where('status', 'Graduated');
+                    }
+                // }
+            })
+            ->select(DB::raw('count(substr(profiles.psgCode, 1, 4)) as levelCount, substr(profiles.psgCode, 1, 4) as code'))
+            ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
+            ->get();
     }
 
     public function formB()

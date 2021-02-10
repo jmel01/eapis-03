@@ -204,7 +204,7 @@
 
 
                 // Update footer by showing the total with the reference of the column index 
-                $(api.column(1).footer()).html('Total');
+                $(api.column(1).footer()).html('Total:');
                 $(api.column(2).footer()).html(elemTotal);
                 $(api.column(3).footer()).html(hsTotal);
                 $(api.column(4).footer()).html(vocTotal);
