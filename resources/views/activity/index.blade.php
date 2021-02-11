@@ -17,7 +17,7 @@
             <thead>
                 <tr>
                     <th>Model Name</th>
-                    <th>Row</th>
+                    <th class="sum">Row</th>
                     <th>Event</th>
                     <th>Before</th>
                     <th>After</th>
@@ -59,6 +59,17 @@
                 </tr>
                 @endforeach
             </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
 
     </div>
@@ -101,15 +112,121 @@
 
         // Create DataTable
         var table = $('#activityLogList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
             "order": [
                 [6, "desc"]
             ],
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+                // Remove the formatting to get integer data for summation
+                var intVal = function(i) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '') * 1 :
+                        typeof i === 'number' ?
+                        i : 0;
+                };
+
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    this.footer().innerHTML = pageSum;
+                });
+            },
+
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
+            buttons: [{
+                filename: 'Summary of Grant or Award Status (FORM A)',
+                title: '',
+                extend: 'excelHtml5',
+                footer: true,
+                exportOptions: {
+                    columns: ':visible',
+                    rows: ':visible'
+                }
+            }, {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':visible',
+                    rows: ':visible'
+                },
+                autoPrint: false,
+                title: '',
+                footer: true,
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br></p>' +
+                    
+                    '<h3 class="text-center">ACTIVITY LOG</h3>' +
+                    '<p class="text-center">As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form A</p>' +
+                    '</div>' +
+                    '</div>',
+
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
+
+                customize: function(win) {
+
+                    var last = null;
+                    var current = null;
+                    var bod = [];
+
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+
+                }
+            }, 'colvis']
         });
 
     })

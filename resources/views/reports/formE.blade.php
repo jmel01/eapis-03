@@ -82,9 +82,7 @@
 
                 // Total over all pages
                 total = api
-                    .column(2, {
-                        page: 'all'
-                    })
+                    .column(2)
                     .data()
                     .reduce(function(a, b) {
                         return intVal(a) + intVal(b);
@@ -123,7 +121,7 @@
                 title: '',
                 footer: true,
                 messageTop: '<p class="text-right">Form E</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS ON DISBURSEMENT*<br>NCIP-EAP ADMINISTRATIVE COST SY ___</p>',
-                
+
                 customize: function(win) {
 
                     var last = null;
@@ -149,7 +147,7 @@
 
                     head.appendChild(style);
                 }
-                
+
             }, 'colvis']
 
         });

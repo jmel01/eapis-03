@@ -17,22 +17,22 @@
                 <tr>
                     <th class="text-center">Region</th>
                     <th class="text-center">Province</th>
-                    <th class="sum">MBS</th>
-                    <th class="sum">Regular</th>
-                    <th class="sum">PAMANA</th>
-                    <th class="sum">Elementary</th>
-                    <th class="sum">High School</th>
-                    <th class="sum">Vocational</th>
-                    <th class="sum">College</th>
-                    <th class="sum">Post Study</th>
-                    <th class="sum">FSD</th>
-                    <th class="sum">FG</th>
-                    <th class="sum">DS</th>
-                    <th class="sum">NE</th>
-                    <th class="sum">FPD</th>
-                    <th class="sum">EOGS</th>
-                    <th class="sum">Other</th>
-                    <th class="sum">Total</th>
+                    <th>MBS</th>
+                    <th>Regular</th>
+                    <th>PAMANA</th>
+                    <th>Elementary</th>
+                    <th>High School</th>
+                    <th>Vocational</th>
+                    <th>College</th>
+                    <th>Post Study</th>
+                    <th>FSD</th>
+                    <th>FG</th>
+                    <th>DS</th>
+                    <th>NE</th>
+                    <th>FPD</th>
+                    <th>EOGS</th>
+                    <th>Other</th>
+                    <th>Total</th>
                     <th>Remarks</th>
                 </tr>
             </thead>
@@ -166,7 +166,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th class="text-right">Total:</th>
+                    <th class="text-right"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
@@ -209,14 +209,13 @@
                 header: true,
                 footer: true
             },
-            "lengthMenu": [
-                [10, 25, 50, 100, -1],
-                [10, 25, 50, 100, "All"]
-            ],
 
-            "footerCallback": function(row, data, start, end, display) {
+
+
+            "drawCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
+
                 // Remove the formatting to get integer data for summation
                 var intVal = function(i) {
                     return typeof i === 'string' ?
@@ -225,18 +224,288 @@
                         i : 0;
                 };
 
-                api.columns('.sum', {
-                    page: 'current'
-                }).every(function() {
-                    var pageSum = this
-                        .data()
-                        .reduce(function(a, b) {
-                            return intVal(a) + intVal(b);
-                        }, 0);
+                // Total over this page
+                var pagembsTotal = api
+                    .column(2, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
 
-                    this.footer().innerHTML = pageSum;
-                });
+                var pageregTotal = api
+                    .column(3, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagepamanaTotal = api
+                    .column(4, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pageelemTotal = api
+                    .column(5, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagehsTotal = api
+                    .column(6, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagevocTotal = api
+                    .column(7, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+                var pagecollegeTotal = api
+                    .column(8, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagepostTotal = api
+                    .column(9, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagefsdTotal = api
+                    .column(10, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagefgTotal = api
+                    .column(11, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagedsTotal = api
+                    .column(12, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pageneTotal = api
+                    .column(13, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagefpdTotal = api
+                    .column(14, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pageeogsTotal = api
+                    .column(15, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pageotherTotal = api
+                    .column(16, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pagerowTotal = api
+                    .column(17, {
+                        page: 'current'
+                    })
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                // Total over all page
+                var mbsTotal = api
+                    .column(2)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var regTotal = api
+                    .column(3)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var pamanaTotal = api
+                    .column(4)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var elemTotal = api
+                    .column(5)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var hsTotal = api
+                    .column(6)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var vocTotal = api
+                    .column(7)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+                var collegeTotal = api
+                    .column(8)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var postTotal = api
+                    .column(9)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var fsdTotal = api
+                    .column(10)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var fgTotal = api
+                    .column(11)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var dsTotal = api
+                    .column(12)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var neTotal = api
+                    .column(13)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var fpdTotal = api
+                    .column(14)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var eogsTotal = api
+                    .column(15)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var otherTotal = api
+                    .column(16)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+                var rowTotal = api
+                    .column(17)
+                    .data()
+                    .reduce(function(a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0);
+
+
+
+                // Update footer by showing the total with the reference of the column index 
+                $(api.column(1).footer()).html('Total:');
+                $(api.column(2).footer()).html(
+                    pagembsTotal.toLocaleString("en-US") + ' ( ' + mbsTotal.toLocaleString("en-US") + ')'
+                );
+                $(api.column(3).footer()).html(pageregTotal);
+                $(api.column(4).footer()).html(pagepamanaTotal);
+                $(api.column(5).footer()).html(pageelemTotal);
+                $(api.column(6).footer()).html(pagehsTotal);
+                $(api.column(7).footer()).html(pagevocTotal);
+                $(api.column(8).footer()).html(pagecollegeTotal);
+                $(api.column(9).footer()).html(pagepostTotal);
+                $(api.column(10).footer()).html(pagefsdTotal);
+                $(api.column(11).footer()).html(pagefgTotal);
+                $(api.column(12).footer()).html(pagedsTotal);
+                $(api.column(13).footer()).html(pageneTotal);
+                $(api.column(14).footer()).html(pagefpdTotal);
+                $(api.column(15).footer()).html(pageeogsTotal);
+                $(api.column(16).footer()).html(pageotherTotal);
+                $(api.column(17).footer()).html(
+                    pagerowTotal.toLocaleString("en-US") + ' ( ' + rowTotal.toLocaleString("en-US") + ')'
+                );
             },
+
             //dom: 'BlftipQ',
 
             dom: '<"row"<"col-md-12 mb-3"B>>' +
@@ -246,19 +515,17 @@
                 '<"row"<"col-md-6"Q>>',
 
             buttons: [{
-                filename: 'Summary of Grant or Award Status (FORM A)',
-                title: '',
+                title: 'Report on Disbursement-Administrative Cost (FORM E)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible',
-                    rows: ':visible'
+                    columns: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
-                    columns: ':visible',
-                    rows: ':visible'
+                    page: "current",
+                    columns: ':visible'
                 },
                 autoPrint: false,
                 title: '',

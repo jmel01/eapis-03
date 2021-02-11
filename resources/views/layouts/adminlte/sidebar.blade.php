@@ -2,7 +2,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/home" class="brand-link">
-        <img src="{{ asset('/images/app/NCIP_logo150x150.png') }}" alt="NCIP Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="{{ asset('/images/app/NCIP_logo150x150.png') }}" alt="NCIP Logo" class="brand-image img-circle elevation-3">
         <span class="brand-text font-weight-light">{{ config('app.name', 'NCIP-EAPIS') }}</span>
     </a>
 
@@ -50,24 +50,27 @@
                         <p>Reports<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <!--   <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ route('formA') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
-                                <p>Form A x</p>
+                                <p>Summary of Grant Status</p>
                             </a>
-                        </li> -->
+                        </li>
+
                         <li class="nav-item">
                             <a href="{{ route('formB') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Report of Graduates</p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a href="{{ route('formC') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Report of Termination</p>
                             </a>
                         </li>
+
                         <!--  <li class="nav-item">
                             <a href="{{ route('formD') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
@@ -80,12 +83,14 @@
                                 <p>Report on Disbursement</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{{ route('formF') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
                                 <p>Actual Disbursement</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{{ route('formG') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
