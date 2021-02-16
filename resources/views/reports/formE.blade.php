@@ -17,7 +17,7 @@
                 <tr>
                     <th>Payee</th>
                     <th>Particulars (Administrative Cost)</th>
-                    <th>Amount</th>
+                    <th class="sum">Amount</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
@@ -36,7 +36,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th class="text-right">Total:</th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
                     <th></th>
                     <th></th>
@@ -60,13 +60,14 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#costList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
 
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
@@ -80,61 +81,80 @@
                         i : 0;
                 };
 
-                // Total over all pages
-                total = api
-                    .column(2)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                // Total over this page
-                pageTotal = api
-                    .column(2, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                // Update footer
-                $(api.column(2).footer()).html(
-                    pageTotal.toLocaleString("en-US") + ' ( ' + total.toLocaleString("en-US") + ')'
-                );
+                    this.footer().innerHTML = pageSum.toLocaleString("en-US");
+                });
             },
-            dom: 'BfrtipQ',
+
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
             buttons: [{
                 title: 'Report on Disbursement-Administrative Cost (FORM E)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
-
+                    columns: ':visible',
+                    rows: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible',
+                    rows: ':visible'
                 },
                 autoPrint: false,
                 title: '',
                 footer: true,
-                messageTop: '<p class="text-right">Form E</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS ON DISBURSEMENT*<br>NCIP-EAP ADMINISTRATIVE COST SY ___</p>',
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>REPORTS ON DISBURSEMENT*<br>NCIP-EAP ADMINISTRATIVE COST</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form E</p>' +
+                    '</div>' +
+                    '</div>',
+
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
 
                 customize: function(win) {
-
-                    var last = null;
-                    var current = null;
-                    var bod = [];
 
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
-
-                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
 
                     style.type = 'text/css';
                     style.media = 'print';
@@ -146,6 +166,16 @@
                     }
 
                     head.appendChild(style);
+
+                    $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
+
+                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
+
                 }
 
             }, 'colvis']

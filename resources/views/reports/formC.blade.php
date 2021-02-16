@@ -19,13 +19,13 @@
                     <th>Province</th>
                     <th>Kind of EAP</th>
                     <th>Name</th>
-                    <th>FSD</th>
-                    <th>FG</th>
-                    <th>DS</th>
-                    <th>NE</th>
-                    <th>FPD</th>
-                    <th>EOGS</th>
-                    <th>OTHER</th>
+                    <th class="sum">FSD</th>
+                    <th class="sum">FG</th>
+                    <th class="sum">DS</th>
+                    <th class="sum">NE</th>
+                    <th class="sum">FPD</th>
+                    <th class="sum">EOGS</th>
+                    <th class="sum">OTHER</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +52,7 @@
                     <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
-                    <th class="text-right">Total:</th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
@@ -80,134 +80,99 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#teminatedList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
 
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
 
-                // Remove the formatting to get integer data for summation
-                var intVal = function(i) {
-                    return typeof i != '' ? 1 : 0;
-                };
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    let count = 0;
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            b == '' ? '' : count++;
+                            return count;
+                        }, 0);
 
-                // computing column Total of the complete result 
-                let countfsd = 0;
-                var fsd = api
-                    .column(4)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countfsd++;
-                        return countfsd;
-                    }, 0);
-
-                let countfg = 0;
-                var fg = api
-                    .column(5)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countfg++;
-                        return countfg;
-                    }, 0);
-
-                let countds = 0;
-                var ds = api
-                    .column(6)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countds++;
-                        return countds;
-                    }, 0);
-
-                let countne = 0;
-                var ne = api
-                    .column(7)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countne++;
-                        return countne;
-                    }, 0);
-
-                let countfpd = 0;
-                var fpd = api
-                    .column(8)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countfpd++;
-                        return countfpd;
-                    }, 0);
-
-                let counteogs = 0;
-                var eogs = api
-                    .column(9)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : counteogs++;
-                        return counteogs;
-                    }, 0);
-
-                let countothers = 0;
-                var others = api
-                    .column(10)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countothers++;
-                        return countothers;
-                    }, 0);
-
-
-                // Update footer by showing the total with the reference of the column index 
-                $(api.column(4).footer()).html(fsd);
-                $(api.column(5).footer()).html(fg);
-                $(api.column(6).footer()).html(ds);
-                $(api.column(7).footer()).html(ne);
-                $(api.column(8).footer()).html(fpd);
-                $(api.column(9).footer()).html(eogs);
-                $(api.column(10).footer()).html(others);
+                    this.footer().innerHTML = pageSum;
+                });
             },
-            dom: 'BfrtipQ',
+
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
             buttons: [{
                 title: 'Report of Termination (FORM C)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
-
+                    columns: ':visible',
+                    rows: ':visible'
                 }
             }, {
                 extend: 'print',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
-
+                    columns: ':visible',
+                    rows: ':visible'
                 },
                 autoPrint: false,
                 title: '',
-                messageTop: '<p class="text-right">Form C</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF TERMINATION<br>SY ___<br>As of Month, Year</p>',
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>REPORTS OF TERMINATION</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form C</p>' +
+                    '</div>' +
+                    '</div>',
 
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
                 customize: function(win) {
-
-                    var last = null;
-                    var current = null;
-                    var bod = [];
 
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
 
-                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(11)').css('text-align', 'center');
+                        $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
 
                     $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'center');
@@ -217,14 +182,11 @@
                     $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
 
+                    $(win.document.body).find('table tfoot th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
                     $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(11)').css('text-align', 'center');
 
                     style.type = 'text/css';
                     style.media = 'print';

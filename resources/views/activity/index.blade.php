@@ -155,7 +155,7 @@
                 '<"row"<"col-md-6"Q>>',
 
             buttons: [{
-                filename: 'Summary of Grant or Award Status (FORM A)',
+                filename: 'Activity Logs',
                 title: '',
                 extend: 'excelHtml5',
                 footer: true,
@@ -178,8 +178,8 @@
                     '</div>' +
                     '<div class="col-4">' +
                     '<p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br></p>' +
-                    
-                    '<h3 class="text-center">ACTIVITY LOG</h3>' +
+
+                    '<h3 class="text-center">ACTIVITY LOGS</h3>' +
                     '<p class="text-center">As of {{now()}}</p>' +
                     '</div>' +
                     '<div class="col-4">' +
@@ -206,11 +206,7 @@
 
                 customize: function(win) {
 
-                    var last = null;
-                    var current = null;
-                    var bod = [];
-
-                    var css = '@page { size: landscape; }',
+                    var css = '@page { size: landscape; } table tfoot { display: table-row-group; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
 

@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
 
-        <table id="costList" class="table table-sm table-bordered table-hover table-responsive-lg">
+        <table id="granteeList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
                     <th class="text-center">Region</th>
@@ -166,7 +166,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th class="text-right">Total:</th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
@@ -204,7 +204,7 @@
 <script>
     $(document).ready(function() {
         // Create DataTable
-        var table = $('#costList').DataTable({
+        var table = $('#granteeList').DataTable({
             "fixedHeader": {
                 header: true,
                 footer: true
@@ -237,7 +237,6 @@
                     this.footer().innerHTML = pageSum;
                 });
             },
-            //dom: 'BlftipQ',
 
             dom: '<"row"<"col-md-12 mb-3"B>>' +
                 '<"row"<"col-md-5"l><"col-md-7"f>>' +
@@ -268,10 +267,11 @@
                     '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
                     '</div>' +
                     '<div class="col-4">' +
-                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>' +
-                    'Regional Office No. ____<br><br>' +
-                    'Summary of Grant/Award Status<br> ' +
-                    'School Year ____</p>' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>Summary of Grant/Award Status</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
                     '</div>' +
                     '<div class="col-4">' +
                     '<p class="text-right">Form A</p>' +
@@ -297,22 +297,25 @@
 
                 customize: function(win) {
 
-                    $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(11)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(12)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(13)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(14)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(15)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(16)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(17)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(18)').css('text-align', 'center');
+                    var css = '@page { size: landscape; } table tfoot { display: table-row-group; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+
+                    $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
 
                     $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'center');
@@ -331,42 +334,11 @@
                     $(win.document.body).find('table tbody td:nth-child(17)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(18)').css('text-align', 'center');
 
+                    $(win.document.body).find('table tfoot th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
                     $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(11)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(12)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(13)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(14)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(15)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(16)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(17)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(18)').css('text-align', 'center');
-
-                    var last = null;
-                    var current = null;
-                    var bod = [];
-
-                    var css = '@page { size: landscape; }',
-                        head = win.document.head || win.document.getElementsByTagName('head')[0],
-                        style = win.document.createElement('style');
-
-                    style.type = 'text/css';
-                    style.media = 'print';
-
-                    if (style.styleSheet) {
-                        style.styleSheet.cssText = css;
-                    } else {
-                        style.appendChild(win.document.createTextNode(css));
-                    }
-
-                    head.appendChild(style);
 
                 }
             }, 'colvis']

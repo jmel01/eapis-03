@@ -17,9 +17,9 @@ class ReportController extends Controller
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             $data = array(
                 'applicant' => Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-                                        ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
-                                        ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
-                                        ->get()
+                    ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
+                    ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
+                    ->get()
             );
 
             $userType = 'admin';
@@ -27,12 +27,12 @@ class ReportController extends Controller
             $regionId = Str::substr(Auth::user()->region, 0, 2);
             $userType = 'user';
 
-            $data = array (
+            $data = array(
                 'applicant' => Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-                                        ->where(DB::raw('substr(profiles.psgCode, 1, 2)'), $regionId)
-                                        ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
-                                        ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
-                                        ->get()
+                    ->where(DB::raw('substr(profiles.psgCode, 1, 2)'), $regionId)
+                    ->select(DB::raw('substr(profiles.psgCode, 1, 4) as code'))
+                    ->groupBy(DB::raw('substr(profiles.psgCode, 1, 4)'))
+                    ->get()
             );
         }
 
@@ -59,24 +59,24 @@ class ReportController extends Controller
         return view('reports.formA', compact('level', 'data'));
     }
 
-    
+
     public function granteesGraduate($level, $regionId, $status, $userType)
     {
         return Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-            ->where(function($query) use ($regionId, $userType){
-                if($userType != 'admin'){
+            ->where(function ($query) use ($regionId, $userType) {
+                if ($userType != 'admin') {
                     $query->where(DB::raw('substr(profiles.psgCode, 1, 2)'), $regionId);
                 }
             })
             ->where(function ($query) use ($level, $status, $userType) {
                 // if($userType != 'admin'){
-                    if ($level != 'noWhere' && $level != 'type') {
-                        $query->where('applications.level', $level)->where('status', $status);
-                    }else if($level == 'noWhere'){
-                        $query->where('status', $status);
-                    }else if($level == 'type'){
-                        $query->where('applications.type', $status)->where('status', 'Graduated');
-                    }
+                if ($level != 'noWhere' && $level != 'type') {
+                    $query->where('applications.level', $level)->where('status', $status);
+                } else if ($level == 'noWhere') {
+                    $query->where('status', $status);
+                } else if ($level == 'type') {
+                    $query->where('applications.type', $status)->where('status', 'Graduated');
+                }
                 // }
             })
             ->select(DB::raw('count(substr(profiles.psgCode, 1, 4)) as levelCount, substr(profiles.psgCode, 1, 4) as code'))
@@ -168,6 +168,7 @@ class ReportController extends Controller
             'highSchool' => $this->grantees('High School'),
             'elementary' => $this->grantees('Elementary'),
             'vocational' => $this->grantees('Vocational'),
+            'postStudy' => $this->grantees('Post Study'),
             'total' => $this->grantees('noWhere')
         );
 

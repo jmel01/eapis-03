@@ -17,15 +17,15 @@
                 <tr>
                     <th>Kind of EAP/Name</th>
                     <th>Ethno Group</th>
-                    <th>Male</th>
-                    <th>Female</th>
+                    <th class="sum">Male</th>
+                    <th class="sum">Female</th>
                     <th>Age</th>
                     <th>School</th>
                     <th>Course</th>
-                    <th>College</th>
-                    <th>Vocational</th>
-                    <th>High School</th>
-                    <th>Elementary</th>
+                    <th class="sum">College</th>
+                    <th class="sum">Vocational</th>
+                    <th class="sum">High School</th>
+                    <th class="sum">Elementary</th>
                     <th>No. of Years Availed</th>
                     <th>Province/District</th>
                     <th>Region</th>
@@ -56,7 +56,7 @@
             <tfoot>
                 <tr>
                     <th></th>
-                    <th class="text-right"></th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th></th>
@@ -89,125 +89,100 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#graduateList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
 
-                // Remove the formatting to get integer data for summation
-                var intVal = function(i) {
-                    return typeof i != '' ? 1 : 0;
-                };
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    let count = 0;
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            b == '' ? '' : count++;
+                            return count;
+                        }, 0);
 
-                // computing column Total of the complete result 
-
-                let countmale = 0;
-                var male = api
-                    .column(2)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countmale++;
-                        return countmale;
-                    }, 0);
-
-                let countfemale = 0;
-                var female = api
-                    .column(3)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countfemale++;
-                        return countfemale;
-                    }, 0);
-
-                let countcollege = 0;
-                var college = api
-                    .column(7)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countcollege++;
-                        return countcollege;
-                    }, 0);
-
-                let countvocational = 0;
-                var vocational = api
-                    .column(8)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countvocational++;
-                        return countvocational;
-                    }, 0);
-
-
-                let counthighSchool = 0;
-                var highSchool = api
-                    .column(9)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : counthighSchool++;
-                        return counthighSchool;
-                    }, 0);
-
-                let countelementary = 0;
-                var elementary = api
-                    .column(10)
-                    .data()
-                    .reduce(function(a, b) {
-                        b == '' ? '' : countelementary++;
-                        return countelementary;
-                    }, 0);
-
-
-                // Update footer by showing the total with the reference of the column index 
-                $(api.column(1).footer()).html('Total:');
-                $(api.column(2).footer()).html(male);
-                $(api.column(3).footer()).html(female);
-                $(api.column(7).footer()).html(college);
-                $(api.column(8).footer()).html(vocational);
-                $(api.column(9).footer()).html(highSchool);
-                $(api.column(10).footer()).html(elementary);
+                    this.footer().innerHTML = pageSum;
+                });
             },
-            dom: 'BfrtipQ',
+
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
             buttons: [{
                 title: 'Report of Graduates (FORM B)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
-
+                    columns: ':visible',
+                    rows: ':visible'
                 }
             }, {
                 extend: 'print',
-                footer: true,
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible',
+                    rows: ':visible'
                 },
                 autoPrint: false,
                 title: '',
-                messageTop: '<p class="text-right">Form B</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF GRADUATES<br>SY ___<br>As of Month, Year</p>',
+                footer: true,
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>REPORTS OF GRADUATES</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form B</p>' +
+                    '</div>' +
+                    '</div>',
+
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
+
                 customize: function(win) {
 
-                    var last = null;
-                    var current = null;
-                    var bod = [];
-
-                    var css = '@page { size: landscape; }',
+                    var css = '@page { size: landscape; } table tfoot { display: table-row-group; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
 
-                    $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(11)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(12)').css('text-align', 'center');
+                    $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
 
                     $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'center');
@@ -218,14 +193,11 @@
                     $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
 
+                    $(win.document.body).find('table tfoot th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
                     $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(11)').css('text-align', 'center');
-                    $(win.document.body).find('table tfoot th:nth-child(12)').css('text-align', 'center');
 
                     style.type = 'text/css';
                     style.media = 'print';

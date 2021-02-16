@@ -17,13 +17,14 @@
                 <tr>
                     <th>Region</th>
                     <th>Province/District</th>
-                    <th>Elementary</th>
-                    <th>High School</th>
-                    <th>Vocational</th>
-                    <th>College</th>
-                    <th>Administrative Cost</th>
-                    <th>Actual Amount Disburse to Grantees</th>
-                    <th>Total</th>
+                    <th class="sum">Elementary</th>
+                    <th class="sum">High School</th>
+                    <th class="sum">Vocational</th>
+                    <th class="sum">College</th>
+                    <th class="sum">Post Study</th>
+                    <th class="sum">Administrative Cost</th>
+                    <th class="sum">Actual Amount Disburse to Grantees</th>
+                    <th class="sum">Total</th>
                     <th>Remarks</th>
                 </tr>
             </thead>
@@ -32,31 +33,38 @@
                 <tr>
                     <td>{{ App\Models\Psgc::getRegion($expense->province) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($expense->province) }}</td>
-                    <td class="text-right">
+                    <td class="text-center">
                         @foreach($level['elementary'] as $elementary)
                         @if($elementary->province == $expense->province)
                         {{ $elementary->levelCount }}
                         @endif
                         @endforeach
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                         @foreach($level['highSchool'] as $highSchool)
                         @if($highSchool->province == $expense->province)
                         {{ $highSchool->levelCount }}
                         @endif
                         @endforeach
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                         @foreach($level['vocational'] as $vocational)
                         @if($vocational->province == $expense->province)
                         {{ $vocational->levelCount }}
                         @endif
                         @endforeach
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                         @foreach($level['college'] as $college)
                         @if($college->province == $expense->province)
                         {{ $college->levelCount }}
+                        @endif
+                        @endforeach
+                    </td>
+                    <td class="text-center">
+                        @foreach($level['postStudy'] as $postStudy)
+                        @if($postStudy->province == $expense->province)
+                        {{ $postStudy->levelCount }}
                         @endif
                         @endforeach
                     </td>
@@ -74,7 +82,7 @@
                         @endif
                         @endforeach
                     </td>
-                    <td class="text-right">
+                    <td class="text-center">
                         @foreach($level['total'] as $total)
                         @if($total->province == $expense->province)
                         {{ $total->levelCount }}
@@ -89,13 +97,14 @@
                 <tr>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
                     <th class="text-right"></th>
                     <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
+                    <th class="text-center"></th>
                     <th class="text-right"></th>
                 </tr>
             </tfoot>
@@ -117,13 +126,14 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#expensesList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
 
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
@@ -137,95 +147,38 @@
                         i : 0;
                 };
 
-                // computing column Total of the complete result 
-                var elemTotal = api
-                    .column(2, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                var hsTotal = api
-                    .column(3, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var vocTotal = api
-                    .column(4, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var collegeTotal = api
-                    .column(5, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var adminCostTotal = api
-                    .column(6, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var disburseToGranteeTotal = api
-                    .column(7, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                var rowTotal = api
-                    .column(8, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-
-
-                // Update footer by showing the total with the reference of the column index 
-                $(api.column(1).footer()).html('Total:');
-                $(api.column(2).footer()).html(elemTotal);
-                $(api.column(3).footer()).html(hsTotal);
-                $(api.column(4).footer()).html(vocTotal);
-                $(api.column(5).footer()).html(collegeTotal);
-                $(api.column(6).footer()).html(adminCostTotal.toLocaleString("en-US"));
-                $(api.column(7).footer()).html(disburseToGranteeTotal.toLocaleString("en-US"));
-                $(api.column(8).footer()).html(rowTotal);
+                    this.footer().innerHTML = pageSum;
+                });
             },
 
-            dom: 'BfrtipQ',
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
             buttons: [{
                 title: 'SUMMARY OF ACTUAL DISBURSEMENT (FORM F)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible',
+                    rows: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible',
+                    rows: ':visible'
                 },
                 autoPrint: false,
                 title: '',
@@ -233,45 +186,42 @@
                 exportOptions: {
                     columns: ':visible'
                 },
-                messageTop: '<p class="text-right">Form F</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>SUMMARY OF ACTUAL DISBURSEMENT<br>School Year ___<br>as of Date</p>',
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>SUMMARY OF ACTUAL DISBURSEMENT</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form F</p>' +
+                    '</div>' +
+                    '</div>',
+
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
+
                 customize: function(win) {
-                    $(win.document.body).find('table thead th:nth-child(1)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(2)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(3)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(4)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(6)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(7)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(8)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(9)').css('text-align', 'center');
-                    $(win.document.body).find('table thead th:nth-child(10)').css('text-align', 'center');
 
-                    $(win.document.body).find('table tbody td:nth-child(1)').css('text-align', 'center');
-                    $(win.document.body).find('table tbody td:nth-child(2)').css('text-align', 'center');
-                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(7)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'right');
-                    $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'right');
-
-                    $(win.document.body).find('table tfoot th:nth-child(1)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(4)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(6)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(7)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'right');
-                    $(win.document.body).find('table tfoot th:nth-child(10)').css('text-align', 'right');
-                    var last = null;
-                    var current = null;
-                    var bod = [];
-
-                    var css = '@page { size: landscape; }',
+                    var css = '@page { size: landscape; } table tfoot { display: table-row-group; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
 
@@ -283,8 +233,25 @@
                     } else {
                         style.appendChild(win.document.createTextNode(css));
                     }
-
                     head.appendChild(style);
+
+                    $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
+
+                    $(win.document.body).find('table tbody td').css({
+                        'text-align': 'center'
+                    });
+                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'right');
+
+                    $(win.document.body).find('table tfoot th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
+                    $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'right');
 
                 }
             }, 'colvis']
