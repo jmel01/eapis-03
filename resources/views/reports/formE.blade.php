@@ -90,7 +90,7 @@
                             return intVal(a) + intVal(b);
                         }, 0);
 
-                    this.footer().innerHTML = pageSum.toLocaleString("en-US");
+                    this.footer().innerHTML = pageSum.toLocaleString("us-US");
                 });
             },
 

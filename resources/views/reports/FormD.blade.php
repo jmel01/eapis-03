@@ -15,9 +15,10 @@
         <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-lg">
             <thead>
                 <tr>
+                    <th>Region</th>
+                    <th>Province</th>
                     <th>Name</th>
                     <th>Kind of EAP</th>
-                    <th>Region</th>
                     <th>Ethno Group</th>
                     <th>Male</th>
                     <th>Female</th>
@@ -28,17 +29,46 @@
                     <th>SE</th>
                     <th>GO/NGO/CSO</th>
                     <th>Position</th>
+                    <th>Employer Name</th>
                     <th>Place of Employment</th>
                 </tr>
             </thead>
             <tbody>
-                
+                @forelse($data as $application)
+                @if(!is_null($application->employment))
+                <tr>
+                    <td>{{ \App\Models\Psgc::getRegion($application->applicant->psgCode ?? '') }}</td>
+                    <td>{{ \App\Models\Psgc::getProvince($application->applicant->psgCode ?? '') }}</td>
+                    <td>{{ $application->applicant->lastName ?? '' }}, {{ $application->applicant->firstName ?? '' }} {{ $application->applicant->middleName ?? '' }}</td>
+                    <td>{{ $application->type }}</td>
+                    <td>{{ \App\Models\Ethnogroup::getEthno($application->applicant->ethnoGroup ?? '') }}</td>
+                    <td>{{ $application->applicant->gender ?? '' }}</td>
+                    <td>{{ $application->applicant->gender ?? '' }}</td>
+                    <td>{{ $application->course ?? '' }}</td>
+                    <td>{{ $application->employment->yearEmployed }}</td>
+                    <td>{{ $application->employment->employerType }}</td>
+                    
+                    
+                    <td>{{ $application->employment->employerType }}</td>
+                    <td>{{ $application->employment->employerType }}</td>
+                    <td>{{ $application->employment->employerType }}</td>
+                    <td>{{ $application->employment->position }}</td>
+                    <td>{{ $application->employment->employerName }}</td>
+                    <td>{{ $application->employment->employerAddress }}</td>
+                </tr>
+                @endif
+                @empty
+                @endforelse
             </tbody>
         </table>
 
     </div>
     <div class="card-footer">
-        Footer
+        Note:<br>
+        *FE -<br>
+        *PE -<br>
+        *SE -<br>
+        *GO/NGO/CSO - Government Organization/ Non-Government Organization/ Civil Service Organization
     </div>
 </div>
 @endsection
@@ -59,7 +89,7 @@
             "info": true,
             "autoWidth": true,
             "responsive": true,
-           
+
             dom: 'BfrtipQ',
             buttons: [{
                 title: 'Report of Graduates (FORM B)',

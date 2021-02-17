@@ -43,12 +43,6 @@ class Profile extends Model
         'motherIncome',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Profile';
-
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'user_id');

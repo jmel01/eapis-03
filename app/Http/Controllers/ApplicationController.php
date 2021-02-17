@@ -87,7 +87,7 @@ class ApplicationController extends Controller
 
     public function showGraduated($id)
     {
-        $data = Application::with('applicant.psgcBrgy')
+        $data = Application::with('applicant.psgcBrgy')->with('employment')
             ->where('grant_id', $id)
             ->where('status', 'Graduated')
             ->get();

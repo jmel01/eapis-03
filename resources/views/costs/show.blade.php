@@ -24,7 +24,7 @@
                     <th>Date Received</th>
                     <th>Payee</th>
                     <th>Particulars</th>
-                    <th>Amount</th>
+                    <th class="sum">Amount</th>
                     <th>Check No.</th>
                     <th>Province</th>
                     <th>Actions</th>
@@ -56,7 +56,7 @@
                 <tr>
                     <th></th>
                     <th></th>
-                    <th></th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
                     <th></th>
                     <th></th>
@@ -85,13 +85,14 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#costList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
@@ -104,28 +105,17 @@
                         i : 0;
                 };
 
-                // Total over all pages
-                total = api
-                    .column(3)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                // Total over this page
-                pageTotal = api
-                    .column(3, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                // Update footer
-                $(api.column(3).footer()).html(
-                    'Total: ₱  ' + pageTotal.toLocaleString("en-US") + ' ( ₱ ' + total.toLocaleString("en-US") + ')'
-                );
+                    this.footer().innerHTML = pageSum.toLocaleString("us-US");
+                });
             },
         });
 

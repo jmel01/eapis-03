@@ -44,12 +44,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'User';
-
     public function profile()
     {
         return $this->hasOne('App\Models\Profile');

@@ -93,7 +93,7 @@
                             return intVal(a) + intVal(b);
                         }, 0);
 
-                    this.footer().innerHTML = pageSum;
+                    this.footer().innerHTML = pageSum.toLocaleString('us-US');
                 });
             },
 

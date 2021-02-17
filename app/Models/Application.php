@@ -24,12 +24,6 @@ class Application extends Model
         'remarks',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Application';
-
     public function applicant()
     {
         return $this->hasOne('App\Models\Profile','user_id','user_id');
@@ -38,5 +32,10 @@ class Application extends Model
     public function grant()
     {
         return $this->hasOne('App\Models\Grant','id','grant_id');
+    }
+
+    public function employment()
+    {
+        return $this->hasOne('App\Models\Employment','user_id','user_id');
     }
 }

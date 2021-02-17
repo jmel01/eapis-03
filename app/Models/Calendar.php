@@ -20,12 +20,6 @@ class Calendar extends Model
         'region',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Calendar';
-
     public function regionname(){
         return $this->hasOne(Psgc::class, 'code' ,'region');
     }

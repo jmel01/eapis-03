@@ -19,12 +19,6 @@ class Document extends Model
         'schoolYear',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Document';
-
     public function grantDetails()
     {
         return $this->hasOne('App\Models\Grant','id','grantID');

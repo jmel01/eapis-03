@@ -29,8 +29,8 @@
                 @foreach ($data as $key => $application)
                     @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $regionId || Auth::user()->hasAnyRole(["Admin", 'Executive Officer']))
                         <tr>
-                            <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }}
-                                {{ substr($application->applicant->middleName,1,'1') }}.
+                            <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                                {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                             </td>
                             <td>{{ $application->type }}</td>
                             <td>{{ $application->level }}</td>

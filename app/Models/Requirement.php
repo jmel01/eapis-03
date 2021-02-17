@@ -14,9 +14,5 @@ class Requirement extends Model
         'id',
         'description',
     ];
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Requirements';
+   
 }

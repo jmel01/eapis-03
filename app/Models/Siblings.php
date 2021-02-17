@@ -22,12 +22,6 @@ class Siblings extends Model
         'present_status',
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Siblings';
-
     static function insert($request)
     {
         Siblings::where('user_id', $request->id)->delete();

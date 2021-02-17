@@ -23,12 +23,6 @@ class AdminCost extends Model
         'checkNo',
         'province',
     ];
-
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Expenses';
     
     public function provname()
     {

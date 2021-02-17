@@ -14,10 +14,13 @@ class Ethnogroup extends Model
         'region',
         'ipgroup',
     ];
+
+    static function getEthno($code){
+        $ethno = Ethnogroup::where('id', $code)->first();
+
+        if(isset($ethno)){
+            return $ethno->ipgroup;
+        }
+    }
     
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Ethnogroup';
 }

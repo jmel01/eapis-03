@@ -96,7 +96,7 @@
             <tfoot>
                 <tr>
                     <th class="text-right"></th>
-                    <th class="text-right"></th>
+                    <th class="text-right">TOTAL:</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
@@ -156,7 +156,7 @@
                             return intVal(a) + intVal(b);
                         }, 0);
 
-                    this.footer().innerHTML = pageSum;
+                    this.footer().innerHTML = pageSum.toLocaleString('us-US');
                 });
             },
 
@@ -250,6 +250,7 @@
                         'vertical-align': 'middle',
                         'text-align': 'center'
                     });
+                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
                     $(win.document.body).find('table tfoot th:nth-child(8)').css('text-align', 'right');
                     $(win.document.body).find('table tfoot th:nth-child(9)').css('text-align', 'right');
 

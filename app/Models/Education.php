@@ -24,12 +24,6 @@ class Education extends Model
         'rank'
     ];
 
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Education';
-
     static function insert($request){
         Education::where('user_id', $request->id)->delete();
 

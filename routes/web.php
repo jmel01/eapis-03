@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminCostController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\EmploymentController;
 use App\Http\Controllers\EthnogroupController;
 use App\Http\Controllers\GrantController;
 use App\Http\Controllers\HomeController;
@@ -74,6 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/myDocument', [DocumentController::class, 'myDocument'])->name('myDocument');
     Route::resource('documents', DocumentController::class);
 
+    Route::resource('employments', EmploymentController::class);
     Route::resource('ethnogroups', EthnogroupController::class);
     Route::resource('grants', GrantController::class);
     Route::resource('profiles', ProfileController::class);
