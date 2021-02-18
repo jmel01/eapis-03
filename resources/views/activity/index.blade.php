@@ -17,11 +17,11 @@
             <thead>
                 <tr>
                     <th>Model Name</th>
-                    <th class="sum">Row</th>
+                    <th>Row</th>
                     <th>Event</th>
                     <th>Before</th>
                     <th>After</th>
-                    <th>User</th>
+                    <th>Username</th>
                     <th>Event Date</th>
                 </tr>
             </thead>
@@ -49,9 +49,11 @@
                     </td>
 
                     <td>
+                        @if(isset($log->properties['attributes']))
                         @foreach($log->properties['attributes'] as $keyAttribute => $valueAttribute)
                         <span class="badge badge-light mr-2">{{$keyAttribute}}:</span>{{$valueAttribute}} <br>
                         @endforeach
+                        @endif
                     </td>
 
                     <td>{{\App\Models\User::find($log->causer_id)->name ?? ''}}</td>

@@ -134,13 +134,13 @@ class ReportController extends Controller
     public function formD()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            return $data = Application::with('applicant')
+             $data = Application::with('applicant')
                 ->with('employment')
                 ->where([['status', 'Graduated'], ['level', 'College']])
                 ->get();
         } else {
             $regionId = Str::substr(Auth::user()->region, 0, 2);
-            return $data = Application::with(['applicant' => function ($query) use ($regionId) {
+             $data = Application::with(['applicant' => function ($query) use ($regionId) {
                 $query->where([[\DB::raw('substr(psgCode, 1, 2)'), '=', $regionId]]);
             }])
                 ->with('employment')
