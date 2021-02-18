@@ -88,14 +88,15 @@
 
         // Create DataTable
         var table = $('#applicationList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "order": [
-                [1, "desc"]
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
             ],
-            "info": true,
-            "autoWidth": true,
+            "order": [],
             "responsive": true,
         });
 

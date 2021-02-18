@@ -97,6 +97,7 @@
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
+            "order": [],
 
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
