@@ -27,7 +27,7 @@
                         @endif
                         <h4>Student Details</h4>
                         <hr>
-                        <img class="img-circle img-bordered-sm cover mx-3 float-left" style="height: 90px; width: 90px;" alt="user image" src="/storage/users-avatar">
+                        <img class="img-circle img-bordered-sm cover mx-3 float-left" style="height: 90px; width: 90px;" alt="user image" src="/storage/users-avatar/{{Auth::user()->avatar ?? 'avatar.png' }}">
                         <p>
                             @if(!empty(Auth::user()->profile))
                             <strong>{{ Auth::user()->profile->firstName ?? '' }} {{ Auth::user()->profile->middleName ?? '' }} {{ Auth::user()->profile->lastName ?? '' }}</strong><br>

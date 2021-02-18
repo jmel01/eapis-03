@@ -42,7 +42,7 @@
                 <a href="#" class="dropdown-item">
                     <!-- Message Start -->
                     <div class="media">
-                        <img src="/storage/users-avatar/{{ App\Models\User::find($message->from_id)->avatar }}" alt="User Avatar" class="img-size-50 mr-3 img-circle cover" style="width:50px;height:50px;">
+                        <img src="/storage/users-avatar/{{ App\Models\User::find($message->from_id)->avatar ?? 'avatar.png' }}" alt="User Avatar" class="img-size-50 mr-3 img-circle cover" style="width:50px;height:50px;">
                         <div class="media-body">
                             <h3 class="dropdown-item-title text-primary">
                                 {{ App\Models\User::find($message->from_id)->name }}
@@ -68,13 +68,13 @@
 
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img class="user-image img-circle cover" alt="User Image" src="/storage/users-avatar/{{Auth::user()->avatar ?? '' }}">
+                <img class="user-image img-circle cover" alt="User Image" src="/storage/users-avatar/{{Auth::user()->avatar ?? 'avatar.png' }}">
                 <span class="d-none d-md-inline">{{ Auth::user()->name }}</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
                 <li class="user-header bg-primary">
-                    <img src="/storage/users-avatar/{{Auth::user()->avatar ?? '' }}" class="img-circle elevation-2 cover" alt="User Image">
+                    <img src="/storage/users-avatar/{{Auth::user()->avatar ?? 'avatar.png' }}" class="img-circle elevation-2 cover" alt="User Image">
                     <p>
                         {{ Auth::user()->profile->firstName ?? '' }} {{ Auth::user()->profile->middleName ?? '' }} {{ Auth::user()->profile->lastName ?? '' }}
                         <small>Member since {{ Auth::user()->created_at->format('M. Y') }}</small>
