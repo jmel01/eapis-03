@@ -7,6 +7,7 @@ use App\Models\Ethnogroup;
 use App\Models\Profile;
 use App\Models\Psgc;
 use App\Models\Siblings;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -92,6 +93,12 @@ class ProfileController extends Controller
 
         Education::insert($request);
         Siblings::insert($request);
+
+        if (!empty(User::select('region')->where('id', $request->id)->first())) {
+            $region = Psgc::where('code', Str::substr($request->barangay, 0, 2) . "0000000")->first();
+            User::where('id', $request->id)
+                ->update(['region' => $region->code]);
+        }
 
         $notification = array(
             'message' => 'Profile updated successfully',

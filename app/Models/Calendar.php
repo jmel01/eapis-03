@@ -10,6 +10,10 @@ class Calendar extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Announcement';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'user_id',
         'title',

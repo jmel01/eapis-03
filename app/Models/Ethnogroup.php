@@ -10,6 +10,10 @@ class Ethnogroup extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'EthnoGroup';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'region',
         'ipgroup',

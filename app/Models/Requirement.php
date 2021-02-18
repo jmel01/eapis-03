@@ -10,6 +10,10 @@ class Requirement extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Requirement';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'id',
         'description',

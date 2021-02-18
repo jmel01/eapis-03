@@ -23,10 +23,8 @@ class UserController extends Controller
      */
     public function index()
     {
-
-
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = User::orderBy('id', 'DESC')->get();
+            $data = User::with('profile')->orderBy('id', 'DESC')->get();
             $regions = Psgc::where('level', 'Reg')->get();
             $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))

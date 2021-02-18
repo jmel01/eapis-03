@@ -10,6 +10,10 @@ class AdminCost extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Expenses';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $table = 'admin_costs';
 
     protected $fillable = [

@@ -50,6 +50,7 @@ Route::get('ethnogroups/getEthnoGroups', [EthnogroupController::class, 'getEthno
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('/applications/showAllApplication', [ApplicationController::class, 'showAllApplication'])->name('showAllApplication');
     Route::get('/applications/showAllApproved', [ApplicationController::class, 'showAllApproved'])->name('showAllApproved');
     Route::get('/applications/showApproved/{id}', [ApplicationController::class, 'showApproved'])->name('showApproved');
     Route::get('/applications/showTerminated/{id}', [ApplicationController::class, 'showTerminated'])->name('showTerminated');

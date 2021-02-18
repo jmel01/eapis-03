@@ -22,6 +22,7 @@
                 <tr>
                     <th>Avatar</th>
                     <th>Username</th>
+                    <th>Profile Name</th>
                     <th>Email</th>
                     <th>Region</th>
                     <th>Role</th>
@@ -38,6 +39,7 @@
                         </div>
                     </td>
                     <td> {{ $user->name }}</td>
+                    <td>{{ $user->profile->firstName ?? '' }} {{ $user->profile->lastName ?? '' }}</td>
                     <td>{{ $user->email }}</td>
                     <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
                     <td>
@@ -49,18 +51,6 @@
                     </td>
                     <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
                     <td>
-                        @can('application-add')
-                        @if($user->hasRole('Applicant'))
-                        @if($user->profile!='')
-                        <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
-                        @endif
-                        @endif
-                        @endcan
-
-                        @can('profile-edit')
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
-                        @endcan
-
                         @can('user-edit')
                         <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-user">Edit</button>
                         @endcan
@@ -69,7 +59,17 @@
                         <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
                         @endcan
 
+                        @can('profile-edit')
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
+                        @endcan
 
+                        @can('application-add')
+                        @if($user->hasRole('Applicant'))
+                        @if($user->profile!='')
+                        <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
+                        @endif
+                        @endif
+                        @endcan
 
                     </td>
                 </tr>
@@ -180,15 +180,15 @@
 
         // Create DataTable
         var table = $('#userList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "order": [
-                [5, "desc"]
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
             ],
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "order": [],
         });
     });
 </script>

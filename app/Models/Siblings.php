@@ -11,6 +11,10 @@ class Siblings extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Sibling';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $table = 'siblings';
 
     protected $fillable = [

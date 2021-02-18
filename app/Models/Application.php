@@ -10,6 +10,10 @@ class Application extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Application';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+    
     protected $fillable = [
         'id',
         'grant_id',

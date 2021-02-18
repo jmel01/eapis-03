@@ -27,6 +27,13 @@
                 @unlessrole('Applicant')
                 @can('grant-browse')
                 <li class="nav-item">
+                    <a href="{{ route('showAllApplication') }}" class="nav-link">
+                        <i class="far fa-thumbs-up nav-icon"></i>
+                        <p>All Applications</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="{{ route('showAllApproved') }}" class="nav-link">
                         <i class="far fa-thumbs-up nav-icon"></i>
                         <p>Approved Applications</p>

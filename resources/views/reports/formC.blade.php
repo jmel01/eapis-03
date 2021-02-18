@@ -35,7 +35,7 @@
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
                     <td>{{ $application->type }}</td>
-                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  3) }}</td>
+                    <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  1) }}.</td>
                     <td class="text-center text-bold">@if ($application->status=='Terminated-FSD') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->status=='Terminated-FG') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->status=='Terminated-DS') &#10003; @endif</td>

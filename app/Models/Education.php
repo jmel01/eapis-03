@@ -11,6 +11,10 @@ class Education extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Education';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $table = 'education';
 
     protected $fillable = [

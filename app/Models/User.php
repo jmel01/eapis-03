@@ -13,6 +13,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, LogsActivity;
 
+    protected static $logName = 'User';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,11 +53,13 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile');
     }
 
-    public function educations(){
+    public function educations()
+    {
         return $this->hasMany(Education::class, 'user_id', 'id');
     }
 
-    public function siblings(){
+    public function siblings()
+    {
         return $this->hasMany(Siblings::class, 'user_id', 'id');
     }
 }

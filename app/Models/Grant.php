@@ -10,6 +10,10 @@ class Grant extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Grant';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'id',
         'region',
@@ -17,12 +21,6 @@ class Grant extends Model
         'applicationOpen',
         'applicationClosed',
     ];
-
-    protected static $logFillable = true;
-
-    protected static $logOnlyDirty = true;
-
-    protected static $logName = 'Grant';
 
     public function psgCode()
     {

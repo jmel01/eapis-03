@@ -9,6 +9,10 @@ class Employment extends Model
 {
     use HasFactory;
 
+    protected static $logName = 'Employment';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'user_id',
         'yearEmployed',

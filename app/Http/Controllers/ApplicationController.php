@@ -11,6 +11,29 @@ use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
+    public function showAllApplication()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regionId = '';
+            $regions = Psgc::where('level', 'Reg')->get();
+            $data = Application::with('applicant.psgcBrgy')
+                ->with('grant')
+                ->where('status', '')
+                ->orWhere('status', 'On Process')
+                ->get();
+        } else {
+            $regionId = Str::substr(Auth::user()->region, 0, 2);
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $data = Application::with('applicant.psgcBrgy')
+                ->with('grant')
+                ->where('status', '')
+                ->orWhere('status', 'On Process')
+                ->get();
+        }
+
+        return view('applications.showAllApplication', compact('data', 'regions', 'regionId'));
+    }
+
     public function showAllApproved()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
@@ -37,8 +60,6 @@ class ApplicationController extends Controller
             ->where('grant_id', $id)
             ->where('status', 'Approved')
             ->get();
-
-
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
 

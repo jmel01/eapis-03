@@ -11,6 +11,10 @@ class Profile extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Profile';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'user_id',
         'lastName',

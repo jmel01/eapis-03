@@ -10,6 +10,10 @@ class Document extends Model
 {
     use HasFactory, LogsActivity;
 
+    protected static $logName = 'Document';
+    protected static $logFillable = true;
+    protected static $logOnlyDirty = true;
+
     protected $fillable = [
         'grantID',
         'requirementID',

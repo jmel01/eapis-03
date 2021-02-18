@@ -28,7 +28,7 @@
             <tbody>
                 @foreach($activity as $log)
                 <tr>
-                    <td>{{ $log->subject_type }}</td>
+                    <td>{{ $log->log_name }}</td>
                     <td>{{ $log->subject_id }}</td>
                     <td>
                         @if($log->description == 'created')
@@ -114,9 +114,7 @@
 
         // Create DataTable
         var table = $('#activityLogList').DataTable({
-            "order": [
-                [6, "desc"]
-            ],
+            "order": [],
             "fixedHeader": {
                 header: true,
                 footer: true
