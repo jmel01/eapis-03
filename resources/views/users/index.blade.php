@@ -39,7 +39,11 @@
                         </div>
                     </td>
                     <td> {{ $user->name }}</td>
-                    <td>{{ $user->profile->firstName ?? '' }} {{ $user->profile->lastName ?? '' }}</td>
+                    <td>
+                        @if(!empty($user->profile))
+                        {{ ucwords($user->profile->lastName ?? '') }}, {{ ucwords($user->profile->firstName ?? '') }} {{ ucwords(substr($user->profile->middleName ?? '',1,'1')) }}.
+                        @endif
+                    </td>
                     <td>{{ $user->email }}</td>
                     <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
                     <td>
@@ -52,7 +56,7 @@
                     <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
                     <td>
                         @can('user-edit')
-                        <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-user">Edit</button>
+                        <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-user">Update</button>
                         @endcan
 
                         @can('user-delete')
@@ -60,7 +64,11 @@
                         @endcan
 
                         @can('profile-edit')
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Profile</button>
+                        @if(!empty($user->profile))
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        @else
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 btn-edit-profile">Create Profile</button>
+                        @endif
                         @endcan
 
                         @can('application-add')

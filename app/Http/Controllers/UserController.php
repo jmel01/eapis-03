@@ -69,8 +69,8 @@ class UserController extends Controller
         $request->validateWithBag('user', [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $request->id,
-            'password' => 'same:confirm-password',
-            'roles' => 'required|array|min:1'
+            'password' => 'same:confirm-password'
+            //'roles' => 'required|array|min:1'
         ]);
 
         $input = $request->all();

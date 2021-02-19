@@ -28,15 +28,15 @@
                 @can('grant-browse')
                 <li class="nav-item">
                     <a href="{{ route('showAllApplication') }}" class="nav-link">
-                        <i class="far fa-thumbs-up nav-icon"></i>
-                        <p>All Applications</p>
+                        <i class="far fa-address-card nav-icon"></i>
+                        <p>Applicants</p>
                     </a>
                 </li>
 
                 <li class="nav-item">
                     <a href="{{ route('showAllApproved') }}" class="nav-link">
-                        <i class="far fa-thumbs-up nav-icon"></i>
-                        <p>Approved Applications</p>
+                        <i class="fas fa-user-graduate nav-icon"></i>
+                        <p>Students</p>
                     </a>
                 </li>
                 @endcan
@@ -70,7 +70,7 @@
                                 <p>Report of Graduates</p>
                             </a>
                         </li>
-                        
+
                         <li class="nav-item">
                             <a href="{{ route('formC') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
