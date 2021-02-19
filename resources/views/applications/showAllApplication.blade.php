@@ -28,27 +28,76 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $application)
-                    @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $regionId || Auth::user()->hasAnyRole(["Admin", 'Executive Officer']))
-                        <tr>
-                            <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                                {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                            </td>
-                            <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
-                            <td>{{ $application->type }}</td>
-                            <td>{{ $application->level }}</td>
-                            <td>{{ $application->status }}</td>
-                            <td>{{ $application->remarks }}</td>
-                            <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                            <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+                @hasanyrole('Admin|Executive Officer')
+                <tr>
+                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                    </td>
+                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>{{ $application->type }}</td>
+                    <td>{{ $application->level }}</td>
+                    <td>{{ $application->status }}</td>
+                    <td>{{ $application->remarks }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
-                            <td>
-                                @can('profile-edit')
-                                <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
-                                @endcan
-                                <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
-                            </td>
-                        </tr>
-                    @endif
+                    <td>
+                        @can('profile-edit')
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        @endcan
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
+                    </td>
+                </tr>
+                @endhasanyrole
+
+                @hasanyrole('Regional Officer')
+                @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $locationId)
+                <tr>
+                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                    </td>
+                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>{{ $application->type }}</td>
+                    <td>{{ $application->level }}</td>
+                    <td>{{ $application->status }}</td>
+                    <td>{{ $application->remarks }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+
+                    <td>
+                        @can('profile-edit')
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        @endcan
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
+                    </td>
+                </tr>
+                @endif
+                @endhasanyrole
+
+                @hasanyrole('Provincial Officer|Community Service Officer')
+                @if(substr($application->applicant->psgcBrgy->code, 0, 4) == $locationId)
+                <tr>
+                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                    </td>
+                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>{{ $application->type }}</td>
+                    <td>{{ $application->level }}</td>
+                    <td>{{ $application->status }}</td>
+                    <td>{{ $application->remarks }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+
+                    <td>
+                        @can('profile-edit')
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        @endcan
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
+                    </td>
+                </tr>
+                @endif
+                @endhasanyrole
+
                 @endforeach
             </tbody>
         </table>

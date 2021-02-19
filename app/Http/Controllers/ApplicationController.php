@@ -14,48 +14,52 @@ class ApplicationController extends Controller
     public function showAllApplication()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $regionId = '';
-            $regions = Psgc::where('level', 'Reg')->get();
-            $data = Application::with('applicant.psgcBrgy')
-                ->with('grant')
-                ->where('status', '')
-                ->orWhere('status', 'On Process')
-                ->get();
-        } else {
-            $regionId = Str::substr(Auth::user()->region, 0, 2);
-            $regions = Psgc::where('code', Auth::user()->region)->get();
-            $data = Application::with('applicant.psgcBrgy')
-                ->with('grant')
-                ->where('status', '')
-                ->orWhere('status', 'On Process')
-                ->get();
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
         }
 
-        return view('applications.showAllApplication', compact('data', 'regions', 'regionId'));
+        $regions = Psgc::where('code', Auth::user()->region)->get();
+        $data = Application::with('applicant.psgcBrgy')
+            ->with('grant')
+            ->where('status', '')
+            ->orWhere('status', 'On Process')
+            ->get();
+
+        return view('applications.showAllApplication', compact('data', 'regions', 'locationId'));
     }
 
     public function showAllApproved()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $regions = Psgc::where('level', 'Reg')->get();
-            $data = Application::with('applicant.psgcBrgy')
-                ->where('status', 'Approved')
-                ->get();
-            $regionId = '';
-        } else {
-            $regionId = Str::substr(Auth::user()->region, 0, 2);
-
-            $regions = Psgc::where('code', Auth::user()->region)->get();
-            $data = Application::with('applicant.psgcBrgy')
-                ->where('status', 'Approved') //Add filter region
-                ->get();
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
         }
 
-        return view('applications.showAllApproved', compact('data', 'regions', 'regionId'));
+        $regions = Psgc::where('code', Auth::user()->region)->get();
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('status', 'Approved') //Add filter region
+            ->get();
+
+
+        return view('applications.showAllApproved', compact('data', 'regions', 'locationId'));
     }
 
     public function showApproved($id)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'Approved')
@@ -68,11 +72,19 @@ class ApplicationController extends Controller
             ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
             ->get();
 
-        return view('applications.show', compact('data', 'grant', 'provinces'));
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
     public function showTerminated($id)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', '!=', 'Approved')
@@ -87,11 +99,18 @@ class ApplicationController extends Controller
             ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
             ->get();
 
-        return view('applications.show', compact('data', 'grant', 'provinces'));
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
     public function showOnProcess($id)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+        }
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'On Process')
@@ -103,11 +122,19 @@ class ApplicationController extends Controller
             ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
             ->get();
 
-        return view('applications.show', compact('data', 'grant', 'provinces'));
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
     public function showGraduated($id)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
         $data = Application::with('applicant.psgcBrgy')->with('employment')
             ->where('grant_id', $id)
             ->where('status', 'Graduated')
@@ -119,7 +146,7 @@ class ApplicationController extends Controller
             ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
             ->get();
 
-        return view('applications.show', compact('data', 'grant', 'provinces'));
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
     /**
@@ -186,6 +213,14 @@ class ApplicationController extends Controller
      */
     public function show($id)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->get();
@@ -196,7 +231,7 @@ class ApplicationController extends Controller
             ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
             ->get();
 
-        return view('applications.show', compact('data', 'grant', 'provinces'));
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
     /**
