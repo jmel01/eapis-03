@@ -48,6 +48,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    // Set default value
+    protected $attributes = [ 
+        'password' => '$2y$10$NxjAqWoKSrUhDhjD7SR3ROrhXgSmslSxgbPOLe1ct/2hNKbqbIkgi' 
+    ]; 
+
     public function profile()
     {
         return $this->hasOne('App\Models\Profile');
