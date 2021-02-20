@@ -18,7 +18,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $regions = Psgc::where('code', Auth::user()->region)->get();
@@ -38,7 +38,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $regions = Psgc::where('code', Auth::user()->region)->get();
@@ -57,7 +57,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $data = Application::with('applicant.psgcBrgy')
@@ -82,7 +82,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $data = Application::with('applicant.psgcBrgy')
@@ -109,7 +109,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
@@ -132,7 +132,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $data = Application::with('applicant.psgcBrgy')->with('employment')
@@ -218,7 +218,7 @@ class ApplicationController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $locationId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
         }
 
         $data = Application::with('applicant.psgcBrgy')
