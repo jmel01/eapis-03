@@ -25,12 +25,14 @@
                     <th>Profile Name</th>
                     <th>Email</th>
                     <th>Region</th>
+                    <th>Province</th>
                     <th>Role</th>
                     <th>Date Registered</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+            @hasanyrole('Admin|Executive Officer|Regional Officer')
                 @foreach ($data as $key => $user)
                 <tr>
                     <td>
@@ -46,6 +48,11 @@
                     </td>
                     <td>{{ $user->email }}</td>
                     <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
+                    <td>
+                        @if(!empty($user->profile))
+                        {{ App\Models\Psgc::getProvince($user->profile->psgCode) }}
+                        @endif
+                    </td>
                     <td>
                         @if(!empty($user->getRoleNames()))
                         @foreach($user->getRoleNames() as $userRole)
@@ -63,25 +70,56 @@
                         <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
                         @endcan
 
-                        @can('profile-edit')
+                    </td>
+                </tr>
+                @endforeach
+                @endhasanyrole
+                
+                @hasanyrole('Provincial Officer|Community Service Officer')
+                @foreach ($data as $key => $user)
+                @if(App\Models\Psgc::getProvince($user->profile->psgCode) == App\Models\Psgc::getProvince(Auth::user()->profile->psgCode))
+                <tr>
+                    <td>
+                        <div class="user-block">
+                            <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
+                        </div>
+                    </td>
+                    <td> {{ $user->name }}</td>
+                    <td>
                         @if(!empty($user->profile))
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 btn-edit-profile">Update Profile</button>
-                        @else
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 btn-edit-profile">Create Profile</button>
+                        {{ ucwords($user->profile->lastName ?? '') }}, {{ ucwords($user->profile->firstName ?? '') }} {{ ucwords(substr($user->profile->middleName ?? '',1,'1')) }}.
                         @endif
+                    </td>
+                    <td>{{ $user->email }}</td>
+                    <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
+                    <td>
+                        @if(!empty($user->profile))
+                        {{ App\Models\Psgc::getProvince($user->profile->psgCode) }}
+                        @endif
+                    </td>
+                    <td>
+                        @if(!empty($user->getRoleNames()))
+                        @foreach($user->getRoleNames() as $userRole)
+                        <span class="badge badge-info">{{ $userRole }}</span><br>
+                        @endforeach
+                        @endif
+                    </td>
+                    <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
+                    <td>
+                        @can('user-edit')
+                        <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-user">Update</button>
                         @endcan
 
-                        @can('application-add')
-                        @if($user->hasRole('Applicant'))
-                        @if($user->profile!='')
-                        <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
-                        @endif
-                        @endif
+                        @can('user-delete')
+                        <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
                         @endcan
 
                     </td>
                 </tr>
+               
+                @endif
                 @endforeach
+                @endhasanyrole
             </tbody>
         </table>
 

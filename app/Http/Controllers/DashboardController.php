@@ -29,6 +29,11 @@ class DashboardController extends Controller
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')->get();
         $chartDataAll = Regional::regionsApplicant($regions, $userProfile);
 
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::regionsApplicant($regions, $userProfileNew);
+
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'Approved')
             ->get();
@@ -142,6 +147,7 @@ class DashboardController extends Controller
                 'data',
                 'regions',
                 'chartDataAll',
+                'chartDataNew',
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
@@ -176,6 +182,11 @@ class DashboardController extends Controller
 
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')->get();
         $chartDataAll = Regional::regionsApplicant($regions, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::regionsApplicant($regions, $userProfileNew);
 
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'Approved')
@@ -290,6 +301,7 @@ class DashboardController extends Controller
                 'data',
                 'regions',
                 'chartDataAll',
+                'chartDataNew',
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
@@ -331,6 +343,12 @@ class DashboardController extends Controller
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])->get();
         $chartDataAll = Regional::provincesApplicant($provinces, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::provincesApplicant($provinces, $userProfileNew);
 
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
@@ -471,6 +489,7 @@ class DashboardController extends Controller
                 'data',
                 'provinces',
                 'chartDataAll',
+                'chartDataNew',
                 'chartDataApproved',
                 'chartDataOnProcess',
                 'chartDataTerminated',
@@ -523,6 +542,12 @@ class DashboardController extends Controller
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])->get();
         $chartDataAll = Regional::citiesApplicant($cities, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::citiesApplicant($cities, $userProfileNew);
 
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -661,6 +686,7 @@ class DashboardController extends Controller
             'data',
             'cities',
             'chartDataAll',
+            'chartDataNew',
             'chartDataOnProcess',
             'chartDataApproved',
             'chartDataGraduated',
@@ -712,6 +738,12 @@ class DashboardController extends Controller
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])->get();
         $chartDataAll = Regional::citiesApplicant($cities, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::citiesApplicant($cities, $userProfileNew);
 
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -850,6 +882,7 @@ class DashboardController extends Controller
             'data',
             'cities',
             'chartDataAll',
+            'chartDataNew',
             'chartDataOnProcess',
             'chartDataApproved',
             'chartDataGraduated',

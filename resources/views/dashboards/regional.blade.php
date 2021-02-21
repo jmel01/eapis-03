@@ -139,6 +139,21 @@
                 @endforeach
             ],
             datasets: [ { 
+                    label: 'New Applicant',
+                    data: [ @foreach($provinces as $value)
+                                @foreach($chartDataNew as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(106, 90, 205, 0.2)',
+                    borderColor: 'rgba(106, 90, 205, 1)',
+                    borderWidth: 1
+
+                }, { 
                     label: 'On Process',
                     data: [ @foreach($provinces as $value)
                                 @foreach($chartDataOnProcess as $chartData)
