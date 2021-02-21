@@ -25,6 +25,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')
             ->with('grant')
             ->where('status', '')
+            ->orWhere('status', 'New')
             ->orWhere('status', 'On Process')
             ->get();
 
@@ -114,6 +115,29 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'On Process')
+            ->get();
+
+        $grant = Grant::with('psgCode')->where('id', $id)->first();
+        $regionId = Str::substr($grant->region, 0, 2);
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
+    }
+
+    public function showAllNew($id)
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
+        }
+        $data = Application::with('applicant.psgcBrgy')
+            ->where('grant_id', $id)
+            ->where('status', 'New')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();

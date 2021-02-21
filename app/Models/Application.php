@@ -28,6 +28,11 @@ class Application extends Model
         'remarks',
     ];
 
+    // Set default value
+    protected $attributes = [ 
+        'status' => 'New' 
+    ]; 
+
     public function applicant()
     {
         return $this->hasOne('App\Models\Profile','user_id','user_id');

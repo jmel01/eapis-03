@@ -67,4 +67,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Siblings::class, 'user_id', 'id');
     }
+
+    public function application()
+    {
+        return $this->hasOne(Application::class, 'user_id', 'id');
+    }
 }

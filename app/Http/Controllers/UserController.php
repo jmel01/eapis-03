@@ -16,6 +16,82 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+    public function newUser()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $userApplied = User::with('profile')
+                ->with('application')
+                ->doesntHave('roles')
+                ->orderBy('id', 'DESC')->get();
+
+            $userEnrolledByAdmin = User::with('profile')
+                ->with('application')
+                ->role('Applicant')
+                ->orderBy('id', 'DESC')->get();
+
+            $data = $userEnrolledByAdmin->merge($userApplied);
+
+            $regions = Psgc::where('level', 'Reg')->get();
+            $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $userApplied = User::with('profile')
+                ->with('application')
+                ->whereNull('region')
+                ->doesntHave('roles')
+                ->orderBy('id', 'DESC')->get();
+
+            $userEnrolledByAdmin = User::with('profile')
+                ->with('application')
+                ->role('Applicant')
+                ->where('region', Auth::user()->region)
+                ->orderBy('id', 'DESC')->get();
+
+            $data = $userEnrolledByAdmin->merge($userApplied);
+
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $userApplied = User::with('profile')
+                ->with('application')
+                ->whereNull('region')
+                ->doesntHave('roles')
+                ->orderBy('id', 'DESC')->get();
+
+            $userEnrolledByAdmin = User::with('profile')
+                ->with('application')
+                ->role('Applicant')
+                ->where('region', Auth::user()->region)
+                ->orderBy('id', 'DESC')->get();
+
+            $data = $userEnrolledByAdmin->merge($userApplied);
+
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        }
+
+        return view('users.newUser', compact('data', 'grants', 'regions', 'roles'));
+    }
+
     /**
      * Display a listing of the resource.
      *
