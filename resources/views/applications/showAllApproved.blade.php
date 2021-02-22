@@ -27,7 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-            @foreach ($data as $key => $application)
+                @foreach ($data as $key => $application)
                 @hasanyrole('Admin|Executive Officer')
                 <tr>
                     <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
@@ -42,6 +42,9 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        @can('application-edit')
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
+                        @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
                         @endcan
@@ -65,6 +68,9 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        @can('application-edit')
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
+                        @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
                         @endcan
@@ -89,6 +95,9 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        @can('application-edit')
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
+                        @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
                         @endcan
@@ -109,6 +118,7 @@
 </div>
 
 @include('profiles.modalProfile')
+@include('applications.modalApplicationEdit')
 @endsection
 
 @push('scripts')
@@ -134,6 +144,26 @@
                 $('#modalProfile .modal-body').empty()
                 $('#modalProfile .modal-body').append(result)
                 $('#modalProfile').modal('show')
+            })
+        });
+
+        $('.btn-edit-application').click(function() {
+            var url_id = $(this).attr('data-url');
+            $.get(url_id, function(data) {
+                console.log(data)
+                $('[name="type"]').val(data.application.type)
+                $('[name="level"]').val(data.application.level)
+                $('[name="school"]').val(data.application.school)
+                $('[name="course"]').val(data.application.course)
+                $('[name="contribution"]').val(data.application.contribution)
+                $('[name="plans"]').val(data.application.plans)
+                $('[name="status"]').val(data.application.status)
+                $('[name="remarks"]').val(data.application.remarks)
+                $('[name="user_id"]').val(data.application.user_id)
+                $('[name="grant_id"]').val(data.application.grant_id)
+                $('[name="id"]').val(data.application.id)
+
+                $('#modalApplicationEdit').modal('show')
             })
         });
 

@@ -90,7 +90,7 @@
                                 <tr>
                                     <th class="text-center">Date Received</th>
                                     <th class="text-center">Particulars</th>
-                                    <th class="text-center">Amount</th>
+                                    <th class="text-center sum">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
