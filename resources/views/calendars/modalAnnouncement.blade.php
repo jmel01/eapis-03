@@ -13,7 +13,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label>Date/Time Start</label>
-                            <input name="dateTimeStart" type="datetime-local" class="form-control {{$errors->calendar->first('dateTimeStart') == null ? '' : 'is-invalid'}}">
+                            <input name="dateTimeStart" value="{{old('dateTimeStart')}}" type="datetime-local" class="form-control {{$errors->calendar->first('dateTimeStart') == null ? '' : 'is-invalid'}}" required>
                             @if($errors->calendar->first('dateTimeStart') != null)
                             <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('dateTimeStart') }}</span>
                             @endif
@@ -21,7 +21,7 @@
 
                         <div class="form-group col-md-6">
                             <label>Date/Time End</label>
-                            <input name="dateTimeEnd" type="datetime-local" class="form-control {{$errors->calendar->first('dateTimeEnd') == null ? '' : 'is-invalid'}}">
+                            <input name="dateTimeEnd" value="{{old('dateTimeEnd')}}" type="datetime-local" class="form-control {{$errors->calendar->first('dateTimeEnd') == null ? '' : 'is-invalid'}}">
                             @if($errors->calendar->first('dateTimeEnd') != null)
                             <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('dateTimeEnd') }}</span>
                             @endif
@@ -50,7 +50,7 @@
                         <div class="form-group col-md-6">
                             <label>Color</label>
                             <div class="input-group my-colorpicker2">
-                                <input name="color" type="text" class="form-control">
+                                <input name="color" value="{{old('color')}}" type="text" class="form-control">
 
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fas fa-square"></i></span>
@@ -61,7 +61,7 @@
 
                     <div class="form-group">
                         <label>Title</label>
-                        <input name="title" type="text" class="form-control {{$errors->calendar->first('title') == null ? '' : 'is-invalid'}}">
+                        <input name="title" value="{{old('title')}}" type="text" class="form-control {{$errors->calendar->first('title') == null ? '' : 'is-invalid'}}" required>
                         @if($errors->calendar->first('title') != null)
                         <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('title') }}</span>
                         @endif
@@ -69,7 +69,7 @@
 
                     <div class="form-group">
                         <label>Description</label>
-                        <input name="description" type="text" class="form-control {{$errors->calendar->first('description') == null ? '' : 'is-invalid'}}">
+                        <input name="description" value="{{old('description')}}" type="text" class="form-control {{$errors->calendar->first('description') == null ? '' : 'is-invalid'}}" required>
                         @if($errors->calendar->first('description') != null)
                         <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('description') }}</span>
                         @endif

@@ -32,19 +32,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Last Name</label>
-                                        <input name="lastName" type="text" value="{{old('lastName')}}" class="form-control {!! $errors->profile->first('lastName', 'is-invalid') !!}">
+                                        <input name="lastName" type="text" value="{{old('lastName')}}" class="form-control {!! $errors->profile->first('lastName', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>First Name</label>
-                                        <input name="firstName" type="text" value="{{old('firstName')}}" class="form-control {!! $errors->profile->first('firstName', 'is-invalid') !!}">
+                                        <input name="firstName" type="text" value="{{old('firstName')}}" class="form-control {!! $errors->profile->first('firstName', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Middle Name</label>
-                                        <input name="middleName" type="text" value="{{old('middleName')}}" class="form-control {!! $errors->profile->first('middleName', 'is-invalid') !!}">
+                                        <input name="middleName" type="text" value="{{old('middleName')}}" class="form-control {!! $errors->profile->first('middleName', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                             </div>
@@ -53,19 +53,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Date of Birth</label>
-                                        <input name="birthdate" type="date" value="{{old('birthdate')}}" class="form-control {!! $errors->profile->first('birthdate', 'is-invalid') !!}">
+                                        <input name="birthdate" type="date" value="{{old('birthdate')}}" class="form-control {!! $errors->profile->first('birthdate', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Place of Birth</label>
-                                        <input name="placeOfBirth" type="text" value="{{old('placeOfBirth')}}" class="form-control {!! $errors->profile->first('placeOfBirth', 'is-invalid') !!}">
+                                        <input name="placeOfBirth" type="text" value="{{old('placeOfBirth')}}" class="form-control {!! $errors->profile->first('placeOfBirth', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Gender</label>
-                                        <select name="gender" class="form-control {!! $errors->profile->first('gender', 'is-invalid') !!}">
+                                        <select name="gender" class="form-control {!! $errors->profile->first('gender', 'is-invalid') !!}" required>
                                             <option disabled selected>Select Gender</option>
                                             <option value="Female" {{ old('gender')=='Female' ? 'selected' : ''}}>Female</option>
                                             <option value="Male" {{ old('gender')=='Male' ? 'selected' : ''}}>Male</option>
@@ -74,7 +74,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <label>Civil Status</label>
-                                    <select name="civilStatus" class="form-control {!! $errors->profile->first('civilStatus', 'is-invalid') !!}">
+                                    <select name="civilStatus" class="form-control {!! $errors->profile->first('civilStatus', 'is-invalid') !!}" required>
                                         <option disabled selected>Select Status</option>
                                         <option value="Single" {{ old('civilStatus')=='Single' ? 'selected' : ''}}>Single</option>
                                         <option value="Married" {{ old('civilStatus')=='Married' ? 'selected' : ''}}>Married</option>
@@ -89,7 +89,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Region</label>
-                                        <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}">
+                                        <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}" required>
                                             <option selected>Select Region</option>
                                             @foreach ($regions as $allRegion)
                                                 <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' :'' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
@@ -103,14 +103,14 @@
                                     <div class="form-group">
                                         <label>Province/District</label>
                                         <input type="hidden" id="provinceCode" value="{{$province->code ?? ''}}">
-                                        <select name="province" id="province" class="form-control {!! $errors->profile->first('province', 'is-invalid') !!}"></select>
+                                        <select name="province" id="province" class="form-control {!! $errors->profile->first('province', 'is-invalid') !!}" required></select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <input type="hidden" id="cityCode" value="{{$city->code ?? ''}}">
                                         <label>City/Municipality/Sub-Municipality</label>
-                                        <select name="city" id="city" class="form-control {!! $errors->profile->first('city', 'is-invalid') !!}"></select>
+                                        <select name="city" id="city" class="form-control {!! $errors->profile->first('city', 'is-invalid') !!}" required></select>
                                     </div>
                                 </div>
 
@@ -118,13 +118,13 @@
                                     <div class="form-group">
                                         <label>Barangay</label>
                                         <input type="hidden" id="barangayCode" value="{{$barangay->code ?? ''}}">
-                                        <select name="barangay" id="barangay" class="form-control {!! $errors->profile->first('barangay', 'is-invalid') !!}"></select>
+                                        <select name="barangay" id="barangay" class="form-control {!! $errors->profile->first('barangay', 'is-invalid') !!}" required></select>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>House No. and Street/Sitio</label>
-                                        <input name="address" type="text" value="{{old('address')}}" class="form-control {!! $errors->profile->first('address', 'is-invalid') !!}">
+                                        <input name="address" type="text" value="{{old('address')}}" class="form-control {!! $errors->profile->first('address', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                             </div>
@@ -134,13 +134,13 @@
                                     <div class="form-group">
                                         <label>Ethnolinguistic Group</label>
                                         <input type="hidden" id="ethnoGroupID" value="{{$userProfile->ethnoGroup ?? ''}}">
-                                        <select name="ethnoGroup" id="ethnoGroup" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}"></select>
+                                        <select name="ethnoGroup" id="ethnoGroup" class="form-control {!! $errors->profile->first('ethnoGroup', 'is-invalid') !!}" required></select>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>Contact Number</label>
-                                        <input name="contactNumber" type="text" value="{{old('contactNumber')}}" class="form-control {!! $errors->profile->first('contactNumber', 'is-invalid') !!}">
+                                        <input name="contactNumber" type="text" value="{{old('contactNumber')}}" class="form-control {!! $errors->profile->first('contactNumber', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -218,11 +218,11 @@
                                                 <div class="form-group form-inline">
                                                     <label class="mr-2">FATHER:</label>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="fatherLiving" value="Living" @if("Living" == ($userProfile->fatherLiving ?? '')) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="fatherLiving" value="Living" @if("Living" == ($userProfile->fatherLiving ?? '')) checked @endif required>
                                                         <label class="form-check-label mr-1">Living</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="fatherLiving" value="Deceased" @if("Deceased" == ($userProfile->fatherLiving ?? '')) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="fatherLiving" value="Deceased" @if("Deceased" == ($userProfile->fatherLiving ?? '')) checked @endif required>
                                                         <label class="form-check-label mr-1">Deceased</label>
                                                     </div>
                                                     {!! $errors->profile->first('fatherLiving', '<label class="mr-1 text-danger">Required</label>') !!}
@@ -232,11 +232,11 @@
                                                 <div class="form-group form-inline">
                                                     <label class="mr-2">MOTHER:</label>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Living" @if("Living" == ($userProfile->motherLiving ?? '')) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Living" @if("Living" == ($userProfile->motherLiving ?? '')) checked @endif required>
                                                         <label class="form-check-label mr-1">Living</label>
                                                     </div>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased" == ($userProfile->motherLiving ?? '')) checked @endif>
+                                                        <input class="form-check-input" type="radio" name="motherLiving" value="Deceased" @if("Deceased" == ($userProfile->motherLiving ?? '')) checked @endif required>
                                                         <label class="form-check-label mr-1">Deceased</label>
                                                     </div>
                                                     {!! $errors->profile->first('motherLiving', '<label class="mr-1 text-danger">Required</label>') !!}
@@ -246,38 +246,38 @@
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Name</td>
-                                            <td><input name="fatherName" type="text" value="{{old('fatherName')}}" class="form-control  {!! $errors->profile->first('fatherName', 'is-invalid') !!}"> </td>
-                                            <td><input name="motherName" type="text" value="{{old('motherName')}}" class="form-control {!! $errors->profile->first('motherName', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherName" type="text" value="{{old('fatherName')}}" class="form-control  {!! $errors->profile->first('fatherName', 'is-invalid') !!}" required> </td>
+                                            <td><input name="motherName" type="text" value="{{old('motherName')}}" class="form-control {!! $errors->profile->first('motherName', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Address</td>
-                                            <td><input name="fatherAddress" type="text" value="{{old('fatherAddress')}}" class="form-control {!! $errors->profile->first('fatherAddress', 'is-invalid') !!}"></td>
-                                            <td><input name="motherAddress" type="text" value="{{old('motherAddress')}}" class="form-control {!! $errors->profile->first('motherAddress', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherAddress" type="text" value="{{old('fatherAddress')}}" class="form-control {!! $errors->profile->first('fatherAddress', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherAddress" type="text" value="{{old('motherAddress')}}" class="form-control {!! $errors->profile->first('motherAddress', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Occupation</td>
-                                            <td><input name="fatherOccupation" type="text" value="{{old('fatherOccupation')}}" class="form-control {!! $errors->profile->first('fatherOccupation', 'is-invalid') !!}"></td>
-                                            <td><input name="motherOccupation" type="text" value="{{old('motherOccupation')}}" class="form-control {!! $errors->profile->first('motherOccupation', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherOccupation" type="text" value="{{old('fatherOccupation')}}" class="form-control {!! $errors->profile->first('fatherOccupation', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherOccupation" type="text" value="{{old('motherOccupation')}}" class="form-control {!! $errors->profile->first('motherOccupation', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Office Address</td>
-                                            <td><input name="fatherOffice" type="text" value="{{old('fatherOffice')}}" class="form-control {!! $errors->profile->first('fatherOffice', 'is-invalid') !!}"></td>
-                                            <td><input name="motherOffice" type="text" value="{{old('motherOffice')}}" class="form-control {!! $errors->profile->first('motherOffice', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherOffice" type="text" value="{{old('fatherOffice')}}" class="form-control {!! $errors->profile->first('fatherOffice', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherOffice" type="text" value="{{old('motherOffice')}}" class="form-control {!! $errors->profile->first('motherOffice', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Educational Attainment</td>
-                                            <td><input name="fatherEducation" type="text" value="{{old('fatherEducation')}}" class="form-control {!! $errors->profile->first('fatherEducation', 'is-invalid') !!}"></td>
-                                            <td><input name="motherEducation" type="text" value="{{old('motherEducation')}}" class="form-control {!! $errors->profile->first('motherEducation', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherEducation" type="text" value="{{old('fatherEducation')}}" class="form-control {!! $errors->profile->first('fatherEducation', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherEducation" type="text" value="{{old('motherEducation')}}" class="form-control {!! $errors->profile->first('motherEducation', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Ethnolinguistic Group</td>
-                                            <td><input name="fatherEthnoGroup" type="text" value="{{old('fatherEthnoGroup')}}" class="form-control {!! $errors->profile->first('fatherEthnoGroup', 'is-invalid') !!}"></td>
-                                            <td><input name="motherEthnoGroup" type="text" value="{{old('motherEthnoGroup')}}" class="form-control {!! $errors->profile->first('motherEthnoGroup', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherEthnoGroup" type="text" value="{{old('fatherEthnoGroup')}}" class="form-control {!! $errors->profile->first('fatherEthnoGroup', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherEthnoGroup" type="text" value="{{old('motherEthnoGroup')}}" class="form-control {!! $errors->profile->first('motherEthnoGroup', 'is-invalid') !!}" required></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold">Parent Annual Income</td>
-                                            <td><input name="fatherIncome" type="text" value="{{old('fatherIncome')}}" class="form-control {!! $errors->profile->first('fatherIncome', 'is-invalid') !!}"></td>
-                                            <td><input name="motherIncome" type="text" value="{{old('motherIncome')}}" class="form-control {!! $errors->profile->first('motherIncome', 'is-invalid') !!}"></td>
+                                            <td><input name="fatherIncome" type="text" value="{{old('fatherIncome')}}" class="form-control {!! $errors->profile->first('fatherIncome', 'is-invalid') !!}" required></td>
+                                            <td><input name="motherIncome" type="text" value="{{old('motherIncome')}}" class="form-control {!! $errors->profile->first('motherIncome', 'is-invalid') !!}" required></td>
                                         </tr>
 
                                     </table>

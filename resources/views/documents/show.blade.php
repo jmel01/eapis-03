@@ -29,6 +29,7 @@
                 <tr>
                     <th>Grant Name/Year</th>
                     <th>Requirement Description</th>
+                    <th>Date Submitted</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -37,11 +38,12 @@
                 <tr>
                     <td>{{ App\Models\Psgc::getRegion($document->grantDetails->region) }} ({{ $document->grantDetails->acadYr }}-{{ $document->grantDetails->acadYr + 1}})</td>
                     <td>{{ $document->requirementDetails->description }}</td>
+                    <td>{{ \Carbon\Carbon::parse($document->created_at)->format('F d, Y h:i:s A') }}</td>
                     <td>
                         <a href="/uploads/{{ $document->filepath }}" target="_blank" class="btn btn-info btn-sm">View</a>
-                        @can('document-delete')
+                       
                         <button data-url="{{ route('documents.destroy', $document->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-document">Delete</button>
-                        @endcan
+                        
                     </td>
                 </tr>
                 @empty
@@ -56,7 +58,7 @@
     </div>
 
     <div class="card-footer">
-        Footer
+       
     </div>
 
 </div>

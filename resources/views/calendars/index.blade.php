@@ -23,29 +23,25 @@
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">List of Announcement</h3>
-
-        <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="fas fa-minus"></i></button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
-                <i class="fas fa-times"></i></button>
-        </div>
     </div>
     <div class="card-body">
-        @can('announcement-add')
+
         <div class="row">
-            <div class="col-lg-12 mb-3">
+            <div class="col-md-7 mb-3">
+                @can('announcement-add')
                 <div class="float-right">
                     <button type="button" class="btn btn-primary addCalendar">
                         Create New Announcement
                     </button>
                 </div>
+                @endcan
             </div>
-        </div>
-        @endcan
-        <div class="row">
+
+            <div class="col-md-5">
+            </div>
+        
             <div class="col-md-7">
-                <table id="calendarList" class="table table-sm table-hover table-responsive-lg">
+                <table id="calendarList" class="table table-sm table-hover">
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -156,15 +152,15 @@
         });
 
         $('#calendarList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "order": [
-                [3, "asc"]
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
             ],
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "order": [],
         });
 
         function timestampToDatetimeInputString(timestamp) {

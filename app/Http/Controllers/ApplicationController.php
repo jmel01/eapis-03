@@ -27,6 +27,7 @@ class ApplicationController extends Controller
             ->where('status', '')
             ->orWhere('status', 'New')
             ->orWhere('status', 'On Process')
+            ->orderBy('id', 'DESC')
             ->get();
 
         return view('applications.showAllApplication', compact('data', 'regions', 'locationId'));
@@ -44,9 +45,9 @@ class ApplicationController extends Controller
 
         $regions = Psgc::where('code', Auth::user()->region)->get();
         $data = Application::with('applicant.psgcBrgy')
-            ->where('status', 'Approved') //Add filter region
+            ->where('status', 'Approved')
+            ->orderBy('id', 'DESC')
             ->get();
-
 
         return view('applications.showAllApproved', compact('data', 'regions', 'locationId'));
     }
@@ -64,6 +65,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'Approved')
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
@@ -92,6 +94,7 @@ class ApplicationController extends Controller
             ->where('status', '!=', 'On Process')
             ->where('status', '!=', 'Graduated')
             ->whereNotNull('status')
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
@@ -115,6 +118,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'On Process')
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
@@ -138,6 +142,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'New')
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
@@ -162,6 +167,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant.psgcBrgy')->with('employment')
             ->where('grant_id', $id)
             ->where('status', 'Graduated')
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();
@@ -247,6 +253,7 @@ class ApplicationController extends Controller
 
         $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
+            ->orderBy('id', 'DESC')
             ->get();
 
         $grant = Grant::with('psgCode')->where('id', $id)->first();

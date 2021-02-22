@@ -38,7 +38,7 @@
                         </p>
                     </div>
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-5">
                     <div class="col-12">
                         @if($userProfile != '')
                         <button data-id="{{ Auth::id() }}" class="btn btn-outline-success btn-sm float-right btn-add-application">APPLY SCHOLARSHIP</button>
@@ -81,7 +81,7 @@
                     </div>
 
                 </div>
-                <div class="row mt-3">
+                <div class="row mt-5">
                     <div class="col-12">
                         <h4>Financial Assistance</h4>
 
@@ -107,7 +107,7 @@
                             <tfoot>
                                 <tr>
                                     <th></th>
-                                    <th></th>
+                                    <th class="text-right">TOTAL:</th>
                                     <th class="text-right"></th>
                                 </tr>
                             </tfoot>
@@ -211,23 +211,27 @@
         });
 
         var table = $('#applicationList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            "order": [],
         });
 
         var table = $('#paymentList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            "order": [],
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
@@ -240,28 +244,17 @@
                         i : 0;
                 };
 
-                // Total over all pages
-                total = api
-                    .column(2)
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
 
-                // Total over this page
-                pageTotal = api
-                    .column(2, {
-                        page: 'current'
-                    })
-                    .data()
-                    .reduce(function(a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
-
-                // Update footer
-                $(api.column(2).footer()).html(
-                    'Total: ₱  ' + pageTotal.toLocaleString("en-US") + ' ( ₱ ' + total.toLocaleString("en-US") + ')'
-                );
+                    this.footer().innerHTML = pageSum.toLocaleString('us-US');
+                });
             },
         });
 

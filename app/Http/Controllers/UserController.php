@@ -29,7 +29,7 @@ class UserController extends Controller
                 ->role('Applicant')
                 ->orderBy('id', 'DESC')->get();
 
-            $data = $userEnrolledByAdmin->merge($userApplied);
+            $data = $userApplied->merge($userEnrolledByAdmin);
 
             $regions = Psgc::where('level', 'Reg')->get();
             $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
@@ -50,7 +50,7 @@ class UserController extends Controller
                 ->where('region', Auth::user()->region)
                 ->orderBy('id', 'DESC')->get();
 
-            $data = $userEnrolledByAdmin->merge($userApplied);
+            $data = $userApplied->merge($userEnrolledByAdmin);
 
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
@@ -75,7 +75,7 @@ class UserController extends Controller
                 ->where('region', Auth::user()->region)
                 ->orderBy('id', 'DESC')->get();
 
-            $data = $userEnrolledByAdmin->merge($userApplied);
+            $data = $userApplied->merge($userEnrolledByAdmin);
 
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
@@ -101,14 +101,13 @@ class UserController extends Controller
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             $data = User::with('profile')->orderBy('id', 'DESC')->get();
-            
+
             $regions = Psgc::where('level', 'Reg')->get();
             $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
 
             $roles = Role::pluck('name', 'name')->all();
-
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $userEnrolledByAdmin = User::with('profile')
                 ->role(['Applicant', 'Regional Officer', 'Provincial Officer', 'Community Service Officer'])
@@ -121,7 +120,7 @@ class UserController extends Controller
                 ->orderBy('id', 'DESC')->get();
 
             $data = $userApplied->merge($userEnrolledByAdmin);
-            
+
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
                 ->where('applicationOpen', '<=', date('Y-m-d'))

@@ -22,6 +22,10 @@
                     </a>
                 </li>
 
+                
+
+                @unlessrole('Applicant')
+                @can('grant-browse')
                 <li class="nav-item">
                     <a href="{{ route('newUser') }}" class="nav-link">
                         <i class="far fa-address-card nav-icon"></i>
@@ -29,8 +33,6 @@
                     </a>
                 </li>
 
-                @unlessrole('Applicant')
-                @can('grant-browse')
                 <li class="nav-item">
                     <a href="{{ route('showAllApplication') }}" class="nav-link">
                         <i class="far fa-address-card nav-icon"></i>
