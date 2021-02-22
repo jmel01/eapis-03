@@ -14,7 +14,7 @@
         <h3 class="card-title">List of New Users</h3>
     </div>
     <div class="card-body">
-       
+
         <table id="userList" class="table table-sm table-hover table-responsive-lg">
             <thead>
                 <tr>
@@ -30,7 +30,9 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $user)
-                @if( empty($user->application))
+                @if(empty($user->application))
+                @hasanyrole('Regional Officer|Provincial Officer|Community Service Officer')
+                @if((Auth::user()->region == $user->region))
                 <tr>
                     <td>
                         <div class="user-block">
@@ -73,6 +75,8 @@
 
                     </td>
                 </tr>
+                @endif
+                @endhasanyrole
                 @endif
                 @endforeach
             </tbody>
