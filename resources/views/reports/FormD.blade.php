@@ -20,14 +20,14 @@
                     <th>Name</th>
                     <th>Kind of EAP</th>
                     <th>Ethno Group</th>
-                    <th>Male</th>
-                    <th>Female</th>
+                    <th class="sum">Male</th>
+                    <th class="sum">Female</th>
                     <th>Course</th>
                     <th>Year Employed</th>
-                    <th>FE</th>
-                    <th>PE</th>
-                    <th>SE</th>
-                    <th>GO/NGO/CSO</th>
+                    <th class="sum">FE</th>
+                    <th class="sum">PE</th>
+                    <th class="sum">SE</th>
+                    <th class="sum">GO/NGO/CSO</th>
                     <th>Position</th>
                     <th>Employer Name</th>
                     <th>Place of Employment</th>
@@ -42,16 +42,14 @@
                     <td>{{ $application->applicant->lastName ?? '' }}, {{ $application->applicant->firstName ?? '' }} {{ $application->applicant->middleName ?? '' }}</td>
                     <td>{{ $application->type }}</td>
                     <td>{{ \App\Models\Ethnogroup::getEthno($application->applicant->ethnoGroup ?? '') }}</td>
-                    <td>{{ $application->applicant->gender ?? '' }}</td>
-                    <td>{{ $application->applicant->gender ?? '' }}</td>
+                    <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
                     <td>{{ $application->course ?? '' }}</td>
                     <td>{{ $application->employment->yearEmployed }}</td>
-                    <td>{{ $application->employment->employerType }}</td>
-                    
-                    
-                    <td>{{ $application->employment->employerType }}</td>
-                    <td>{{ $application->employment->employerType }}</td>
-                    <td>{{ $application->employment->employerType }}</td>
+                    <td class="text-center text-bold">@if ($application->employment->employerType=='FE') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->employment->employerType=='PE') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->employment->employerType=='SE') &#10003; @endif</td>
+                    <td class="text-center text-bold">@if ($application->employment->employerType=='GO/NGO/CSO') &#10003; @endif</td>
                     <td>{{ $application->employment->position }}</td>
                     <td>{{ $application->employment->employerName }}</td>
                     <td>{{ $application->employment->employerAddress }}</td>
@@ -60,6 +58,26 @@
                 @empty
                 @endforelse
             </tbody>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-right">TOTAL:</th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th></th>
+                    <th></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
         </table>
 
     </div>
@@ -82,41 +100,113 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#graduateList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
             "order": [],
 
-            dom: 'BfrtipQ',
+            "footerCallback": function(row, data, start, end, display) {
+                var api = this.api(),
+                    data;
+
+                api.columns('.sum', {
+                    page: 'current'
+                }).every(function() {
+                    let count = 0;
+                    var pageSum = this
+                        .data()
+                        .reduce(function(a, b) {
+                            b == '' ? '' : count++;
+                            return count;
+                        }, 0);
+
+                    this.footer().innerHTML = pageSum;
+                });
+            },
+
+            dom: '<"row"<"col-md-12 mb-3"B>>' +
+                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12"t>>' +
+                '<"row"<"col-md-5"i><"col-md-7"p>>' +
+                '<"row"<"col-md-6"Q>>',
+
             buttons: [{
-                title: 'Report of Graduates (FORM B)',
+                title: 'Report of Graduates (FORM D)',
                 extend: 'excelHtml5',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
-
+                    columns: ':visible',
+                    rows: ':visible'
                 }
             }, {
                 extend: 'print',
                 footer: true,
                 exportOptions: {
-                    columns: ':visible'
+                    columns: ':visible',
+                    rows: ':visible'
                 },
                 autoPrint: false,
                 title: '',
-                messageTop: '<p class="text-right">Form B</p><p class="text-center">Republic of the Philippines<br>Office of the President<br>NATIONAL COMMISSION ON INDIGENOUS PEOPLES<br>Regional Office No. ____<br><br>REPORTS OF GRADUATES<br>SY ___<br>As of Month, Year</p>',
-                customize: function(win) {
+                messageTop: '<div class="row">' +
+                    '<div class="col-4">' +
+                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
+                    '{{ App\Models\Psgc::getRegion(Auth::user()->region) }}<br><br>' +
+                    '<strong>REPORTS OF GRADUATES</strong><br> ' +
+                    'School Year ____ <br>' +
+                    'As of {{now()}}</p>' +
+                    '</div>' +
+                    '<div class="col-4">' +
+                    '<p class="text-right">Form D</p>' +
+                    '</div>' +
+                    '</div>',
 
-                    var last = null;
-                    var current = null;
-                    var bod = [];
+                messageBottom: '<div class="row mt-5">' +
+                    '<div class="col-1">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '</div>' +
+                    '<div class="col-3">' +
+                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
+                    'Position<br><br>' +
+                    '</div>' +
+                    '<div class="col-2">' +
+                    '</div>' +
+                    '</div>',
+                customize: function(win) {
 
                     var css = '@page { size: landscape; }',
                         head = win.document.head || win.document.getElementsByTagName('head')[0],
                         style = win.document.createElement('style');
+
+                        $(win.document.body).find('table thead th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
+
+                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(7)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(13)').css('text-align', 'center');
+
+                    $(win.document.body).find('table tfoot th').css({
+                        'vertical-align': 'middle',
+                        'text-align': 'center'
+                    });
+                    $(win.document.body).find('table tfoot th:nth-child(5)').css('text-align', 'right');
 
                     style.type = 'text/css';
                     style.media = 'print';

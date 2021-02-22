@@ -17,7 +17,13 @@
 
                     <div class="form-group">
                         <label>Type of Employment</label>
-                        <input name="employerType" type="text" value="{{old('employerType')}}" class="form-control {{$errors->employment->first('employerType') == null ? '' : 'is-invalid'}}">
+                        <select name="employerType" class="form-control {{$errors->employment->first('employerType') == null ? '' : 'is-invalid'}}">
+                            <option disabled selected>Select Level</option>
+                            <option value="FE" {{ old('employerType') == "FE" ? 'selected' : ''}}>FE</option>
+                            <option value="PE" {{ old('employerType') == "PE" ? 'selected' : ''}}>PE</option>
+                            <option value="SE" {{ old('employerType')== "SE" ? 'selected' : ''}}>SE</option>
+                            <option value="GO/NGO/CSO" {{ old('employerType')== "GO/NGO/CSO" ? 'selected' : ''}}>GO/NGO/CSO</option>
+                        </select>
                     </div>
 
                     <div class="form-group">

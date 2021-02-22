@@ -53,7 +53,7 @@
                     <tbody>
                         @foreach ($data as $key => $calendar)
 
-                        <tr @if(date("Y-m-d")> $calendar->dateTimeEnd)class="text-danger"@endif>
+                        <tr @if(date("Y-m-d")> $calendar->dateTimeStart)class="text-danger"@endif>
                             <td>{{ date('d F Y', strtotime($calendar->dateTimeStart)) }}</td>
                             <td>{{ $calendar->title }}</td>
                             <td>{{ $calendar->description }}</td>

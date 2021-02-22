@@ -74,6 +74,11 @@
                         <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('description') }}</span>
                         @endif
                     </div>
+
+                    <!-- <div class="form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="form-control rounded-0" name="description" rows="3" placeholder="Description">{{old('description')}}</textarea>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <input name="id" value="{{old('id')}}" type="hidden">

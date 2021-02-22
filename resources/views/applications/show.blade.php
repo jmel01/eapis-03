@@ -64,7 +64,7 @@
                         @endif
                         @endcan
 
-                        @if($application->status=='Graduated')
+                        @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
                         <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
                         @else
@@ -109,7 +109,7 @@
                         @endif
                         @endcan
 
-                        @if($application->status=='Graduated')
+                        @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
                         <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
                         @else
@@ -155,7 +155,7 @@
                         @endif
                         @endcan
 
-                        @if($application->status=='Graduated')
+                        @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
                         <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
                         @else

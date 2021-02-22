@@ -41,7 +41,7 @@
                     region: '{{ $announcement->regionname->name }}',
                     @php
                     $date_now = date("Y-m-d");
-                    $event_date = date($announcement -> dateTimeEnd);
+                    $event_date = date($announcement -> dateTimeStart);
                     if ($date_now > $event_date) {
                         echo "color:'red'";
                     } else {
