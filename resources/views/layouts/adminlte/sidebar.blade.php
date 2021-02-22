@@ -85,12 +85,12 @@
                             </a>
                         </li>
 
-                        <!--  <li class="nav-item">
+                        <li class="nav-item">
                             <a href="{{ route('formD') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
-                                <p>Form D x</p>
+                                <p>Graduates - Where Abouts</p>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('formE') }}" class="nav-link">
                                 <i class="fas fa-file-alt nav-icon"></i>
