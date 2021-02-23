@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\ChartArray\Registered;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Grant;
@@ -18,6 +19,20 @@ class UserController extends Controller
 {
     public function newUser()
     {
+        $userApplied = User::with('profile')
+            ->with('application')
+            ->doesntHave('roles')
+            ->orderBy('id', 'DESC')->get();
+
+        $userEnrolledByAdmin = User::with('profile')
+            ->with('application')
+            ->role('Applicant')
+            ->orderBy('id', 'DESC')->get();
+
+        $data = $userApplied->merge($userEnrolledByAdmin);
+        $data = Registered::whereProvide($data);
+        //$data = $data->where(Str::substr('profile.psgCode', 1, 4), Str::substr('128002007', 1, 4));
+
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
 
             $regions = Psgc::where('level', 'Reg')->get();
@@ -27,7 +42,6 @@ class UserController extends Controller
 
             $roles = Role::pluck('name', 'name')->all();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
                 ->where('applicationOpen', '<=', date('Y-m-d'))
@@ -51,18 +65,6 @@ class UserController extends Controller
                 ->pluck('name', 'name')
                 ->all();
         }
-
-        $userApplied = User::with('profile')
-            ->with('application')
-            ->doesntHave('roles')
-            ->orderBy('id', 'DESC')->get();
-
-        $userEnrolledByAdmin = User::with('profile')
-            ->with('application')
-            ->role('Applicant')
-            ->orderBy('id', 'DESC')->get();
-
-        $data = $userApplied->merge($userEnrolledByAdmin);
 
         return view('users.newUser', compact('data', 'grants', 'regions', 'roles'));
     }

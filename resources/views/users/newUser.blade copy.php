@@ -30,7 +30,8 @@
             </thead>
             <tbody>
                 @foreach ($data as $key => $user)
-                   
+                    @if(empty($user->application))
+                        @hasanyrole('Admin|Executive Officer')
                         <tr>
                             <td>
                                 <div class="user-block">
@@ -64,13 +65,64 @@
                                 @endcan
 
                                 @can('application-add')
+                                @if($user->hasRole('Applicant'))
                                 @if($user->profile!='')
                                 <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
+                                @endif
                                 @endif
                                 @endcan
                             </td>
                         </tr>
-                   
+                        @endhasanyrole
+
+                        @hasanyrole('Regional Officer|Provincial Officer|Community Service Officer')
+                            @if((Auth::user()->region == $user->region))
+                            <tr>
+                                <td>
+                                    <div class="user-block">
+                                        <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
+                                    </div>
+                                </td>
+                                <td> {{ $user->name }}</td>
+                                <td>
+                                    @if(!empty($user->profile))
+                                    {{ ucwords($user->profile->lastName ?? '') }}, {{ ucwords($user->profile->firstName ?? '') }} {{ ucwords(substr($user->profile->middleName ?? '',1,'1')) }}.
+                                    @endif
+                                </td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
+                                <td>
+                                    @if(!empty($user->getRoleNames()))
+                                    @foreach($user->getRoleNames() as $userRole)
+                                    <span class="badge badge-info">{{ $userRole }}</span><br>
+                                    @endforeach
+                                    @endif
+                                </td>
+                                <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
+                                <td>
+
+                                    @can('profile-edit')
+                                    @if(!empty($user->profile))
+                                    <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                                    @else
+                                    <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 btn-edit-profile">Create Profile</button>
+                                    @endif
+                                    @endcan
+
+                                    @can('application-add')
+                                    @if($user->hasRole('Applicant'))
+                                    @if($user->profile!='')
+                                    <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
+                                    @endif
+                                    @endif
+                                    @endcan
+
+                                </td>
+                            </tr>
+                            @endif
+                        @endhasanyrole
+
+                    @endif
                 @endforeach
             </tbody>
         </table>
