@@ -290,7 +290,7 @@
 @if (count($errors->application) > 0)
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#modalApplication').modal('show');
+        $('#modalApplicationEdit').modal('show');
     });
 </script>
 @endif

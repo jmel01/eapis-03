@@ -14,17 +14,17 @@
                     @if(isset($grants) && count($grants) > 0)
                     <div class="form-group">
                         <label>Select Scholarship/Grant</label>
-                        <select name="grant_id" class="form-control {{$errors->profile->first('civilStatus') == null ? '' : 'is-invalid'}}">
+                        <select name="grant_id" class="form-control {{$errors->application->first('grant_id') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Scholarship/Grant</option>
                             @foreach ($grants as $grant)
-                            <option value="{{ $grant->id}}" {{ old('grant_id')=='$grant->id' ? 'selected' : ''}}>{{ $grant->psgCode->name}} SY {{ $grant->acadYr}}-{{ $grant->acadYr+1}}</option>
+                            <option value="{{ $grant->id}}" {{ old('grant_id')==$grant->id ? 'selected' : ''}}>{{ $grant->psgCode->name}} SY {{ $grant->acadYr}}-{{ $grant->acadYr+1}}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Type</label>
-                        <select name="type" class="form-control {{$errors->profile->first('civilStatus') == null ? '' : 'is-invalid'}}">
+                        <label>Type of Assistance</label>
+                        <select name="type" class="form-control {{$errors->application->first('type') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Type</option>
                             <option value="Regular" {{ old('type')=='Regular' ? 'selected' : ''}}>Regular</option>
                             <option value="Merit-Based" {{ old('type')=='Merit-Based' ? 'selected' : ''}}>Merit-Based</option>
@@ -33,35 +33,35 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Level</label>
-                        <select name="level" class="form-control {{$errors->profile->first('civilStatus') == null ? '' : 'is-invalid'}}">
+                        <label>Assistance Applied/Level</label>
+                        <select name="level" class="form-control {{$errors->application->first('level') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Level</option>
-                            <option value="Post Study" {{ old('type') == "Post Study" ? 'selected' : ''}}>Post Study</option>
-                            <option value="College" {{ old('type') == "College" ? 'selected' : ''}}>College</option>
-                            <option value="Vocational" {{ old('type')== "Vocational" ? 'selected' : ''}}>Vocational</option>
-                            <option value="High School" {{ old('type')== "High School" ? 'selected' : ''}}>High School</option>
-                            <option value="Elementary" {{ old('type')== "Elementary" ? 'selected' : ''}}>Elementary</option>
+                            <option value="Post Study" {{ old('level') == "Post Study" ? 'selected' : ''}}>Post Study</option>
+                            <option value="College" {{ old('level') == "College" ? 'selected' : ''}}>College</option>
+                            <option value="Vocational" {{ old('level')== "Vocational" ? 'selected' : ''}}>Vocational</option>
+                            <option value="High School" {{ old('level')== "High School" ? 'selected' : ''}}>High School</option>
+                            <option value="Elementary" {{ old('level')== "Elementary" ? 'selected' : ''}}>Elementary</option>
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label>School</label>
-                        <input name="school" type="text" value="{{old('amount')}}" class="form-control {{$errors->application->first('amount') == null ? '' : 'is-invalid'}}">
+                        <input name="school" type="text" value="{{old('school')}}" class="form-control {{$errors->application->first('school') == null ? '' : 'is-invalid'}}">
                     </div>
 
                     <div class="form-group">
                         <label>Course/Level</label>
-                        <input name="course" type="text" value="{{old('checkNo')}}" class="form-control {{$errors->application->first('checkNo') == null ? '' : 'is-invalid'}}">
+                        <input name="course" type="text" value="{{old('course')}}" class="form-control {{$errors->application->first('course') == null ? '' : 'is-invalid'}}">
                     </div>
 
                     <div class="form-group">
-                        <label>Contribution</label>
-                        <input name="contribution" type="text" value="{{old('province')}}" class="form-control {{$errors->application->first('province') == null ? '' : 'is-invalid'}}">
+                        <label>What possible contribution/s that you may extend to your community or fellow ICCs/IPs while studying?</label>
+                        <textarea name="contribution" rows="5" class="form-control {{$errors->application->first('contribution') == null ? '' : 'is-invalid'}}">{{old('contribution')}}</textarea>
                     </div>
 
                     <div class="form-group">
-                        <label>Plans</label>
-                        <input name="plans" type="text" value="{{old('province')}}" class="form-control {{$errors->application->first('province') == null ? '' : 'is-invalid'}}">
+                        <label>What are your plans after graduation?</label>
+                        <textarea name="plans" rows="5" class="form-control {{$errors->application->first('plans') == null ? '' : 'is-invalid'}}">{{old('plans')}}</textarea>
                     </div>
 
                     @else

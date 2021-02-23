@@ -21,8 +21,8 @@ class CreateApplicationsTable extends Migration
             $table->string('level');
             $table->string('school');
             $table->string('course');
-            $table->string('contribution');
-            $table->string('plans');
+            $table->text('contribution');
+            $table->text('plans');
             $table->string('status')->default('On Process');
             $table->string('remarks')->nullable();
             $table->timestamps();

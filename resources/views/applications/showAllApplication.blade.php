@@ -185,6 +185,14 @@
 </script>
 
 <!-- Error/Modal Opener -->
+@if (count($errors->application) > 0)
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#modalApplicationEdit').modal('show');
+    });
+</script>
+@endif
+
 @if (count($errors->profile) > 0)
 <script type="text/javascript">
     $(document).ready(function() {
