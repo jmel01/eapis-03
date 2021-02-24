@@ -21,27 +21,34 @@
             },
             //eventMouseEnter: function(info) {
             eventClick: function(info) {
+                $.get('calendars/'+info.event.id+'/edit', function(data) {
+                    var dateFrom = new Date(data.announcement.dateTimeStart);
+                    dateFrom.setMinutes(dateFrom.getMinutes() - dateFrom.getTimezoneOffset());
+                    var dateTo = new Date(data.announcement.dateTimeEnd);
+                    dateTo.setMinutes(dateTo.getMinutes() - dateTo.getTimezoneOffset());
 
-                var eventObj = info.event;
+                    $('[name="id"]').val(data.announcement.id)
+                    $('[name="user_id"]').val(data.announcement.user_id)
+                    $('[name="dateTimeStart"]').val(dateFrom.toISOString().slice(0, 16))
+                    $('[name="dateTimeEnd"]').val(data.announcement.dateTimeEnd == null ? '' : dateTo.toISOString().slice(0, 16))
 
-                $('[name="title"]').val(eventObj.title)
-                $('[name="description"]').val(eventObj.extendedProps.description)
-                $('[name="datestart"]').val(eventObj.start)
-                $('[name="dateend"]').val(eventObj.end)
-                $('[name="region"]').val(eventObj.extendedProps.region)
+                    $('[name="title"]').val(data.announcement.title)
+                    $('[name="description"]').val(data.announcement.description)
+                    $('[name="color"]').val(data.announcement.color)
+                    $('[name="region"]').val(data.announcement.region)
 
-                $('#modalShowAnnouncement').modal('show')
+                    $('#modalAnnouncement').modal('show')
+                })
             },
             events: [
                 @foreach($data as $announcement) {
+                    id: '{{ $announcement->id }}',
                     title: '{{ $announcement->title }}',
                     start: '{{ $announcement->dateTimeStart }}',
                     end: '{{ $announcement->dateTimeEnd }}',
-                    description: '{{ $announcement->description }}',
-                    region: '{{ $announcement->regionname->name }}',
                     @php
                     $date_now = date("Y-m-d");
-                    $event_date = date($announcement -> dateTimeStart);
+                    $event_date = date($announcement->dateTimeStart);
                     if ($date_now > $event_date) {
                         echo "color:'red'";
                     } else {

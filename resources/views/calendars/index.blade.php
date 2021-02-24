@@ -134,7 +134,6 @@
                 $('[name="user_id"]').val(data.announcement.user_id)
                 $('[name="dateTimeStart"]').val(dateFrom.toISOString().slice(0, 16))
                 $('[name="dateTimeEnd"]').val(dateTo.toISOString().slice(0, 16))
-
                 $('[name="title"]').val(data.announcement.title)
                 $('[name="description"]').val(data.announcement.description)
                 $('[name="color"]').val(data.announcement.color)

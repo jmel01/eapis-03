@@ -67,18 +67,18 @@
                         @endif
                     </div>
 
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label>Description</label>
                         <input name="description" value="{{old('description')}}" type="text" class="form-control {{$errors->calendar->first('description') == null ? '' : 'is-invalid'}}" required>
                         @if($errors->calendar->first('description') != null)
                         <span class="invalid-feedback" role="alert">*{{ $errors->calendar->first('description') }}</span>
                         @endif
-                    </div>
-
-                    <!-- <div class="form-group">
-                        <label for="Description">Description</label>
-                        <textarea class="form-control rounded-0" name="description" rows="3" placeholder="Description">{{old('description')}}</textarea>
                     </div> -->
+
+                    <div class="form-group">
+                        <label for="Description">Description</label>
+                        <textarea class="form-control rounded-0" name="description" rows="4" placeholder="Description">{{old('description')}}</textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <input name="id" value="{{old('id')}}" type="hidden">

@@ -11,17 +11,21 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Date/Time Start</label>
-                    <input name="datestart" type="text" class="form-control" readonly>
+                    <input name="datestart" type="datetime-local" class="form-control" readonly>
                 </div>
 
                 <div class="form-group">
                     <label>Date/Time End</label>
-                    <input name="dateend" type="text" class="form-control" readonly>
+                    <input name="dateend" type="datetime-local" class="form-control" readonly>
                 </div>
 
                 <div class="form-group">
                     <label>Region</label>
-                    <input name="region" type="text" class="form-control" readonly>
+                    <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}" disabled>
+                        @foreach (App\Models\Psgc::where('level','Reg')->get() as $region)
+                        <option value="{{ $region->code }}" {{ old('region')==$region->code ? 'selected' : ''}}>{{ $region->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="form-group">

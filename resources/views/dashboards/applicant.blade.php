@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 <div class="row mt-5">
-                    <div class="col-12">
+                    <div class="col-12 mb-3">
                         @if($userProfile != '')
                         <button data-id="{{ Auth::id() }}" class="btn btn-outline-success btn-sm float-right btn-add-application">APPLY SCHOLARSHIP</button>
                         @endif
@@ -82,9 +82,10 @@
 
                 </div>
                 <div class="row mt-5">
-                    <div class="col-12">
+                    <div class="col-12 mb-3">
                         <h4>Financial Assistance</h4>
-
+                    </div>
+                    <div class="col-12">
                         <table id="paymentList" class="table table-sm table-hover table-responsive-lg">
                             <thead>
                                 <tr>
