@@ -13,6 +13,7 @@ use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -295,6 +296,9 @@ class DashboardController extends Controller
         $totalAdminCost = AdminCost::whereNull('user_id')->sum('amount');
         $totalGrantDisburse = AdminCost::whereNotNull('user_id')->sum('amount');
 
+        $adminCostsPerRegion = Regional::adminCost();
+        $grantsPerRegion = Regional::assistance();
+
         return view(
             'dashboards.executive',
             compact(
@@ -324,7 +328,9 @@ class DashboardController extends Controller
                 'numberOfHighSchool',
                 'numberOfElementary',
                 'totalAdminCost',
-                'totalGrantDisburse'
+                'totalGrantDisburse',
+                'adminCostsPerRegion',
+                'grantsPerRegion'
             )
         );
     }

@@ -46,6 +46,16 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <canvas id="expensesPerRegion"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
@@ -127,6 +137,66 @@
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+<script>
+    var ctx = document.getElementById('expensesPerRegion').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach($regions as $value)
+                '{{$value->name}}',
+                @endforeach
+            ],
+            datasets: [ { 
+                    label: 'Administrative Cost',
+                    data: [ @foreach($regions as $value)
+                                @foreach($adminCostsPerRegion as $chartData)
+                                    @if($chartData['region'].'0000000' ==  $value->code)
+                                        {{$chartData['sum']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+
+                }, { 
+                    label: 'Grant/Assistance',
+                    data: [ @foreach($regions as $value)
+                                @foreach($grantsPerRegion as $chartData)
+                                    @if($chartData['region'].'0000000' ==  $value->code)
+                                        {{$chartData['sum']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+
+                }, 
+            ]
+        },
+        options: {
+
+            title: {
+                display: true,
+                text: 'Total Administrative Cost and Grant/Assistance Per Region'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }]
+            }
+        }
+    });
+</script>
 
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');

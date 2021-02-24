@@ -15,17 +15,17 @@
     </div>
     <div class="card-body">
 
-        <table id="userList" class="table table-sm table-hover table-responsive-lg">
+        <table id="userList" class="table table-sm table-hover">
             <thead>
                 <tr>
-                    <th>Avatar</th>
-                    <th>Username</th>
-                    <th>Profile Name</th>
-                    <th>Email</th>
-                    <th>Region</th>
-                    <th>Role</th>
-                    <th>Date Registered</th>
-                    <th>Actions</th>
+                    <th class="align-middle">Avatar</th>
+                    <th class="align-middle">Username</th>
+                    <th class="align-middle">Profile Name</th>
+                    <th class="align-middle">Email</th>
+                    <th class="align-middle">Region</th>
+                    <th class="align-middle">Province</th>
+                    <th class="align-middle">Date Registered</th>
+                    <th class="align-middle">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,10 +45,8 @@
                     <td>{{ $user->email }}</td>
                     <td>{{ App\Models\Psgc::getRegion($user->region) }}</td>
                     <td>
-                        @if(!empty($user->getRoleNames()))
-                        @foreach($user->getRoleNames() as $userRole)
-                        <span class="badge badge-info">{{ $userRole }}</span><br>
-                        @endforeach
+                        @if(!empty($user->profile))
+                        {{ App\Models\Psgc::getProvince($user->profile->psgCode) }}
                         @endif
                     </td>
                     <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
@@ -56,9 +54,9 @@
 
                         @can('profile-edit')
                         @if(!empty($user->profile))
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @else
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 btn-edit-profile">Create Profile</button>
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 mb-1 btn-edit-profile">Create Profile</button>
                         @endif
                         @endcan
 

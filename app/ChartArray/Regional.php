@@ -2,6 +2,7 @@
 
 namespace App\ChartArray;
 
+use App\Models\AdminCost;
 use Illuminate\Support\Str;
 
 class Regional
@@ -71,5 +72,45 @@ class Regional
         }
 
         return $array;
+    }
+
+    static function adminCost()
+    {
+        $regionAdminCostArray = array();
+
+        for ($start = 1; $start <= 17; $start++) {
+            $region = $start <= 9 ?  '0' . $start : $start;
+
+            $totalAdminCost = AdminCost::whereNull('user_id')
+                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $region]])
+                ->sum('amount');
+
+            array_push($regionAdminCostArray, array(
+                'region' => $region,
+                'sum' => $totalAdminCost,
+            ));
+        }
+
+        return $regionAdminCostArray;
+    }
+
+    static function assistance()
+    {
+        $regionAdminCostArray = array();
+
+        for ($start = 1; $start <= 17; $start++) {
+            $region = $start <= 9 ?  '0' . $start : $start;
+
+            $totalAdminCost = AdminCost::whereNotNull('user_id')
+                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $region]])
+                ->sum('amount');
+
+            array_push($regionAdminCostArray, array(
+                'region' => $region,
+                'sum' => $totalAdminCost,
+            ));
+        }
+
+        return $regionAdminCostArray;
     }
 }
