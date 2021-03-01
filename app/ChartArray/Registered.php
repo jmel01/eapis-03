@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Registered
 {
-    static function whereProvide($data)
+    static function whereNotApplied($data)
     {
         $array = array();
 
@@ -24,6 +24,19 @@ class Registered
                         array_push($array, $value);
                     }
                 }
+            }
+        }
+
+        return $array;
+    }
+
+    static function whereProvince($data)
+    {
+        $array = array();
+
+        foreach ($data as $key => $value) {
+            if (isset($value->profile->psgCode) && substr($value->profile->psgCode, 0, 4) == substr(Auth::user()->profile->psgCode, 0, 4) || !isset($value->profile->psgCode)) {
+                array_push($array, $value);
             }
         }
 

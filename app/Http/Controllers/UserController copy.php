@@ -30,7 +30,8 @@ class UserController extends Controller
             ->orderBy('id', 'DESC')->get();
 
         $data = $userApplied->merge($userEnrolledByAdmin);
-        $data = Registered::whereNotApplied($data);
+        $data = Registered::whereProvide($data);
+        //$data = $data->where(Str::substr('profile.psgCode', 1, 4), Str::substr('128002007', 1, 4));
 
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
 
@@ -77,43 +78,54 @@ class UserController extends Controller
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             $data = User::with('profile')->orderBy('id', 'DESC')->get();
+
             $regions = Psgc::where('level', 'Reg')->get();
-            $roles = Role::pluck('name', 'name')->all();
-        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-            $data = User::with('profile')
-                ->where(function ($query) {
-                    $query->where('region', Auth::user()->region)
-                        ->orwhereNull('region');
-                })
-                ->where(function ($query) {
-                    $query->role(['Applicant', 'Regional Officer', 'Provincial Officer', 'Community Service Officer'])
-                        ->ordoesntHave('roles');
-                })
-                ->orderBy('id', 'DESC')
+            $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
 
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $userEnrolledByAdmin = User::with('profile')
+                ->role(['Applicant', 'Regional Officer', 'Provincial Officer', 'Community Service Officer'])
+                ->where('region', Auth::user()->region)
+                ->orderBy('id', 'DESC')->get();
+
+            $userApplied = User::with('profile')
+                ->whereNull('region')
+                ->doesntHave('roles')
+                ->orderBy('id', 'DESC')->get();
+
+            $data = $userApplied->merge($userEnrolledByAdmin);
+
             $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
 
             $roles = Role::where('name', '<>', 'Admin')
                 ->where('name', '<>', 'Executive Officer')
                 ->pluck('name', 'name')
                 ->all();
-        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $data = User::with('profile')
-                ->where(function ($query) {
-                    $query->where('region', Auth::user()->region)
-                        ->orwhereNull('region');
-                })
-                ->where(function ($query) {
-                    $query->role(['Applicant', 'Provincial Officer', 'Community Service Officer'])
-                        ->ordoesntHave('roles');
-                })
-                ->orderBy('id', 'DESC')
-                ->get();
+        } else {
+            $userEnrolledByAdmin = User::with('profile')
+                ->role(['Applicant', 'Provincial Officer', 'Community Service Officer'])
+                ->where('region', Auth::user()->region)
+                ->orderBy('id', 'DESC')->get();
 
-            $data = Registered::whereProvince($data);
+            $userApplied = User::with('profile')
+                ->whereNull('region')
+                ->doesntHave('roles')
+                ->orderBy('id', 'DESC')->get();
+
+            $data = $userApplied->merge($userEnrolledByAdmin);
 
             $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
 
             $roles = Role::where('name', '<>', 'Admin')
                 ->where('name', '<>', 'Executive Officer')
@@ -122,7 +134,7 @@ class UserController extends Controller
                 ->all();
         }
 
-        return view('users.index', compact('data',  'regions', 'roles'));
+        return view('users.index', compact('data', 'grants', 'regions', 'roles'));
     }
 
     /**
