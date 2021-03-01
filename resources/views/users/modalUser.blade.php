@@ -48,7 +48,7 @@
                     <div class="form-group">
                         <label>Select Role</label>
                         <div class="select2-primary">
-                            <select name="roles[]" class="form-control select2 {!! $errors->user->first('roles', 'is-invalid') !!}" multiple>
+                            <select name="roles[]" id="roles" class="form-control select2 {!! $errors->user->first('roles', 'is-invalid') !!}" multiple>
                                 @foreach ($roles as $role)
                                 <option value="{{ $role }}">{{ $role }}</option>
                                 @endforeach

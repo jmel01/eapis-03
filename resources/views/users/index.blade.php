@@ -114,7 +114,18 @@
                 $('[name="region"]').val(data.user.region)
                 $('[name="name"]').val(data.user.name)
                 $('[name="email"]').val(data.user.email)
-                $('[name="roles[]"]').val(data.user.roles)
+
+                var roles = $('#roles');
+
+                let selectArray = []
+
+                $.each(data.user.roles, (key, value) => {
+                    if (roles.find("option[value='" + value.name + "']").length) {
+                        selectArray.push(value.name)
+                    }
+                })
+
+                roles.val(selectArray).trigger('change');
 
                 $('#modalUser').modal('show')
             })

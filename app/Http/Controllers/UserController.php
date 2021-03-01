@@ -190,7 +190,6 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $userRole = $user->roles->pluck('name', 'name')->all();
-
         return response()->json(['user' => $user, 'userRole' => $userRole]);
     }
 
