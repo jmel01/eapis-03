@@ -19,17 +19,14 @@ class UserController extends Controller
 {
     public function newUser()
     {
-        $userApplied = User::with('profile')
-            ->with('application')
-            ->doesntHave('roles')
-            ->orderBy('id', 'DESC')->get();
+        $data = User::with('profile')
+            ->where(function ($query) {
+                $query->role(['Applicant'])
+                    ->ordoesntHave('roles');
+            })
+            ->orderBy('id', 'DESC')
+            ->get();
 
-        $userEnrolledByAdmin = User::with('profile')
-            ->with('application')
-            ->role('Applicant')
-            ->orderBy('id', 'DESC')->get();
-
-        $data = $userApplied->merge($userEnrolledByAdmin);
         $data = Registered::whereNotApplied($data);
 
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
@@ -38,19 +35,12 @@ class UserController extends Controller
             $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
-
-            $roles = Role::pluck('name', 'name')->all();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
                 ->where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
-
-            $roles = Role::where('name', '<>', 'Admin')
-                ->where('name', '<>', 'Executive Officer')
-                ->pluck('name', 'name')
-                ->all();
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
 
             $regions = Psgc::where('code', Auth::user()->region)->get();
@@ -58,14 +48,9 @@ class UserController extends Controller
                 ->where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
-
-            $roles = Role::where('name', '<>', 'Admin')
-                ->where('name', '<>', 'Executive Officer')
-                ->pluck('name', 'name')
-                ->all();
         }
 
-        return view('users.newUser', compact('data', 'grants', 'regions', 'roles'));
+        return view('users.newUser', compact('data', 'grants', 'regions'));
     }
 
     /**

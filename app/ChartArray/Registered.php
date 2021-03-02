@@ -16,16 +16,19 @@ class Registered
                 if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
                     array_push($array, $value);
                 } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-                    if ($value->region == Auth::user()->region) {
+                    if ($value->region == Auth::user()->region || $value->region == '') {
                         array_push($array, $value);
                     }
                 } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-                    if (isset($value->profile->psgCode) && substr($value->profile->psgCode, 0, 4) == substr(Auth::user()->profile->psgCode, 0, 4)) {
-                        array_push($array, $value);
+                    if ($value->region == Auth::user()->region || $value->region == '') {
+                        if (isset($value->profile->psgCode) && substr($value->profile->psgCode, 0, 4) == substr(Auth::user()->profile->psgCode, 0, 4) || !isset($value->profile)) {
+                            array_push($array, $value);
+                        }
                     }
                 }
             }
         }
+
 
         return $array;
     }

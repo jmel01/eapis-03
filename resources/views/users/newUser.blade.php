@@ -81,7 +81,6 @@
 @include('layouts.adminlte.modalDelete')
 @include('applications.modalApplication')
 @include('applications.modalApplicationNotAvailable')
-@include('users.modalUser')
 @include('profiles.modalProfile')
 
 @endsection
@@ -161,14 +160,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#modalApplication').modal('show');
-    });
-</script>
-@endif
-
-@if (count($errors->user) > 0)
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#modalUser').modal('show');
     });
 </script>
 @endif
