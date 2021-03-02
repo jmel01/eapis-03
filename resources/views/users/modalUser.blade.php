@@ -50,7 +50,7 @@
                         <div class="select2-primary">
                             <select name="roles[]" id="roles" class="form-control select2 {!! $errors->user->first('roles', 'is-invalid') !!}" multiple>
                                 @foreach ($roles as $role)
-                                <option value="{{ $role }}">{{ $role }}</option>
+                                <option value="{{ $role }}" {{ (collect(old('roles'))->contains($role)) ? 'selected':'' }}>{{ $role }}</option>
                                 @endforeach
                             </select>
                         </div>

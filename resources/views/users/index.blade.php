@@ -17,7 +17,7 @@
         @can('user-add')
         <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
         @endcan
-        <table id="userList" class="table table-sm table-hover table-responsive-lg">
+        <table id="userList" class="table table-sm table-hover">
             <thead>
                 <tr>
                     <th>Avatar</th>
@@ -62,11 +62,11 @@
                     <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
                     <td>
                         @can('user-edit')
-                        <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-user">Update</button>
+                        <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-user">Update</button>
                         @endcan
 
                         @can('user-delete')
-                        <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-user">Delete</button>
+                        <button data-url="{{ route('users.destroy', $user->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-user">Delete</button>
                         @endcan
 
                     </td>
@@ -140,15 +140,15 @@
 
         // Create DataTable
         var table = $('#userList').DataTable({
-            "fixedHeader": {
+            fixedHeader: {
                 header: true,
                 footer: true
             },
-            "lengthMenu": [
+            lengthMenu: [
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
-            "order": [],
+            order: [],
         });
     });
 </script>
