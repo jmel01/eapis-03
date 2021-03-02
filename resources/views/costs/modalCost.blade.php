@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Check No.</label>
+                        <label>Mode of Payment/Reference No.</label>
                         <input name="checkNo" type="text" value="{{old('checkNo')}}" class="form-control {{$errors->cost->first('checkNo') == null ? '' : 'is-invalid'}}">
                     </div>
 

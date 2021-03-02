@@ -18,7 +18,7 @@
                     <th>Payee</th>
                     <th>Date Received</th>
                     <th class="sum">Amount</th>
-                    <th>Check Number</th>
+                    <th>Mode of Payment/Reference No.</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
