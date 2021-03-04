@@ -19,6 +19,7 @@ class CreateSiblingsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
             $table->date('birthdate');
+            $table->string('civilStatus');
             $table->string('scholarship')->nullable();
             $table->string('course_year_level')->nullable();
             $table->string('present_status');

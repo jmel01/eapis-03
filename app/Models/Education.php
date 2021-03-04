@@ -31,7 +31,7 @@ class Education extends Model
     static function insert($request){
         Education::where('user_id', $request->id)->delete();
 
-        if(isset($request->schName)){
+        if(isset($request->schName) &&  $request->schName[0] != null){
             foreach($request->schName as $key => $value){
                 Education::create([
                     'user_id' => $request->id,
