@@ -38,6 +38,16 @@ class Application extends Model
         return $this->hasOne('App\Models\Profile','user_id','user_id');
     }
 
+    public function education()
+    {
+        return $this->hasMany('App\Models\Education','user_id','user_id')->orderBy('year_graduated','DESC');
+    }
+
+    public function sibling()
+    {
+        return $this->hasMany('App\Models\Siblings','user_id','user_id')->orderBy('birthdate','DESC');
+    }
+
     public function grant()
     {
         return $this->hasOne('App\Models\Grant','id','grant_id');

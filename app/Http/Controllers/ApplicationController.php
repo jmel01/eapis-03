@@ -11,6 +11,16 @@ use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
 {
+    public function applicationForm($id)
+    {
+        $data = Application::with('applicant')
+            ->with('education')
+            ->with('sibling')
+            ->where('user_id', $id)
+            ->first();
+        return view('applications.applicationForm', compact('data'));
+    }
+
     public function showAllApplication()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
