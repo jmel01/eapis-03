@@ -45,7 +45,7 @@ class Application extends Model
 
     public function sibling()
     {
-        return $this->hasMany('App\Models\Siblings','user_id','user_id')->orderBy('birthdate','DESC');
+        return $this->hasMany('App\Models\Siblings','user_id','user_id')->orderBy('birthdate','ASC');
     }
 
     public function grant()

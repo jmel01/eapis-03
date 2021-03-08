@@ -22,7 +22,7 @@
                     </a>
                 </li>
 
-                
+
 
                 @unlessrole('Applicant')
                 @can('grant-browse')

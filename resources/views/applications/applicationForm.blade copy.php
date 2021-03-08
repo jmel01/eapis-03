@@ -2,32 +2,21 @@
 @section('title', 'Application Form')
 
 @push('style')
-<style>
-    @media print {
-        * {
-            color: #000 !important;
-            /* Black prints faster: h5bp.com/s */
-            background-color: transparent !important;
-            box-shadow: none !important;
-            text-shadow: none !important;
-        }
-    }
-</style>
+
 @endpush
 @section('content')
 <div class="row">
-    <div class="col-3 mt-5">
+    <div class="col-4 mt-3">
         <img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />
     </div>
-    <div class="col-6">
+    <div class="col-4 mt-3">
         <p class="text-center">Republic of the Philippines<br>Office of the President<br>
             <strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>
-            6th and 7th Floor, Sunnymede IT Center<br>1614 Quezon Ave., Diliman 1103 Quezon City, Philippines.<br>
-            Telephone No.: (02) 572-1200<br><br>
+            6th and 7th Floor, Sunnymede IT Center, 1614 Quezon Ave., Diliman 1103 Quezon City, Philippines. (02) 572-1200<br><br>
             <strong>EDUCATIONAL ASSISTANCE/SCHOLARSHIP PROGRAM</strong><br>APPLICATION FORM
         </p>
     </div>
-    <div class="col-3">
+    <div class="col-4">
 
     </div>
 </div>
@@ -453,7 +442,7 @@
         </p>
         <p>
             This is to certify that I am not availing of any other government scholarship and all data supplied in this application are true and correct.
-            Any material misinterpretation or alteration made hereof shall be sufficient ground for this application to be denied.
+            Any material misinterpretation or alteration made hereof shall be sufficient ground for this application to be denied. 
             If chose, I will abide by the rules and regulations set forth by the National Commission on Indigenous Peoples.<br><br>
         </p>
         <p class="text-right">
