@@ -16,7 +16,7 @@ class ApplicationController extends Controller
         $data = Application::with('applicant')
             ->with('education')
             ->with('sibling')
-            ->where('user_id', $id)
+            ->where('id', $id)
             ->first();
         return view('applications.applicationForm', compact('data'));
     }

@@ -47,7 +47,7 @@
                 </tr>
                 <tr>
                     <td>Date of Filing:</td>
-                    <td>{{ $data->created_at }}</td>
+                    <td>{{$data->created_at->format('M. d, Y | h:i:s a')}}</td>
                 </tr>
                 <tr>
                     <td>Action Taken by CSC/PO:</td>
@@ -102,8 +102,8 @@
         <div class="form-group form-inline">
             <label class="font-weight-normal">Assistance applied for. Please check one (1): </label>
             <div class="form-check ml-3">
-                <input class="form-check-input" type="checkbox" @if ($data->level=='Post-Study') checked @endif>
-                <label class="form-check-label">Post-Study</label>
+                <input class="form-check-input" type="checkbox" @if ($data->level=='Post Study') checked @endif>
+                <label class="form-check-label">Post Study</label>
             </div>
             <div class="form-check ml-3">
                 <input class="form-check-input" type="checkbox" @if ($data->level=='College') checked @endif>
@@ -436,12 +436,12 @@
         </p>
         <div class="form-group">
             <p>What possible contribution/s that you may extend to your community or fellow ICCs/IPs while studying</p>
-            <textarea rows="5" class="form-control">{{ $data->contribution }}</textarea>
+            <textarea rows="5" class="form-control" readonly>{{ $data->contribution }}</textarea>
         </div>
 
         <div class="form-group">
             <p>What are your plans after graduation?</p>
-            <textarea name="plans" rows="5" class="form-control">{{ $data->contribution }}</textarea>
+            <textarea name="plans" rows="5" class="form-control" readonly>{{ $data->contribution }}</textarea>
         </div>
     </div>
 </div>
