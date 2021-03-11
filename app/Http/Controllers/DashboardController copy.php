@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\ChartArray\ChartOrganization;
 use App\ChartArray\Regional;
 use App\Models\AdminCost;
 use App\Models\Application;
@@ -23,7 +22,7 @@ use Spatie\Activitylog\Models\Activity;
 
 class DashboardController extends Controller
 {
-    public function admin(Request $request)
+    public function admin()
     {
         $data = Calendar::orderBy('dateTimeStart', 'DESC')->get();
         $regions = Psgc::where('level', 'Reg')->get();
@@ -341,8 +340,52 @@ class DashboardController extends Controller
         $data = Calendar::where('region', Auth::user()->region)
             ->orderBy('dateTimeStart', 'DESC')->get();
 
-        $regionId = Auth::user()->region;
-        $datas = ChartOrganization::regionChartOne(Str::substr($regionId, 0, 2));
+        $regionId = Str::substr(Auth::user()->region, 0, 2);
+
+        $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Prov']])
+            ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $regionId], ['level', 'Dist']])
+            ->get();
+
+        $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])->get();
+        $chartDataAll = Regional::provincesApplicant($provinces, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::provincesApplicant($provinces, $userProfileNew);
+
+        $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Approved')
+            ->get();
+        $chartDataApproved = Regional::provincesApplicant($provinces, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'On Process')
+            ->get();
+
+        $chartDataOnProcess = Regional::provincesApplicant($provinces, $userProfileOnProcess);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::provincesApplicant($provinces, $userProfileGraduated);
+
+        $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-FSD')
+            ->orWhere('status', 'Terminated-FG')
+            ->orWhere('status', 'Terminated-DS')
+            ->orWhere('status', 'Terminated-NE')
+            ->orWhere('status', 'Terminated-FPD')
+            ->orWhere('status', 'Terminated-EOGS')
+            ->orWhere('status', 'Terminated-Others')
+            ->get();
+        $chartDataTerminated = Regional::provincesApplicant($provinces, $userProfileTerminated);
 
         $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
@@ -450,6 +493,13 @@ class DashboardController extends Controller
             'dashboards.regional',
             compact(
                 'data',
+                'provinces',
+                'chartDataAll',
+                'chartDataNew',
+                'chartDataApproved',
+                'chartDataOnProcess',
+                'chartDataTerminated',
+                'chartDataGraduated',
                 'terminatedFSD',
                 'terminatedFG',
                 'terminatedDS',
@@ -468,8 +518,8 @@ class DashboardController extends Controller
                 'numberOfHighSchool',
                 'numberOfElementary',
                 'totalAdminCost',
-                'totalGrantDisburse',
-            ), $datas
+                'totalGrantDisburse'
+            )
         );
     }
 
@@ -489,7 +539,52 @@ class DashboardController extends Controller
             ->orderBy('dateTimeStart', 'DESC')->get();
 
         $provinceId = Str::substr(Auth::user()->profile->psgCode, 0, 4);
-        $datas = ChartOrganization::provinceChartOne($provinceId);
+
+        $cities = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'City']])
+            ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'Mun']])
+            ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=', $provinceId], ['level', 'SubMun']])
+            ->get();
+
+        $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])->get();
+        $chartDataAll = Regional::citiesApplicant($cities, $userProfile);
+
+        $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'New')
+            ->get();
+        $chartDataNew = Regional::citiesApplicant($cities, $userProfileNew);
+
+        $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Approved')
+            ->get();
+        $chartDataApproved = Regional::citiesApplicant($cities, $userProfileApproved);
+
+        $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'On Process')
+            ->get();
+
+        $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
+
+        $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Graduated')
+            ->get();
+        $chartDataGraduated = Regional::citiesApplicant($cities, $userProfileGraduated);
+
+        $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FSD')
+            ->orWhere('status', 'Terminated-FG')
+            ->orWhere('status', 'Terminated-DS')
+            ->orWhere('status', 'Terminated-NE')
+            ->orWhere('status', 'Terminated-FPD')
+            ->orWhere('status', 'Terminated-EOGS')
+            ->orWhere('status', 'Terminated-Others')
+            ->get();
+        $chartDataTerminated = Regional::citiesApplicant($cities, $userProfileTerminated);
 
         $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[\DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
@@ -595,6 +690,13 @@ class DashboardController extends Controller
 
         return view('dashboards.provincial', compact(
             'data',
+            'cities',
+            'chartDataAll',
+            'chartDataNew',
+            'chartDataOnProcess',
+            'chartDataApproved',
+            'chartDataGraduated',
+            'chartDataTerminated',
             'terminatedFSD',
             'terminatedFG',
             'terminatedDS',
@@ -614,7 +716,7 @@ class DashboardController extends Controller
             'numberOfElementary',
             'totalAdminCost',
             'totalGrantDisburse'
-        ), $datas);
+        ));
     }
 
     public function communityOfficer()
@@ -969,23 +1071,4 @@ class DashboardController extends Controller
         return redirect()->back()->with($notification);
     }
 
-    public function filterChart(Request $request){
-        switch($request->type){
-            case 'region':
-                $datas = ChartOrganization::regionChartOne(Str::substr($request->regionId, 0, 2), $request->dateFrom, $request->dateTo);
-            break;
-
-            case 'province':
-                $datas = ChartOrganization::provinceChartOne(Str::substr($request->provinceId, 0, 4), $request->dateFrom, $request->dateTo);
-            break;
-
-            case 'city':
-                $datas = ChartOrganization::cityChartOne(Str::substr($request->cityId, 0, 6), $request->dateFrom, $request->dateTo);
-            break;
-        }
-
-        return response()->json([
-            'myChartOne' => view('dashboards.charts.my-chart', $datas)->render()
-        ]);
-    }
 }

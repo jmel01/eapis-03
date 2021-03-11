@@ -74,6 +74,28 @@ class Regional
         return $array;
     }
 
+    static function barangaysApplicant($barangays, $userProfiles)
+    {
+        $array = array();
+
+        foreach ($barangays as $brgy) {
+            $count = 0;
+
+            foreach ($userProfiles as $userProfile) {
+                if ($brgy->code == $userProfile->psgCode) {
+                    $count++;
+                }
+            }
+
+            array_push($array, array(
+                'code' => $brgy->code,
+                'count' => $count
+            ));
+        }
+
+        return $array;
+    }
+
     static function adminCost()
     {
         $regionAdminCostArray = array();
