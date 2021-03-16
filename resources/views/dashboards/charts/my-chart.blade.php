@@ -107,7 +107,7 @@
 
                 title: {
                     display: true,
-                    text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Region'
+                    text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Province/District'
                 },
                 scales: {
                     yAxes: [{
@@ -226,7 +226,7 @@
 
             title: {
                 display: true,
-                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Province'
+                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per City/Municipality'
             },
             scales: {
                 yAxes: [{
@@ -345,7 +345,7 @@
 
             title: {
                 display: true,
-                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per City'
+                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Barangay'
             },
             scales: {
                 yAxes: [{

@@ -532,7 +532,7 @@ var myChart3 = new Chart(ctx, {
 
             title: {
                 display: true,
-                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Province'
+                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Region'
             },
             scales: {
                 yAxes: [{
