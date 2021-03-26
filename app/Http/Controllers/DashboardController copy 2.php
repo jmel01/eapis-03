@@ -62,16 +62,6 @@ class DashboardController extends Controller
             ->get();
         $chartDataTerminated = Regional::regionsApplicant($regions, $userProfileTerminated);
 
-        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-            ->where('gender', 'Male')
-            ->where('status', 'Approved')
-            ->count();
-
-        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-            ->where('gender', 'Female')
-            ->where('status', 'Approved')
-            ->count();
-
         $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('status', 'Terminated-FSD')
             ->count();
@@ -100,7 +90,15 @@ class DashboardController extends Controller
             ->where('status', 'Terminated-Others')
             ->count();
 
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('gender', 'Male')
+            ->where('status', 'Approved')
+            ->count();
 
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where('gender', 'Female')
+            ->where('status', 'Approved')
+            ->count();
 
         $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where('type', 'Regular')
@@ -156,6 +154,15 @@ class DashboardController extends Controller
                 'chartDataOnProcess',
                 'chartDataTerminated',
                 'chartDataGraduated',
+                'terminatedFSD',
+                'terminatedFG',
+                'terminatedDS',
+                'terminatedNE',
+                'terminatedFPD',
+                'terminatedEOGS',
+                'terminatedOthers',
+                'numberOfMales',
+                'numberOfFemales',
                 'numberOfEAP',
                 'numberOfMerit',
                 'numberOfPAMANA',
@@ -164,15 +171,6 @@ class DashboardController extends Controller
                 'numberOfVocational',
                 'numberOfHighSchool',
                 'numberOfElementary',
-                'numberOfMales',
-                'numberOfFemales',
-                'terminatedFSD',
-                'terminatedFG',
-                'terminatedDS',
-                'terminatedNE',
-                'terminatedFPD',
-                'terminatedEOGS',
-                'terminatedOthers',                
                 'totalAdminCost',
                 'totalGrantDisburse'
             )
@@ -503,6 +501,15 @@ class DashboardController extends Controller
                 'chartDataOnProcess',
                 'chartDataTerminated',
                 'chartDataGraduated',
+                'terminatedFSD',
+                'terminatedFG',
+                'terminatedDS',
+                'terminatedNE',
+                'terminatedFPD',
+                'terminatedEOGS',
+                'terminatedOthers',
+                'numberOfMales',
+                'numberOfFemales',
                 'numberOfEAP',
                 'numberOfMerit',
                 'numberOfPAMANA',
@@ -511,18 +518,9 @@ class DashboardController extends Controller
                 'numberOfVocational',
                 'numberOfHighSchool',
                 'numberOfElementary',
-                'numberOfMales',
-                'numberOfFemales',
-                'terminatedFSD',
-                'terminatedFG',
-                'terminatedDS',
-                'terminatedNE',
-                'terminatedFPD',
-                'terminatedEOGS',
-                'terminatedOthers',
                 'totalAdminCost',
-                'totalGrantDisburse',
-            )
+                'totalGrantDisburse'
+            )            
         );
     }
 
@@ -1026,25 +1024,20 @@ class DashboardController extends Controller
     {
         switch ($request->type) {
             case 'region':
-                $datas = ChartOrganization::regionChartOne(Str::substr($request->geoCovered, 0, 2), $request->dateFrom, $request->dateTo);
+                $datas = ChartOrganization::regionChartOne(Str::substr($request->regionId, 0, 2), $request->dateFrom, $request->dateTo);
                 break;
 
             case 'province':
-                $datas = ChartOrganization::provinceChartOne(Str::substr($request->geoCovered, 0, 4), $request->dateFrom, $request->dateTo);
+                $datas = ChartOrganization::provinceChartOne(Str::substr($request->provinceId, 0, 4), $request->dateFrom, $request->dateTo);
                 break;
 
             case 'city':
-                $datas = ChartOrganization::cityChartOne(Str::substr($request->geoCovered, 0, 6), $request->dateFrom, $request->dateTo);
+                $datas = ChartOrganization::cityChartOne(Str::substr($request->cityId, 0, 6), $request->dateFrom, $request->dateTo);
                 break;
         }
 
         return response()->json([
-            'ChartExpenses' => view('dashboards.charts.expenses', $datas)->render(),
-            'ChartOne' => view('dashboards.charts.my-chart', $datas)->render(),
-            'ChartTwo' => view('dashboards.charts.my-chart2', $datas)->render(),
-            'ChartThree' => view('dashboards.charts.my-chart3', $datas)->render(),
-            'ChartFour' => view('dashboards.charts.my-chart4', $datas)->render(),
-            'ChartFive' => view('dashboards.charts.my-chart5', $datas)->render()
+            'myChartOne' => view('dashboards.charts.my-chart', $datas)->render()
         ]);
     }
 }

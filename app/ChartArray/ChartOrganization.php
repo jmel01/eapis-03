@@ -2,6 +2,7 @@
 
 namespace App\ChartArray;
 
+use App\Models\AdminCost;
 use App\Models\Application;
 use App\Models\Psgc;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,6 @@ class ChartOrganization
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -33,7 +33,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('status', 'New')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -45,7 +44,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('status', 'Approved')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -57,7 +55,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('status', 'On Process')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -70,7 +67,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
             ->where('status', 'Graduated')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -90,7 +86,6 @@ class ChartOrganization
                     ->orWhere('status', 'Terminated-Others');
             })
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -99,15 +94,221 @@ class ChartOrganization
 
         $chartDataTerminated = Regional::provincesApplicant($provinces, $userProfileTerminated);
 
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('type', 'Regular')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('type', 'PDAF')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('level', 'Post Study')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('level', 'College')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('level', 'Vocational')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('level', 'High School')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('level', 'Elementary')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('gender', 'Male')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('gender', 'Female')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-FSD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-FG')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-DS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-NE')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-FPD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-EOGS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[\DB::raw('substr(profiles.psgCode, 1, 2)'), '=', $regionId]])
+            ->where('status', 'Terminated-Others')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->sum('amount');
+
         return [
             'type' => 'region',
-            'provinces' => $provinces,
+            'zone' => $provinces,
             'chartDataAll' => $chartDataAll,
             'chartDataNew' => $chartDataNew,
             'chartDataApproved' => $chartDataApproved,
             'chartDataOnProcess' => $chartDataOnProcess,
             'chartDataGraduated' => $chartDataGraduated,
             'chartDataTerminated' => $chartDataTerminated,
+            'numberOfEAP' => $numberOfEAP,
+            'numberOfMerit' => $numberOfMerit,
+            'numberOfPAMANA' => $numberOfPAMANA,
+            'numberOfPostStudy' => $numberOfPostStudy,
+            'numberOfCollege' => $numberOfCollege,
+            'numberOfVocational' => $numberOfVocational,
+            'numberOfHighSchool' => $numberOfHighSchool,
+            'numberOfElementary' => $numberOfElementary,
+            'numberOfMales' => $numberOfMales,
+            'numberOfFemales' => $numberOfFemales,
+            'terminatedFSD' => $terminatedFSD,
+            'terminatedFG' => $terminatedFG,
+            'terminatedDS' => $terminatedDS,
+            'terminatedNE' => $terminatedNE,
+            'terminatedFPD' => $terminatedFPD,
+            'terminatedEOGS' => $terminatedEOGS,
+            'terminatedOthers' => $terminatedOthers,
+            'totalAdminCost' => $totalAdminCost,
+            'totalGrantDisburse' => $totalGrantDisburse,
         ];
     }
 
@@ -159,15 +360,221 @@ class ChartOrganization
             ->get();
         $chartDataTerminated = Regional::citiesApplicant($cities, $userProfileTerminated);
 
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Regular')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('type', 'PDAF')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Post Study')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'College')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Vocational')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'High School')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('level', 'Elementary')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Male')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('gender', 'Female')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FSD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FG')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-DS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-NE')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-FPD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-EOGS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where('status', 'Terminated-Others')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->sum('amount');
+
         return [
             'type' => 'province',
-            'cities' => $cities,
+            'zone' => $cities,
             'chartDataAll' => $chartDataAll,
             'chartDataNew' => $chartDataNew,
             'chartDataApproved' => $chartDataApproved,
             'chartDataOnProcess' => $chartDataOnProcess,
             'chartDataGraduated' => $chartDataGraduated,
             'chartDataTerminated' => $chartDataTerminated,
+            'numberOfEAP' => $numberOfEAP,
+            'numberOfMerit' => $numberOfMerit,
+            'numberOfPAMANA' => $numberOfPAMANA,
+            'numberOfPostStudy' => $numberOfPostStudy,
+            'numberOfCollege' => $numberOfCollege,
+            'numberOfVocational' => $numberOfVocational,
+            'numberOfHighSchool' => $numberOfHighSchool,
+            'numberOfElementary' => $numberOfElementary,
+            'numberOfMales' => $numberOfMales,
+            'numberOfFemales' => $numberOfFemales,
+            'terminatedFSD' => $terminatedFSD,
+            'terminatedFG' => $terminatedFG,
+            'terminatedDS' => $terminatedDS,
+            'terminatedNE' => $terminatedNE,
+            'terminatedFPD' => $terminatedFPD,
+            'terminatedEOGS' => $terminatedEOGS,
+            'terminatedOthers' => $terminatedOthers,
+            'totalAdminCost' => $totalAdminCost,
+            'totalGrantDisburse' => $totalGrantDisburse,
         ];
     }
 
@@ -258,15 +665,221 @@ class ChartOrganization
 
         $chartDataTerminated = Regional::barangaysApplicant($barangays, $userProfileTerminated);
 
+        $numberOfEAP = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('type', 'Regular')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMerit = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('type', 'Merit-Based')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPAMANA = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('type', 'PDAF')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfPostStudy = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('level', 'Post Study')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfCollege = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('level', 'College')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfVocational = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('level', 'Vocational')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfHighSchool = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('level', 'High School')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfElementary = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('level', 'Elementary')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfMales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('gender', 'Male')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $numberOfFemales = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('gender', 'Female')
+            ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFSD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-FSD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFG = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-FG')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedDS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-DS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedNE = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-NE')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedFPD = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-FPD')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedEOGS = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-EOGS')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $terminatedOthers = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
+            ->where('status', 'Terminated-Others')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->count();
+
+        $totalAdminCost = AdminCost::whereNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', substr($cityId, 0, 4)]])
+            ->sum('amount');
+        $totalGrantDisburse = AdminCost::whereNotNull('user_id')
+            ->where([[\DB::raw('substr(province, 1, 4)'), '=', substr($cityId, 0, 4)]])
+            ->sum('amount');
+
         return [
             'type' => 'city',
-            'barangays' => $barangays,
+            'zone' => $barangays,
             'chartDataAll' => $chartDataAll,
             'chartDataNew' => $chartDataNew,
             'chartDataApproved' => $chartDataApproved,
             'chartDataOnProcess' => $chartDataOnProcess,
             'chartDataGraduated' => $chartDataGraduated,
             'chartDataTerminated' => $chartDataTerminated,
+            'numberOfEAP' => $numberOfEAP,
+            'numberOfMerit' => $numberOfMerit,
+            'numberOfPAMANA' => $numberOfPAMANA,
+            'numberOfPostStudy' => $numberOfPostStudy,
+            'numberOfCollege' => $numberOfCollege,
+            'numberOfVocational' => $numberOfVocational,
+            'numberOfHighSchool' => $numberOfHighSchool,
+            'numberOfElementary' => $numberOfElementary,
+            'numberOfMales' => $numberOfMales,
+            'numberOfFemales' => $numberOfFemales,
+            'terminatedFSD' => $terminatedFSD,
+            'terminatedFG' => $terminatedFG,
+            'terminatedDS' => $terminatedDS,
+            'terminatedNE' => $terminatedNE,
+            'terminatedFPD' => $terminatedFPD,
+            'terminatedEOGS' => $terminatedEOGS,
+            'terminatedOthers' => $terminatedOthers,
+            'totalAdminCost' => $totalAdminCost,
+            'totalGrantDisburse' => $totalGrantDisburse,
         ];
     }
 }

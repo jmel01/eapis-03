@@ -58,14 +58,17 @@
                                     </div>
 
                                     <div class="col-md-4">
+
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row chart-expenses">
+                <div class="row">
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
@@ -95,7 +98,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body chart-one">
+                            <div class="card-body my-chart-one">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
@@ -105,7 +108,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-body chart-two">
+                            <div class="card-body">
                                 <canvas id="myChart2"></canvas>
                             </div>
                         </div>
@@ -113,7 +116,7 @@
 
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-body chart-three">
+                            <div class="card-body">
                                 <canvas id="myChart3"></canvas>
                             </div>
                         </div>
@@ -123,7 +126,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-body chart-four">
+                            <div class="card-body">
                                 <canvas id="myChart4"></canvas>
                             </div>
                         </div>
@@ -131,7 +134,7 @@
 
                     <div class="col-md-6">
                         <div class="card">
-                            <div class="card-body chart-five">
+                            <div class="card-body">
                                 <canvas id="myChart5"></canvas>
                             </div>
                         </div>
@@ -177,6 +180,45 @@
 
 @push('scripts')
 @include('psgc.scriptPsgc')
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+
+<script>
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    var myChart2 = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Regular EAP', 'Merit-based', 'PAMANA'],
+            datasets: [{
+                label: '# of Votes',
+                data: [{{ $numberOfEAP }}, {{ $numberOfMerit }}, {{ $numberOfPAMANA }}],
+
+                backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderColor: ['rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Number of Grantee per Type of Scholarship/Grant'
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true
+            }
+        }
+    });
+</script>
+
 
 <script>
     $('#region').change(function() {
@@ -212,7 +254,7 @@
             geoCovered = regionId
             
         }
-
+alert(type)
         $.ajax({
             url: '/dashboard/filter-chart',
             data: {
@@ -223,169 +265,74 @@
             },
             type: 'GET'
         }).done(result => {
-            
-            $('.chart-expenses').empty()
-            $('.chart-expenses').append(result.ChartExpenses)
-            $('.chart-one').empty()
-            $('.chart-one').append(result.ChartOne)
-            $('.chart-two').empty()
-            $('.chart-two').append(result.ChartTwo)
-            $('.chart-three').empty()
-            $('.chart-three').append(result.ChartThree)
-            $('.chart-four').empty()
-            $('.chart-four').append(result.ChartFour)
-            $('.chart-five').empty()
-            $('.chart-five').append(result.ChartFive)
-            
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
         })
         return false
     })
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    /* $('#region').change(function() {
+        let regionId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
 
-<script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                @foreach($regions as $value)
-                '{{$value->name}}',
-                @endforeach
-            ],
-            datasets: [{
-                    label: 'New Applicant',
-                    data: [@foreach($regions as $value)
-                            @foreach($chartDataNew as $chartData)
-                                @if($chartData['code'] == $value->code) 
-                                    {{ $chartData['count'] }},
-                                @endif
-                            @endforeach
-                        @endforeach],
-
-                    backgroundColor: 'rgba(106, 90, 205, 1)',
-                    borderColor: 'rgba(106, 90, 205, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'On Process',
-                    data: [@foreach($regions as $value)
-                            @foreach($chartDataOnProcess as $chartData)
-                                @if($chartData['code'] == $value->code) 
-                                    {{ $chartData['count'] }},
-                                @endif
-                            @endforeach
-                        @endforeach],
-
-                    backgroundColor: 'rgba(255, 206, 86, 1)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'Grantee',
-                    data: [@foreach($regions as $value)
-                            @foreach($chartDataApproved as $chartData)
-                                @if($chartData['code'] == $value->code) 
-                                    {{ $chartData['count'] }},
-                                @endif
-                            @endforeach
-                        @endforeach],
-
-                    backgroundColor: 'rgba(75, 192, 192, 1)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }, {
-                    label: 'Terminated',
-                    data: [@foreach($regions as $value)
-                            @foreach($chartDataTerminated as $chartData)
-                                @if($chartData['code'] == $value->code) 
-                                    {{ $chartData['count'] }},
-                                @endif
-                            @endforeach
-                        @endforeach],
-
-                    backgroundColor: 'rgba(255, 99, 132, 1)',
-                    borderColor: 'rgba(255, 99, 132,1)',
-                    borderWidth: 1
-
-                }, {
-                    label: 'Graduated',
-                    data: [@foreach($regions as $value)
-                        @foreach($chartDataGraduated as $chartData)
-                        @if($chartData['code'] == $value->code)
-                            {{ $chartData['count'] }},
-                        @endif
-                        @endforeach
-                        @endforeach],
-
-                    backgroundColor: 'rgba(54, 162, 235, 1)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-
-                }, {
-                    label: 'Total Number of Applicant',
-                    data: [@foreach($regions as $value)
-                            @foreach($chartDataAll as $chartData)
-                                @if($chartData['code'] == $value->code)
-                                    {{ $chartData['count'] }},
-                                @endif
-                            @endforeach
-                        @endforeach],
-
-                    type: 'line',
-                    backgroundColor: 'rgba(244, 246, 249, 1)',
-                    borderColor: 'rgba(52, 58, 64, 0.5)',
-                    borderWidth: 1
-                },]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Region'
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {
+                regionId: regionId,
+                type: 'region',
+                dateFrom: dateFrom,
+                dateTo: dateTo
             },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                    }
-                }]
-            }
-        }
-    });
-</script>
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    })
 
-<script>
-    var ctx = document.getElementById('myChart2').getContext('2d');
-    var myChart2 = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: ['Regular EAP', 'Merit-based', 'PAMANA'],
-            datasets: [{
-                label: '# of Votes',
-                data: [{{ $numberOfEAP }}, {{ $numberOfMerit }}, {{ $numberOfPAMANA }}],
+    $('#province').change(function() {
+        let provinceId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
 
-                backgroundColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderColor: ['rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ]
-            }]
-        },
-        options: {
-            responsive: true,
-            title: {
-                display: true,
-                text: 'Number of Grantee per Type of Scholarship/Grant'
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {
+                provinceId: provinceId,
+                type: 'province',
+                dateFrom: dateFrom,
+                dateTo: dateTo
             },
-            animation: {
-                animateRotate: true,
-                animateScale: true
-            }
-        }
-    });
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    })
+
+    $('#city').change(function() {
+        let cityId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
+
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {
+                cityId: cityId,
+                type: 'city',
+                dateFrom: dateFrom,
+                dateTo: dateTo
+            },
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    }) */
 </script>
 
 <script>
@@ -536,6 +483,114 @@
     });
 </script>
 
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach($regions as $value)
+                '{{$value->name}}',
+                @endforeach
+            ],
+            datasets: [{
+                    label: 'New Applicant',
+                    data: [@foreach($regions as $value)
+                            @foreach($chartDataNew as $chartData)
+                                @if($chartData['code'] == $value->code) 
+                                    {{ $chartData['count'] }},
+                                @endif
+                            @endforeach
+                        @endforeach],
+
+                    backgroundColor: 'rgba(106, 90, 205, 1)',
+                    borderColor: 'rgba(106, 90, 205, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'On Process',
+                    data: [@foreach($regions as $value)
+                            @foreach($chartDataOnProcess as $chartData)
+                                @if($chartData['code'] == $value->code) 
+                                    {{ $chartData['count'] }},
+                                @endif
+                            @endforeach
+                        @endforeach],
+
+                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Grantee',
+                    data: [@foreach($regions as $value)
+                            @foreach($chartDataApproved as $chartData)
+                                @if($chartData['code'] == $value->code) 
+                                    {{ $chartData['count'] }},
+                                @endif
+                            @endforeach
+                        @endforeach],
+
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }, {
+                    label: 'Terminated',
+                    data: [@foreach($regions as $value)
+                            @foreach($chartDataTerminated as $chartData)
+                                @if($chartData['code'] == $value->code) 
+                                    {{ $chartData['count'] }},
+                                @endif
+                            @endforeach
+                        @endforeach],
+
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    borderColor: 'rgba(255, 99, 132,1)',
+                    borderWidth: 1
+
+                }, {
+                    label: 'Graduated',
+                    data: [@foreach($regions as $value)
+                        @foreach($chartDataGraduated as $chartData)
+                        @if($chartData['code'] == $value->code)
+                            {{ $chartData['count'] }},
+                        @endif
+                        @endforeach
+                        @endforeach],
+
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+
+                }, {
+                    label: 'Total Number of Applicant',
+                    data: [@foreach($regions as $value)
+                            @foreach($chartDataAll as $chartData)
+                                @if($chartData['code'] == $value->code)
+                                    {{ $chartData['count'] }},
+                                @endif
+                            @endforeach
+                        @endforeach],
+
+                    type: 'line',
+                    backgroundColor: 'rgba(244, 246, 249, 1)',
+                    borderColor: 'rgba(52, 58, 64, 0.5)',
+                    borderWidth: 1
+                },]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Region'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }]
+            }
+        }
+    });
+</script>
 <script src="{{ asset('/js/full-calendar.js') }}"></script>
 @include('calendars.scriptCalendarApplicant')
 

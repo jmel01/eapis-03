@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'Provincial Officer Dashboard')
+@section('title', 'Admin Dashboard')
 
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">
@@ -16,7 +16,60 @@
         <div class="row">
             <div class="col-12 col-md-12 col-lg-9 order-2 order-md-1">
                 <div class="row">
-                <div class="col-12 col-sm-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label>Region</label>
+                                        <select name="region" id="region" class="form-control {!! $errors->profile->first('region', 'is-invalid') !!}" required>
+                                            <option value="" selected>Select Region</option>
+                                            @foreach ($regions as $allRegion)
+                                            <option {{isset($region->code) ? $region->code == $allRegion->code ? 'selected' : '' : ''}} value="{{ $allRegion->code }}" {{ old('region')==$allRegion->code ? 'selected' : ''}}>
+                                                {{ $allRegion->name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>Province/District</label>
+                                        <input type="hidden" id="provinceCode" value="{{$province->code ?? ''}}">
+                                        <select name="province" id="province" class="form-control {!! $errors->profile->first('province', 'is-invalid') !!}" required></select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <input type="hidden" id="cityCode" value="{{$city->code ?? ''}}">
+                                        <label>City/Municipality/Sub-Municipality</label>
+                                        <select name="city" id="city" class="form-control {!! $errors->profile->first('city', 'is-invalid') !!}" required></select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label>Date From</label>
+                                        <input type="date" id="filterDateFrom" class="form-control">
+                                    </div>
+                                   
+
+                                    <div class="form-group col-md-4">
+                                        <label>Date To</label>
+                                        <input type="date" id="filterDateTo" class="form-control">
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        
+                                    </div>
+                                </div>
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
                                 <span class="info-box-text text-center text-muted">Total Disbursement</span>
@@ -45,7 +98,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-body">
+                            <div class="card-body my-chart-one">
                                 <canvas id="myChart"></canvas>
                             </div>
                         </div>
@@ -126,126 +179,10 @@
 @endsection
 
 @push('scripts')
+@include('psgc.scriptPsgc')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
-<script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                @foreach($zone as $value)
-                '{{$value->name}}',
-                @endforeach
-            ],
-            datasets: [ { 
-                    label: 'New Applicant',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataNew as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
 
-                    backgroundColor: 'rgba(106, 90, 205, 0.2)',
-                    borderColor: 'rgba(106, 90, 205, 1)',
-                    borderWidth: 1
-
-                }, { 
-                    label: 'On Process',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataOnProcess as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
-
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    borderWidth: 1
-
-                }, { 
-                    label: 'Grantee',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataApproved as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
-
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-
-                }, {
-                    label: 'Terminated',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataTerminated as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132,1)',
-                    borderWidth: 1
-
-                }, { 
-                    label: 'Graduated',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataGraduated as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
-
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-
-                }, {
-                    label: 'Total Number of Applicant',
-                    data: [ @foreach($zone as $value)
-                                @foreach($chartDataAll as $chartData)
-                                    @if($chartData['code'] ==  $value->code)
-                                        {{$chartData['count']}},
-                                    @endif
-                                @endforeach
-                            @endforeach
-                        ],
-                    type: 'line',
-                    backgroundColor: 'rgba(244, 246, 249, 1)',
-                    borderColor: 'rgba(52, 58, 64, 0.5)',
-                    borderWidth: 1
-                },
-
-            ]
-        },
-        options: {
-
-            title: {
-                display: true,
-                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Province'
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                    }
-                }]
-            }
-        }
-    });
-</script>
 
 <script>
     var ctx = document.getElementById('myChart2').getContext('2d');
@@ -287,6 +224,56 @@
     });
 </script>
 
+
+<script>
+    $('#region').change(function(){
+        let regionId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
+
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {regionId: regionId, type: 'region', dateFrom: dateFrom, dateTo: dateTo},
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    })
+
+    $('#province').change(function(){
+        let provinceId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
+
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {provinceId: provinceId, type: 'province', dateFrom: dateFrom, dateTo: dateTo},
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    })
+
+    $('#city').change(function(){
+        let cityId = $(this).val()
+        let dateFrom = $('#filterDateFrom').val()
+        let dateTo = $('#filterDateTo').val()
+        
+        $.ajax({
+            url: '/dashboard/filter-chart',
+            data: {cityId: cityId, type: 'city', dateFrom: dateFrom, dateTo: dateTo},
+            type: 'GET'
+        }).done(result => {
+            $('.my-chart-one').empty()
+            $('.my-chart-one').append(result.myChartOne)
+        })
+        return false
+    })
+</script>
 
 <script>
 var ctx = document.getElementById('myChart3').getContext('2d');
@@ -439,6 +426,124 @@ var myChart3 = new Chart(ctx, {
     });
 </script>
 
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                @foreach($regions as $value)
+                '{{$value->name}}',
+                @endforeach
+            ],
+            datasets: [ { 
+                    label: 'New Applicant',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataNew as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(106, 90, 205, 1)',
+                    borderColor: 'rgba(106, 90, 205, 1)',
+                    borderWidth: 1
+
+                }, { 
+                    label: 'On Process',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataOnProcess as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(255, 206, 86, 1)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1
+
+                }, { 
+                    label: 'Grantee',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataApproved as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+
+                }, {
+                    label: 'Terminated',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataTerminated as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+                    backgroundColor: 'rgba(255, 99, 132, 1)',
+                    borderColor: 'rgba(255, 99, 132,1)',
+                    borderWidth: 1
+
+                }, { 
+                    label: 'Graduated',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataGraduated as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+
+                    backgroundColor: 'rgba(54, 162, 235, 1)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+
+                }, {
+                    label: 'Total Number of Applicant',
+                    data: [ @foreach($regions as $value)
+                                @foreach($chartDataAll as $chartData)
+                                    @if($chartData['code'] ==  $value->code)
+                                        {{$chartData['count']}},
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        ],
+                    type: 'line',
+                    backgroundColor: 'rgba(244, 246, 249, 1)',
+                    borderColor: 'rgba(52, 58, 64, 0.5)',
+                    borderWidth: 1
+                },
+
+            ]
+        },
+        options: {
+
+            title: {
+                display: true,
+                text: 'Total Number of Applicant, Grantee and Termination of Scholarship Per Region'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                    }
+                }]
+            }
+        }
+    });
+</script>
 <script src="{{ asset('/js/full-calendar.js') }}"></script>
 @include('calendars.scriptCalendarApplicant')
 
