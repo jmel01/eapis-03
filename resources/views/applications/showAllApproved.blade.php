@@ -12,11 +12,7 @@
         <h3 class="card-title">List of Approved Applications</h3>
     </div>
     <div class="card-body">
-<<<<<<< HEAD
-        <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
-=======
         <table id="applicationList" class="table table-sm table-hover table-responsive">
->>>>>>> f201596 (fixed table and buttons css)
             <thead>
                 <tr>
                     <th>Name</th>
@@ -47,21 +43,12 @@
 
                     <td>
                         @can('application-edit')
-<<<<<<< HEAD
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
-                        @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
-=======
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
->>>>>>> f201596 (fixed table and buttons css)
                     </td>
                 </tr>
                 @endhasanyrole
@@ -82,21 +69,12 @@
 
                     <td>
                         @can('application-edit')
-<<<<<<< HEAD
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
-                        @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
-=======
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
->>>>>>> f201596 (fixed table and buttons css)
                     </td>
                 </tr>
                 @endif
@@ -118,21 +96,12 @@
 
                     <td>
                         @can('application-edit')
-<<<<<<< HEAD
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
-                        @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
-=======
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
->>>>>>> f201596 (fixed table and buttons css)
                     </td>
                 </tr>
                 @endif
@@ -209,10 +178,6 @@
                 [10, 25, 50, 100, "All"]
             ],
             "order": [],
-<<<<<<< HEAD
-            "responsive": true,
-=======
->>>>>>> f201596 (fixed table and buttons css)
         });
 
     });

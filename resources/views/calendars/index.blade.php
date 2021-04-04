@@ -27,11 +27,7 @@
     <div class="card-body">
 
         <div class="row">
-<<<<<<< HEAD
-            <div class="col-md-7 mb-3">
-=======
             <div class="col-12 col-lg-7 mb-3">
->>>>>>> f201596 (fixed table and buttons css)
                 @can('announcement-add')
                 <div class="float-right">
                     <button type="button" class="btn btn-primary addCalendar">
@@ -41,19 +37,11 @@
                 @endcan
             </div>
 
-<<<<<<< HEAD
-            <div class="col-md-5">
-            </div>
-        
-            <div class="col-md-7">
-                <table id="calendarList" class="table table-sm table-hover">
-=======
             <div class="col-12 col-lg-5">
             </div>
         
             <div class="col-12 col-lg-7">
                 <table id="calendarList" class="table table-sm table-hover table-responsive">
->>>>>>> f201596 (fixed table and buttons css)
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -71,19 +59,11 @@
                             <td>{{ $calendar->description }}</td>
                             <td>
                                 @can('announcement-edit')
-<<<<<<< HEAD
-                                <button data-url="{{ route('calendars.edit',$calendar->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-calendar">Edit</button>
-                                @endcan
-
-                                @can('announcement-delete')
-                                <button data-url="{{ route('calendars.destroy', $calendar->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-calendar">Delete</button>
-=======
                                 <button data-url="{{ route('calendars.edit',$calendar->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-calendar">Edit</button>
                                 @endcan
 
                                 @can('announcement-delete')
                                 <button data-url="{{ route('calendars.destroy', $calendar->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-calendar">Delete</button>
->>>>>>> f201596 (fixed table and buttons css)
                                 @endcan
                             </td>
                         </tr>
@@ -92,11 +72,7 @@
                 </table>
             </div>
 
-<<<<<<< HEAD
-            <div class="col-md-5">
-=======
             <div class="col-12 col-lg-5">
->>>>>>> f201596 (fixed table and buttons css)
                 <div id='calendar'></div>
             </div>
         </div>

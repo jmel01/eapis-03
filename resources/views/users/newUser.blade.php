@@ -15,11 +15,7 @@
     </div>
     <div class="card-body">
 
-<<<<<<< HEAD
-        <table id="userList" class="table table-sm table-hover">
-=======
         <table id="userList" class="table table-sm table-hover table-responsive">
->>>>>>> f201596 (fixed table and buttons css)
             <thead>
                 <tr>
                     <th class="align-middle">Avatar</th>

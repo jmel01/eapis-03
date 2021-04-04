@@ -276,9 +276,20 @@ class ChartOrganization
 
         $totalAdminCost = AdminCost::whereNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
+
         $totalGrantDisburse = AdminCost::whereNotNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 2)'), '=', $regionId]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
 
         return [
@@ -320,24 +331,45 @@ class ChartOrganization
             ->get();
 
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
-            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])->get();
+            ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
+            ->get();
         $chartDataAll = Regional::citiesApplicant($cities, $userProfile);
 
         $userProfileNew = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('status', 'New')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
             ->get();
         $chartDataNew = Regional::citiesApplicant($cities, $userProfileNew);
 
         $userProfileApproved = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('status', 'Approved')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
             ->get();
         $chartDataApproved = Regional::citiesApplicant($cities, $userProfileApproved);
 
         $userProfileOnProcess = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('status', 'On Process')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
             ->get();
 
         $chartDataOnProcess = Regional::citiesApplicant($cities, $userProfileOnProcess);
@@ -345,18 +377,30 @@ class ChartOrganization
         $userProfileGraduated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
             ->where('status', 'Graduated')
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
             ->get();
         $chartDataGraduated = Regional::citiesApplicant($cities, $userProfileGraduated);
 
         $userProfileTerminated = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 4)'), '=', $provinceId]])
-            ->where('status', 'Terminated-FSD')
-            ->orWhere('status', 'Terminated-FG')
-            ->orWhere('status', 'Terminated-DS')
-            ->orWhere('status', 'Terminated-NE')
-            ->orWhere('status', 'Terminated-FPD')
-            ->orWhere('status', 'Terminated-EOGS')
-            ->orWhere('status', 'Terminated-Others')
+            ->where(function ($query) {
+                $query->where('status', 'Terminated-FSD')
+                    ->orWhere('status', 'Terminated-FG')
+                    ->orWhere('status', 'Terminated-DS')
+                    ->orWhere('status', 'Terminated-NE')
+                    ->orWhere('status', 'Terminated-FPD')
+                    ->orWhere('status', 'Terminated-EOGS')
+                    ->orWhere('status', 'Terminated-Others');
+            })
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
+                }
+            })
             ->get();
         $chartDataTerminated = Regional::citiesApplicant($cities, $userProfileTerminated);
 
@@ -542,9 +586,20 @@ class ChartOrganization
 
         $totalAdminCost = AdminCost::whereNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
+
         $totalGrantDisburse = AdminCost::whereNotNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 4)'), '=', $provinceId]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
 
         return [
@@ -586,7 +641,6 @@ class ChartOrganization
         $userProfile = Application::join('profiles', 'profiles.user_id', '=', 'applications.user_id')
             ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -599,7 +653,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
             ->where('status', 'New')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -611,7 +664,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
             ->where('status', 'Approved')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -623,7 +675,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
             ->where('status', 'On Process')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -636,7 +687,6 @@ class ChartOrganization
             ->where([[DB::raw('substr(profiles.psgCode, 1, 6)'), '=', $cityId]])
             ->where('status', 'Graduated')
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -656,7 +706,6 @@ class ChartOrganization
                     ->orWhere('status', 'Terminated-Others');
             })
             ->where(function ($query) use ($dateFrom, $dateTo) {
-
                 if (isset($dateFrom) && isset($dateTo)) {
                     $query->whereBetween('applications.created_at', [$dateFrom, $dateTo]);
                 }
@@ -847,9 +896,19 @@ class ChartOrganization
 
         $totalAdminCost = AdminCost::whereNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 4)'), '=', substr($cityId, 0, 4)]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
         $totalGrantDisburse = AdminCost::whereNotNull('user_id')
             ->where([[\DB::raw('substr(province, 1, 4)'), '=', substr($cityId, 0, 4)]])
+            ->where(function ($query) use ($dateFrom, $dateTo) {
+                if (isset($dateFrom) && isset($dateTo)) {
+                    $query->whereBetween('dateRcvd', [$dateFrom, $dateTo]);
+                }
+            })
             ->sum('amount');
 
         return [

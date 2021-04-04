@@ -103,11 +103,7 @@
                 </div>
 
                 <div class="row">
-<<<<<<< HEAD
-                    <div class="col-md-6">
-=======
                     <div class="col-12 col-lg-6">
->>>>>>> f201596 (fixed table and buttons css)
                         <div class="card">
                             <div class="card-body chart-two">
                                 <canvas id="myChart2"></canvas>
@@ -115,11 +111,7 @@
                         </div>
                     </div>
 
-<<<<<<< HEAD
-                    <div class="col-md-6">
-=======
                     <div class="col-12 col-lg-6">
->>>>>>> f201596 (fixed table and buttons css)
                         <div class="card">
                             <div class="card-body chart-three">
                                 <canvas id="myChart3"></canvas>
@@ -129,11 +121,7 @@
                 </div>
 
                 <div class="row">
-<<<<<<< HEAD
-                    <div class="col-md-6">
-=======
                     <div class="col-12 col-lg-6">
->>>>>>> f201596 (fixed table and buttons css)
                         <div class="card">
                             <div class="card-body chart-four">
                                 <canvas id="myChart4"></canvas>
@@ -141,11 +129,7 @@
                         </div>
                     </div>
 
-<<<<<<< HEAD
-                    <div class="col-md-6">
-=======
                     <div class="col-12 col-lg-6">
->>>>>>> f201596 (fixed table and buttons css)
                         <div class="card">
                             <div class="card-body chart-five">
                                 <canvas id="myChart5"></canvas>
@@ -225,8 +209,7 @@
             $('#city').value = ''
         }else if(regionId){
             type = 'region'
-            geoCovered = regionId
-            
+            geoCovered = regionId 
         }
 
         $.ajax({
@@ -239,7 +222,6 @@
             },
             type: 'GET'
         }).done(result => {
-            
             $('.chart-expenses').empty()
             $('.chart-expenses').append(result.ChartExpenses)
             $('.chart-one').empty()

@@ -15,11 +15,7 @@
         @can('ethnogroups-add')
         <button class="btn btn-outline-primary btn-sm btn-add-ethnoGroup float-right">ADD GROUP</button>
         @endcan
-<<<<<<< HEAD
-        <table id="ethnoGroupList" class="table table-sm table-hover table-responsive-lg">
-=======
         <table id="ethnoGroupList" class="table table-sm table-hover table-responsive">
->>>>>>> f201596 (fixed table and buttons css)
             <thead>
                 <tr>
                     <th>ID</th>
@@ -40,17 +36,10 @@
                     <td>{{ $ethnoGroup->ipgroup }}</td>
                     <td>
                         @can('ethnogroups-edit')
-<<<<<<< HEAD
-                        <button class="btn btn-primary btn-sm mr-1 btn-edit-ethnoGroup" data-id="{{ $ethnoGroup->id }}" data-region="{{ $ethnoGroup->region }}" data-ipgroup="{{ $ethnoGroup->ipgroup }}">Edit</button>
-                        @endcan
-                        @can('ethnogroups-delete')
-                        <button data-url="{{ route('ethnogroups.destroy', $ethnoGroup->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-ethnoGroup">Delete</button>
-=======
                         <button class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-ethnoGroup" data-id="{{ $ethnoGroup->id }}" data-region="{{ $ethnoGroup->region }}" data-ipgroup="{{ $ethnoGroup->ipgroup }}">Edit</button>
                         @endcan
                         @can('ethnogroups-delete')
                         <button data-url="{{ route('ethnogroups.destroy', $ethnoGroup->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-ethnoGroup">Delete</button>
->>>>>>> f201596 (fixed table and buttons css)
                         @endcan
 
                     </td>
@@ -61,11 +50,7 @@
 
     </div>
     <div class="card-footer">
-<<<<<<< HEAD
-        Footer
-=======
        
->>>>>>> f201596 (fixed table and buttons css)
     </div>
 </div>
 
@@ -83,17 +68,6 @@
     $(document).ready(function() {
         // Create DataTable
         var table = $('#ethnoGroupList').DataTable({
-<<<<<<< HEAD
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "order": [
-                [0, "desc"]
-            ],
-            "info": true,
-            "autoWidth": true,
-            "responsive": true,
-=======
             fixedHeader: {
                 header: true,
                 footer: true
@@ -105,7 +79,6 @@
             "order": [
                 [0, "desc"]
             ],
->>>>>>> f201596 (fixed table and buttons css)
         });
     })
 
