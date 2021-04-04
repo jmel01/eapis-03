@@ -134,13 +134,13 @@
         type: 'bar',
         data: {
             labels: [
-                @foreach($zone as $value)
+                @foreach($cities as $value)
                 '{{$value->name}}',
                 @endforeach
             ],
             datasets: [ { 
                     label: 'New Applicant',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataNew as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
@@ -155,7 +155,7 @@
 
                 }, { 
                     label: 'On Process',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataOnProcess as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
@@ -170,7 +170,7 @@
 
                 }, { 
                     label: 'Grantee',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataApproved as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
@@ -185,7 +185,7 @@
 
                 }, {
                     label: 'Terminated',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataTerminated as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
@@ -199,7 +199,7 @@
 
                 }, { 
                     label: 'Graduated',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataGraduated as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
@@ -214,7 +214,7 @@
 
                 }, {
                     label: 'Total Number of Applicant',
-                    data: [ @foreach($zone as $value)
+                    data: [ @foreach($cities as $value)
                                 @foreach($chartDataAll as $chartData)
                                     @if($chartData['code'] ==  $value->code)
                                         {{$chartData['count']}},
