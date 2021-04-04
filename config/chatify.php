@@ -107,5 +107,9 @@ return [
     | By default: Chatify\Http\Controllers
     |
     */
+<<<<<<< HEAD
     'namespace' => env('CHATIFY_ROUTES_NAMESPACE', 'Chatify\Http\Controllers'),
+=======
+    'namespace' => env('CHATIFY_ROUTES_NAMESPACE', 'App\Http\Controllers\vendor\Chatify'),
+>>>>>>> f201596 (fixed table and buttons css)
 ];

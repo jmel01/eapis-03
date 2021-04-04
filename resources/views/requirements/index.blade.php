@@ -39,11 +39,19 @@
                     <td>{{ $requirement->description }}</td>
                     <td>
                        @can('requirements-edit')
+<<<<<<< HEAD
                         <button data-description="{{ $requirement->description }}" data-id="{{ $requirement->id }}" class="btn btn-primary btn-sm mr-1 btn-edit-requirement">Edit</button>
                        @endcan
 
                        @can('requirements-delete')
                         <button data-url="{{ route('requirements.destroy', $requirement->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-requirement">Delete</button>
+=======
+                        <button data-description="{{ $requirement->description }}" data-id="{{ $requirement->id }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-requirement">Edit</button>
+                       @endcan
+
+                       @can('requirements-delete')
+                        <button data-url="{{ route('requirements.destroy', $requirement->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-requirement">Delete</button>
+>>>>>>> f201596 (fixed table and buttons css)
                         @endcan
                     </td>
                 </tr>

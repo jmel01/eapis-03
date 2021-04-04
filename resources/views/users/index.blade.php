@@ -17,7 +17,11 @@
         @can('user-add')
         <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
         @endcan
+<<<<<<< HEAD
         <table id="userList" class="table table-sm table-hover">
+=======
+        <table id="userList" class="table table-sm table-hover table-responsive">
+>>>>>>> f201596 (fixed table and buttons css)
             <thead>
                 <tr>
                     <th>Avatar</th>

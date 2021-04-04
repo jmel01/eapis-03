@@ -15,7 +15,11 @@
         @can('grant-add')
         <button class="btn btn-outline-primary btn-sm btn-add-grant float-right">ADD NEW GRANT</button>
         @endcan
+<<<<<<< HEAD
         <table id="grantList" class="table table-sm table-hover table-responsive-lg">
+=======
+        <table id="grantList" class="table table-sm table-hover table-responsive">
+>>>>>>> f201596 (fixed table and buttons css)
             <thead>
                 <tr>
                     <th>Region</th>
@@ -48,7 +52,11 @@
                     </td>
                     <td>
                         @can('application-browse')
+<<<<<<< HEAD
                         <div class="btn-group mr-1" role="group">
+=======
+                        <div class="btn-group mr-1 mb-1" role="group">
+>>>>>>> f201596 (fixed table and buttons css)
                             <a href="{{ route('applications.show',$grant->id) }}" type="button" class="btn btn-info btn-sm">Applications</a>
 
                             <div class="btn-group" role="group">
@@ -67,7 +75,11 @@
                         @endcan
 
                         @can('expenses-browse')
+<<<<<<< HEAD
                         <div class="btn-group mr-1" role="group">
+=======
+                        <div class="btn-group mr-1 mb-1" role="group">
+>>>>>>> f201596 (fixed table and buttons css)
                             <a href="{{ route('costs.show',$grant->id) }}" type="button" class="btn btn-primary btn-sm">Expenses</a>
 
                             <div class="btn-group" role="group">
@@ -83,11 +95,19 @@
                         @endcan
 
                         @can('grant-edit')
+<<<<<<< HEAD
                         <button data-url="{{ route('grants.edit',$grant->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-grant">Edit</button>
                         @endcan
 
                         @can('grant-delete')
                         <button data-url="{{ route('grants.destroy', $grant->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-grant">Delete</button>
+=======
+                        <button data-url="{{ route('grants.edit',$grant->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-grant">Edit</button>
+                        @endcan
+
+                        @can('grant-delete')
+                        <button data-url="{{ route('grants.destroy', $grant->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-grant">Delete</button>
+>>>>>>> f201596 (fixed table and buttons css)
                         @endcan
 
                     </td>
@@ -147,15 +167,29 @@
 
         // Create DataTable
         var table = $('#grantList').DataTable({
+<<<<<<< HEAD
             "paging": true,
             "lengthChange": true,
             "searching": true,
+=======
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+>>>>>>> f201596 (fixed table and buttons css)
             "order": [
                 [1, "desc"]
             ],
             "info": true,
             "autoWidth": true,
+<<<<<<< HEAD
             "responsive": true,
+=======
+>>>>>>> f201596 (fixed table and buttons css)
         });
     });
 

@@ -43,7 +43,11 @@
                 <li class="nav-item">
                     <a href="{{ route('showAllApproved') }}" class="nav-link">
                         <i class="fas fa-user-graduate nav-icon"></i>
+<<<<<<< HEAD
                         <p>Students</p>
+=======
+                        <p>Scholars</p>
+>>>>>>> f201596 (fixed table and buttons css)
                     </a>
                 </li>
                 @endcan
