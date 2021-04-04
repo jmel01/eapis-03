@@ -15,7 +15,7 @@
         @can('grant-add')
         <button class="btn btn-outline-primary btn-sm btn-add-grant float-right">ADD NEW GRANT</button>
         @endcan
-        <table id="grantList" class="table table-sm table-hover table-responsive">
+        <table id="grantList" class="table table-sm table-hover">
             <thead>
                 <tr>
                     <th>Region</th>
@@ -52,9 +52,7 @@
                             <a href="{{ route('applications.show',$grant->id) }}" type="button" class="btn btn-info btn-sm">Applications</a>
 
                             <div class="btn-group" role="group">
-                                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-
-                                </button>
+                                <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                     <a class="dropdown-item" href="{{ route('showAllNew',$grant->id) }}">New Applicant</a>
                                     <a class="dropdown-item" href="{{ route('showOnProcess',$grant->id) }}">On Process</a>
@@ -98,7 +96,7 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
@@ -147,11 +145,6 @@
 
         // Create DataTable
         var table = $('#grantList').DataTable({
-<<<<<<< HEAD
-            "paging": true,
-            "lengthChange": true,
-            "searching": true,
-=======
             "fixedHeader": {
                 header: true,
                 footer: true
@@ -160,16 +153,9 @@
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
->>>>>>> f201596 (fixed table and buttons css)
             "order": [
                 [1, "desc"]
             ],
-            "info": true,
-            "autoWidth": true,
-<<<<<<< HEAD
-            "responsive": true,
-=======
->>>>>>> f201596 (fixed table and buttons css)
         });
     });
 

@@ -48,6 +48,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
@@ -74,6 +75,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
@@ -101,6 +103,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>

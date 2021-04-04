@@ -19,7 +19,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-12">
-                <table id="roleList" class="table table-striped table-hover table-responsive">
+                <table id="roleList" class="table table-sm table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Id</th>

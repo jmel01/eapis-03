@@ -48,6 +48,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
@@ -69,12 +70,13 @@
 
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
                         @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
                 @endif
@@ -96,12 +98,13 @@
 
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Update Application</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
                         @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-profile">Update Profile</button>
+                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm">View Files</a>
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
                 @endif

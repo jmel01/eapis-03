@@ -15,7 +15,7 @@
         @can('ethnogroups-add')
         <button class="btn btn-outline-primary btn-sm btn-add-ethnoGroup float-right">ADD GROUP</button>
         @endcan
-        <table id="ethnoGroupList" class="table table-sm table-hover table-responsive">
+        <table id="ethnoGroupList" class="table table-sm table-hover">
             <thead>
                 <tr>
                     <th>ID</th>

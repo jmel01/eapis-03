@@ -12,21 +12,18 @@
         <h3 class="card-title">List of Requirement</h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-                <i class="fas fa-minus"></i></button>
-        </div>
-    </div>
-    <div class="card-body">
+        
         @can('requirements-add')
-        <div class="row">
-            <div class="form-group col-md-12">
-                <button type="button" class="btn btn-primary btn-add-requirement float-right">
+        
+                <button type="button" class="btn btn-sm btn-primary btn-add-requirement float-right">
                     Add Requirement
                 </button>
-            </div>
-        </div>
-        @endcan
-        <table id="reqList" class="table table-hover table-responsive-lg">
+            
+        @endcan</div>
+    </div>
+    <div class="card-body">
+        
+        <table id="reqList" class="table table-sm table-striped table-hover">
             <thead>
                 <tr>
                     <th>Requirements</th>
@@ -52,7 +49,7 @@
         </table>
     </div>
     <div class="card-footer">
-        Footer
+
     </div>
 </div>
 
@@ -89,13 +86,15 @@
 <script>
     $(function() {
         $('#reqList').DataTable({
-            "paging": true,
-            "lengthChange": true,
-            "searching": false,
-            "ordering": false,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
+            "fixedHeader": {
+                header: true,
+                footer: true
+            },
+            "lengthMenu": [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "All"]
+            ],
+            "order": [],
         });
     });
 
