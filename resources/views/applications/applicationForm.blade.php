@@ -186,11 +186,12 @@
                     <td class="text-center">Average<br>Grade</td>
                     <td class="text-center">Rank</td>
                 </tr>
+
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
-                @if($education->level == "Elementary")
+                @if($education->level == "Doctorate")
                 <tr>
-                    <td class="text-center">Elementary</td>
+                    <td class="text-center">Doctorate</td>
                     <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
                     <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
                     <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
@@ -200,42 +201,12 @@
                 @endif
                 @endforeach
                 @endif
-
+                
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
-                @if($education->level == "High School")
+                @if($education->level == "Masteral")
                 <tr>
-                    <td class="text-center">High School</td>
-                    <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
-                    <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->average_grade }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->rank }}</strong></td>
-                </tr>
-                @endif
-                @endforeach
-                @endif
-
-                @if(!empty($data->education))
-                @foreach($data->education as $education)
-                @if($education->level == "Vocational")
-                <tr>
-                    <td class="text-center">Vocational</td>
-                    <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
-                    <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->average_grade }}</strong></td>
-                    <td class="text-center"><strong>{{ $education->rank }}</strong></td>
-                </tr>
-                @endif
-                @endforeach
-                @endif
-
-                @if(!empty($data->education))
-                @foreach($data->education as $education)
-                @if($education->level == "College")
-                <tr>
-                    <td class="text-center">College/<br>Undergraduate</td>
+                    <td class="text-center">Masteral</td>
                     <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
                     <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
                     <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
@@ -263,9 +234,9 @@
 
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
-                @if($education->level == "Masteral")
+                @if($education->level == "College/Undergraduate")
                 <tr>
-                    <td class="text-center">Masteral</td>
+                    <td class="text-center">College/<br>Undergraduate</td>
                     <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
                     <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
                     <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
@@ -278,9 +249,39 @@
 
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
-                @if($education->level == "Doctorate")
+                @if($education->level == "Vocational")
                 <tr>
-                    <td class="text-center">Doctorate</td>
+                    <td class="text-center">Vocational</td>
+                    <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
+                    <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->average_grade }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->rank }}</strong></td>
+                </tr>
+                @endif
+                @endforeach
+                @endif
+
+                @if(!empty($data->education))
+                @foreach($data->education as $education)
+                @if($education->level == "High School")
+                <tr>
+                    <td class="text-center">High School</td>
+                    <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
+                    <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->average_grade }}</strong></td>
+                    <td class="text-center"><strong>{{ $education->rank }}</strong></td>
+                </tr>
+                @endif
+                @endforeach
+                @endif
+                
+                @if(!empty($data->education))
+                @foreach($data->education as $education)
+                @if($education->level == "Elementary")
+                <tr>
+                    <td class="text-center">Elementary</td>
                     <td><strong>{{ $education->school_name }}</strong><br>{{ $education->address }}</td>
                     <td class="text-center"><strong>{{ $education->school_type }}</strong></td>
                     <td class="text-center"><strong>{{ $education->year_graduated }}</strong></td>
