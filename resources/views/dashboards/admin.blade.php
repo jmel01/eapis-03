@@ -69,24 +69,30 @@
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Disbursement</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ number_format($totalAdminCost + $totalGrantDisburse, 2, '.', ',') }}</span>
+                                <a href="{{ route('formE') }}">
+                                    <span class="info-box-text text-center text-muted">Administrative Cost</span>
+                                    <span class="info-box-number text-center mb-0"><h1>{{ number_format($totalAdminCost, 2, '.', ',') }}</h1></span>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Administrative Cost</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ number_format($totalAdminCost, 2, '.', ',') }}</span>
+                                <a href="{{ route('formG') }}">
+                                    <span class="info-box-text text-center text-muted">Grants Disbursement</span>
+                                    <span class="info-box-number text-center mb-0"><h1>{{ number_format($totalGrantDisburse, 2, '.', ',') }}</h1><span>
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-sm-4">
                         <div class="info-box bg-light">
                             <div class="info-box-content">
-                                <span class="info-box-text text-center text-muted">Total Grants Disbursement</span>
-                                <span class="info-box-number text-center text-muted mb-0">{{ number_format($totalGrantDisburse, 2, '.', ',') }}<span>
+                                <a href="{{ route('formF') }}">
+                                    <span class="info-box-text text-center text-muted">TOTAL</span>
+                                    <span class="info-box-number text-center mb-0"><h1>{{ number_format($totalAdminCost + $totalGrantDisburse, 2, '.', ',') }}</h1></span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -240,6 +246,18 @@
     })
 </script>
 
+<!-- <script>
+/* https://github.com/chartjs/Chart.js/issues/2292 */
+document.getElementById("myChart").onclick = function (evt) {
+        var activePoints = myChart.getElementsAtEventForMode(evt, 'point', myChart.options);
+        var firstPoint = activePoints[0];
+        var label = myChart.data.labels[firstPoint._index];
+        var value = myChart.data.datasets[firstPoint._datasetIndex].data[firstPoint._index];
+        alert(label + ": " + value);
+    };
+</script> -->
+
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <script>
@@ -318,7 +336,6 @@
                     backgroundColor: 'rgba(54, 162, 235, 1)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1
-
                 }, {
                     label: 'Total Number of Applicant',
                     data: [@foreach($regions as $value)
