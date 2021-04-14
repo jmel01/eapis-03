@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a href="{{ route('newUser') }}" class="nav-link">
                         <i class="far fa-address-card nav-icon"></i>
-                        <p>Newly Registered</p>
+                        <p>New Registration</p>
                     </a>
                 </li>
 
@@ -131,15 +131,6 @@
                 </li>
                 @endcan
 
-                @hasanyrole('Admin|Executive Officer|Regional Officer|Provincial Officer|Community Service Officer')
-                <li class="nav-item">
-                    <a href="{{ route('myDocument') }}" class="nav-link">
-                        <i class="far fa-folder-open nav-icon"></i>
-                        <p>My Documents</p>
-                    </a>
-                </li>
-                @endhasanyrole
-
                 @can('user-browse')
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
@@ -194,6 +185,15 @@
                     </a>
                 </li>
                 @endrole
+
+                @hasanyrole('Admin|Executive Officer|Regional Officer|Provincial Officer|Community Service Officer')
+                <li class="nav-item">
+                    <a href="{{ route('myDocument') }}" class="nav-link">
+                        <i class="far fa-folder-open nav-icon"></i>
+                        <p>My Documents</p>
+                    </a>
+                </li>
+                @endhasanyrole
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

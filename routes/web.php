@@ -117,5 +117,5 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    //Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
+    Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
 });

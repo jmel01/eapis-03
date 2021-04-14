@@ -9,7 +9,7 @@
 @section('content')
 <div class="card card-outline card-primary">
     <div class="card-header">
-        <h3 class="card-title">Add New Role Form</h3>
+        <h3 class="card-title">Update Role</h3>
     </div>
     <!-- /.card-header -->
     <!-- form start -->
