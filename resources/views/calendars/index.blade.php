@@ -41,7 +41,7 @@
             </div>
         
             <div class="col-12 col-lg-7">
-                <table id="calendarList" class="table table-sm table-hover table-responsive">
+                <table id="calendarList" class="table table-sm table-hover table-responsive-sm">
                     <thead>
                         <tr>
                             <th>Date</th>

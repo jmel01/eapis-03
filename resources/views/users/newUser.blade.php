@@ -15,7 +15,7 @@
     </div>
     <div class="card-body">
 
-        <table id="userList" class="table table-sm table-hover table-responsive">
+        <table id="userList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th class="align-middle">Avatar</th>
@@ -49,7 +49,7 @@
                         {{ App\Models\Psgc::getProvince($user->profile->psgCode) }}
                         @endif
                     </td>
-                    <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
+                    <td>{{ $user->created_at }}</td>
                     <td>
 
                         @can('profile-edit')
@@ -62,7 +62,7 @@
 
                         @can('application-add')
                         @if($user->profile!='')
-                        <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 btn-add-application">Apply</button>
+                        <button data-id="{{ $user->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-application">Apply</button>
                         @endif
                         @endcan
                     </td>
@@ -142,15 +142,15 @@
 
         // Create DataTable
         var table = $('#userList').DataTable({
-            "fixedHeader": {
+            fixedHeader: {
                 header: true,
                 footer: true
             },
-            "lengthMenu": [
+            lengthMenu: [
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
-            "order": [],
+            order: [],
         });
     });
 </script>

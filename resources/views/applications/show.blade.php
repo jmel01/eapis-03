@@ -16,7 +16,7 @@
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
 
-        <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -24,7 +24,9 @@
                     <th>Type</th>
                     <th>Level</th>
                     <th>Status</th>
+                    <th>Date</th>
                     <th>Remarks</th>
+                    <th>Region</th>
                     <th>Province</th>
                     <th>Actions</th>
                 </tr>
@@ -40,14 +42,24 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
-                    @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
@@ -85,14 +97,24 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
-                    @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
@@ -131,14 +153,25 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
@@ -169,17 +202,7 @@
 
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th class="text-right"></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>
+           
         </table>
 
     </div>

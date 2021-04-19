@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
         <button class="btn btn-outline-danger btn-sm btn-delete-logs float-right">DELETE ALL LOGS</button>
-        <table id="activityLogList" class="table table-sm table-hover table-responsive-lg">
+        <table id="activityLogList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Model Name</th>

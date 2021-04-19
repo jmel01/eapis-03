@@ -17,7 +17,7 @@
         @can('user-add')
         <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
         @endcan
-        <table id="userList" class="table table-sm table-hover table-responsive">
+        <table id="userList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Avatar</th>
@@ -59,7 +59,7 @@
                         @endforeach
                         @endif
                     </td>
-                    <td>{{$user->created_at->format('M. d, Y | h:i:s a')}}</td>
+                    <td>{{ $user->created_at }}</td>
                     <td>
                         @can('user-edit')
                         <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-user">Update</button>

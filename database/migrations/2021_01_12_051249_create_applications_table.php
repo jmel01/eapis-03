@@ -25,7 +25,13 @@ class CreateApplicationsTable extends Migration
             $table->text('plans');
             $table->string('status')->default('On Process');
             $table->string('remarks')->nullable();
+            $table->timestamp('date_process')->nullable();
+            $table->timestamp('date_approved')->nullable();
+            $table->timestamp('date_graduated')->nullable();
+            $table->timestamp('date_terminated')->nullable();
+            $table->timestamp('date_denied')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

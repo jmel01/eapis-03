@@ -12,7 +12,7 @@
         <h3 class="card-title">List of Approved Applications</h3>
     </div>
     <div class="card-body">
-        <table id="applicationList" class="table table-sm table-hover table-responsive">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -20,6 +20,7 @@
                     <th>Type</th>
                     <th>Level</th>
                     <th>Status</th>
+                    <th>Date Approved</th>
                     <th>Remarks</th>
                     <th>Region</th>
                     <th>Province</th>
@@ -37,6 +38,11 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>

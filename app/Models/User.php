@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles, LogsActivity;
+    use HasFactory, Notifiable, HasRoles, LogsActivity, SoftDeletes;
 
     protected static $logName = 'User';
     protected static $logFillable = true;
@@ -49,9 +50,9 @@ class User extends Authenticatable
     ];
 
     // Set default value
-    protected $attributes = [ 
-        'password' => '$2y$10$NxjAqWoKSrUhDhjD7SR3ROrhXgSmslSxgbPOLe1ct/2hNKbqbIkgi' 
-    ]; 
+    protected $attributes = [
+        'password' => '$2y$10$NxjAqWoKSrUhDhjD7SR3ROrhXgSmslSxgbPOLe1ct/2hNKbqbIkgi'
+    ];
 
     public function profile()
     {

@@ -18,7 +18,7 @@
     </div>
     <div class="card-body">
 
-        <table id="documentList" class="table table-striped table-hover table-responsive-lg">
+        <table id="documentList" class="table table-striped table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Filename</th>
