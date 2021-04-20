@@ -131,20 +131,25 @@
                 </li>
                 @endcan
 
-                @can('user-browse')
+                @canany(['user-browse', 'role-browse', 'requirements-browse', 'ethnogroups-browse'])
+                <li class="nav-header">SETTINGS</li>
+                @endcanany
+
+                @canany(['user-browse', 'role-browse'])
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>User Management<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @can('user-browse')
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}" class="nav-link">
                                 <i class="far fa-address-book nav-icon"></i>
                                 <p>User List</p>
                             </a>
                         </li>
-
+                        @endcan
                         @can('role-browse')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
@@ -155,7 +160,7 @@
                         @endcan
                     </ul>
                 </li>
-                @endcan
+                @endcanany
 
                 @can('requirements-browse')
                 <li class="nav-item">
