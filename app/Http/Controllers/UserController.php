@@ -53,6 +53,30 @@ class UserController extends Controller
         return view('users.newUser', compact('data', 'grants', 'regions'));
     }
 
+    public function updateCredential(Request $request)
+    {
+        $request->validateWithBag('user', [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'password' => 'same:confirm-password'
+        ]);
+        
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+        }
+
+        User::updateOrCreate(["id" => Auth::id()], $input);
+
+        $notification = array(
+            'message' => 'User credential updated successfully',
+            'alert-type' => 'success'
+        );
+        return redirect()->back()->with($notification);
+    }
+
     /**
      * Display a listing of the resource.
      *

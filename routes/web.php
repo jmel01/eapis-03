@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
 
+    Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
     Route::resource('users', UserController::class);
 

@@ -34,8 +34,11 @@
                             email: {{ Auth::user()->email ?? '' }}
                         </p>
                         <div class="row">
-                            <div class="col-12 text-center">
-                                <button class="btn btn-success rounded-0 py-1 px-2 btn-change-profile">change profile picture</button>
+                            <div class="col-6 text-left">
+                                <button class="btn btn-success btn-sm mr-1 mb-1 btn-change-profile">change profile picture</button>
+                            </div>
+                            <div class="col-6 text-right">
+                            <button data-url="{{ route('users.edit',Auth::id()) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-user">Update Login Credential</button>
                             </div>
                         </div>
                     </div>
@@ -315,6 +318,7 @@
 </div>
 @include('profiles.modalProfile')
 @include('profiles.modalProfilePicture')
+@include('users.modalAuthUser')
 @endsection
 
 @push('scripts')
@@ -360,6 +364,17 @@
                 $('#region').trigger("change")
             })
         })
+
+        $('.btn-edit-user').click(function() {
+            var url_id = $(this).attr('data-url');
+            $.get(url_id, function(data) {
+                console.log(data)
+                $('[name="name"]').val(data.user.name)
+                $('[name="email"]').val(data.user.email)
+
+                $('#modalAuthUser').modal('show')
+            })
+        });
 
         $('.btn-change-profile').click(function() {
             $('#modalProfilePicture').modal('show');
