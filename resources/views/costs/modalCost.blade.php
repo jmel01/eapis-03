@@ -12,12 +12,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Date Received</label>
-                        <input name="dateRcvd" type="date" value="{{old('dateRcvd')}}" class="form-control {{$errors->cost->first('dateRcvd') == null ? '' : 'is-invalid'}}">
+                        <input name="dateRcvd" type="date" value="{{old('dateRcvd')}}" class="form-control {{$errors->cost->first('dateRcvd') == null ? '' : 'is-invalid'}}" required>
                     </div>
 
                     <div class="form-group">
                         <label>Payee</label>
-                        <input name="payee" type="text" value="{{old('payee')}}" class="form-control {{$errors->cost->first('payee') == null ? '' : 'is-invalid'}}">
+                        <input name="payee" type="text" value="{{old('payee')}}" class="form-control {{$errors->cost->first('payee') == null ? '' : 'is-invalid'}}" required>
                     </div>
 
                     <div class="form-group">
@@ -27,7 +27,7 @@
 
                     <div class="form-group">
                         <label>Amount</label>
-                        <input name="amount" type="number" step=".01" value="{{old('amount')}}" class="form-control {{$errors->cost->first('amount') == null ? '' : 'is-invalid'}}">
+                        <input name="amount" type="number" step=".01" value="{{old('amount')}}" class="form-control {{$errors->cost->first('amount') == null ? '' : 'is-invalid'}}" required>
                     </div>
 
                     <div class="form-group">
@@ -37,10 +37,10 @@
 
                     <div class="form-group">
                         <label>Province</label>
-                        <select name="province" class="form-control {{$errors->cost->first('province') == null ? '' : 'is-invalid'}}">
+                        <select name="province" class="form-control {{$errors->cost->first('province') == null ? '' : 'is-invalid'}}" required>
                             <option disabled selected>Select Province</option>
                             @foreach ($provinces as $province)
-                            <option value="{{ $province->code }}">{{ $province->name }}</option>
+                            <option value="{{ $province->code }}" @if($province->code == old('province')) selected @endif>{{ $province->name }}</option>
                             @endforeach
                         </select>
                     </div>

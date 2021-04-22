@@ -326,4 +326,12 @@
 </script>
 @endif
 
+@if (count($errors->cost) > 0)
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#modalCost').modal('show');
+    });
+</script>
+@endif
+
 @endpush
