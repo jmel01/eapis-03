@@ -22,6 +22,7 @@
                     <th>Age</th>
                     <th>School</th>
                     <th>Course</th>
+                    <th class="sum">Post Study</th>
                     <th class="sum">College</th>
                     <th class="sum">Vocational</th>
                     <th class="sum">High School</th>
@@ -42,6 +43,7 @@
                     <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }}</td>
                     <td>{{ $application->school }}</td>
                     <td>{{ $application->course }}</td>
+                    <td class="text-center text-bold">@if ($application->level=='Post Study') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='College') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='Vocational') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
@@ -62,6 +64,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
