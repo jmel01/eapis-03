@@ -62,25 +62,25 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
                         @endcan
                         @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
+                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1">Files</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
+                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
 
                         @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
+                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
                         @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 btn-add-employment">Employment</button>
+                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
                         @endif
                         @endif
                     </td>
@@ -117,25 +117,25 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
                         @endcan
                         @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
+                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1">Files</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
+                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
 
                         @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
+                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
                         @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 btn-add-employment">Employment</button>
+                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
                         @endif
                         @endif
                     </td>
@@ -322,14 +322,6 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#modalEmployment').modal('show');
-    });
-</script>
-@endif
-
-@if (count($errors->cost) > 0)
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#modalCost').modal('show');
     });
 </script>
 @endif
