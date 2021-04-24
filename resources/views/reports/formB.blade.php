@@ -12,10 +12,11 @@
     </div>
     <div class="card-body">
 
-        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-lg">
+        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-sm">
             <thead>
                 <tr>
-                    <th>Kind of EAP/Name</th>
+                    <th>Kind of EAP</th>
+                    <th>Name</th>
                     <th>Ethno Group</th>
                     <th class="sum">Male</th>
                     <th class="sum">Female</th>
@@ -36,6 +37,7 @@
                 @foreach ($data as $key => $application)
                 @if(isset($application->applicant))
                 <tr>
+                    <td>{{ $application->type }}</td>
                     <td>{{ $application->applicant->lastName }}, {{ $application->applicant->firstName }} {{ substr($application->applicant->middleName, 0,  1) }}.</td>
                     <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
@@ -58,6 +60,7 @@
             <tfoot>
                 <tr>
                     <th></th>
+                    <th></th>
                     <th class="text-right">TOTAL:</th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
@@ -78,7 +81,7 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 @endsection
@@ -188,20 +191,21 @@
                         'text-align': 'center'
                     });
 
-                    $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'center');
-                    $(win.document.body).find('table tbody td:nth-child(8)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(13)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(14)').css('text-align', 'center');
 
                     $(win.document.body).find('table tfoot th').css({
                         'vertical-align': 'middle',
                         'text-align': 'center'
                     });
-                    $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
+                    $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
 
                     style.type = 'text/css';
                     style.media = 'print';
