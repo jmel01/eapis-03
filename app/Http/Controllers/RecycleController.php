@@ -30,7 +30,7 @@ class RecycleController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+        return redirect()->back()->withInput(['tab'=>'tab3'])->with($notification);
     }
 
     public function restoreApplication($id)
@@ -43,7 +43,7 @@ class RecycleController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+        return redirect()->back()->withInput(['tab'=>'tab3'])->with($notification);
     }
 
     public function destroyGrant($id)
@@ -56,7 +56,7 @@ class RecycleController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+        return redirect()->back()->withInput(['tab'=>'tab2'])->with($notification);
     }
 
     public function restoreGrant($id)
@@ -69,7 +69,7 @@ class RecycleController extends Controller
             'alert-type' => 'success'
         );
 
-        return redirect()->back()->with($notification);
+        return redirect()->back()->withInput(['tab'=>'tab2'])->with($notification);
     }
 
     public function destroyUser($id)

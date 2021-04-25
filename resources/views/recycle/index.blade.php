@@ -12,13 +12,13 @@
     <div class="card-body">
         <nav>
             <div class="nav nav-tabs" role="tablist">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#tab1" role="tab">
+                <a class="nav-item nav-link {{old('tab') == 'tab1' || old('tab') == '' ? ' active' : null}}" data-toggle="tab" href="#tab1" role="tab">
                     User
                 </a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab2" role="tab">
+                <a class="nav-item nav-link {{old('tab') == 'tab2' ? ' active' : null}}" data-toggle="tab" href="#tab2" role="tab">
                     Grant
                 </a>
-                <a class="nav-item nav-link" data-toggle="tab" href="#tab3" role="tab">
+                <a class="nav-item nav-link {{old('tab') == 'tab3' ? ' active' : null}}" data-toggle="tab" href="#tab3" role="tab">
                     Application
                 </a>
             </div>
@@ -26,7 +26,7 @@
 
         <div class="tab-content p-3" id="nav-tabContent">
             <!-- User -->
-            <div class="tab-pane fade show active" id="tab1" role="tabpanel">
+            <div class="tab-pane fade {{old('tab') == 'tab1' || old('tab') == '' ? ' show active' : null}}" id="tab1" role="tabpanel">
                 <table id="userList" class="table table-sm table-hover table-responsive-sm">
                     <thead>
                         <tr>
@@ -79,7 +79,7 @@
             </div>
 
             <!-- Grant -->
-            <div class="tab-pane fade" id="tab2" role="tabpanel">
+            <div class="tab-pane fade {{old('tab') == 'tab2' ? ' show active' : null}}" id="tab2" role="tabpanel">
                 <table id="grantList" class="table table-sm table-hover">
                     <thead>
                         <tr>
@@ -115,7 +115,7 @@
 
 
             <!-- Application -->
-            <div class="tab-pane fade" id="tab3" role="tabpanel">
+            <div class="tab-pane fade {{old('tab') == 'tab3' ? ' show active' : null}}" id="tab3" role="tabpanel">
                 <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
                     <thead>
                         <tr>
@@ -135,7 +135,13 @@
                             <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
                                 {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                             </td>
-                            <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                            <td>
+                                @if(isset($application->grant->acadYr))
+                                {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
+                                @else
+                                <p class="text-danger">Grant Deleted</p>
+                                @endif
+                            </td>
                             <td>{{ $application->type }}</td>
                             <td>{{ $application->level }}</td>
                             <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
@@ -148,11 +154,6 @@
                                 @endcan
                             </td>
                         </tr>
-
-
-
-
-
                         @empty
                         @endforelse
                     </tbody>
@@ -173,23 +174,5 @@
 @endsection
 
 @push('scripts')
-
-<script>
-    $(document).ready(function() {
-
-        // Create DataTable
-        var table = $('#userList').DataTable({
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            lengthMenu: [
-                [10, 25, 50, 100, -1],
-                [10, 25, 50, 100, "All"]
-            ],
-            order: [],
-        });
-    });
-</script>
 
 @endpush
