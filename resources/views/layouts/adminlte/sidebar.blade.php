@@ -184,6 +184,13 @@
 
                 @role('Admin')
                 <li class="nav-item">
+                    <a href="/recycle" class="nav-link">
+                        <i class="fas fa-recycle nav-icon"></i>
+                        <p>Recycle Bin</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="/activity-logs" class="nav-link">
                         <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Activity Logs</p>

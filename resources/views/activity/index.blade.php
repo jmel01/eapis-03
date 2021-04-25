@@ -35,6 +35,8 @@
                         <span class="badge badge-success">{{ $log->description }}</span>
                         @elseif($log->description == 'updated')
                         <span class="badge badge-primary">{{ $log->description }}</span>
+                        @elseif($log->description == 'restored')
+                        <span class="badge badge-info">{{ $log->description }}</span>
                         @else
                         <span class="badge badge-danger">{{ $log->description }}</span>
                         @endif
