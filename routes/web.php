@@ -17,6 +17,8 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
@@ -30,6 +32,13 @@ use Illuminate\Support\Facades\Redirect;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('clear', function () {
+    $exitCode = Artisan::call('config:clear');
+    $exitCode = Artisan::call('cache:clear');
+    $exitCode = Artisan::call('config:cache');
+    return 'DONE'; //Return anything
+});
 
 Route::get('/', function () {
     return redirect('login');
@@ -65,7 +74,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('costs', AdminCostController::class);
     Route::resource('calendars', CalendarController::class);
 
-    
+
     Route::get('/dashboard/admin', [DashboardController::class, 'admin'])->name('admin');
     Route::get('/dashboard/executiveOfficer', [DashboardController::class, 'executiveOfficer'])->name('executiveOfficer');
     Route::get('/dashboard/regionalOfficer', [DashboardController::class, 'regionalOfficer'])->name('regionalOfficer');
@@ -73,7 +82,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dashboard/communityOfficer', [DashboardController::class, 'communityOfficer'])->name('communityOfficer');
     Route::get('/dashboard/applicant', [DashboardController::class, 'applicant'])->name('applicant');
     Route::get('/dashboard/filter-chart', [DashboardController::class, 'filterChart']);
-    
+
     Route::resource('dashboard', DashboardController::class);
 
     Route::get('/showAttachment/{grantID}/{userID}', [DocumentController::class, 'showAttachment'])->name('showAttachment');
