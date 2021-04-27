@@ -20,6 +20,7 @@ class CreateGrantsTable extends Migration
             $table->date('applicationOpen');
             $table->date('applicationClosed');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

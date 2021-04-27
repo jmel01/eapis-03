@@ -5,5 +5,5 @@
     ver.1.0.0.0
   </div>
   <!-- Default to the left -->
-  <strong>Copyright &copy; 2020 <a href="">eapis.ncip.gov.ph</a>.</strong> All rights reserved.
+  <strong>Copyright &copy; 2021 <a href="">eapis.ncip.gov.ph</a>.</strong> All rights reserved.
 </footer>

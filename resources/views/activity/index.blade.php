@@ -13,7 +13,7 @@
     </div>
     <div class="card-body">
         <button class="btn btn-outline-danger btn-sm btn-delete-logs float-right">DELETE ALL LOGS</button>
-        <table id="activityLogList" class="table table-sm table-hover table-responsive-lg">
+        <table id="activityLogList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Model Name</th>
@@ -35,6 +35,8 @@
                         <span class="badge badge-success">{{ $log->description }}</span>
                         @elseif($log->description == 'updated')
                         <span class="badge badge-primary">{{ $log->description }}</span>
+                        @elseif($log->description == 'restored')
+                        <span class="badge badge-info">{{ $log->description }}</span>
                         @else
                         <span class="badge badge-danger">{{ $log->description }}</span>
                         @endif

@@ -27,6 +27,7 @@
                             <option value="Terminated-FPD" {{ old('status')== "Terminated-FPD" ? 'selected' : ''}}>Terminated-FPD</option>
                             <option value="Terminated-EOGS" {{ old('status')== "Terminated-EOGS" ? 'selected' : ''}}>Terminated-EOGS</option>
                             <option value="Terminated-Others" {{ old('status')== "Terminated-Others" ? 'selected' : ''}}>Terminated-Others</option>
+                            <option value="Denied" {{ old('status')== "Denied" ? 'selected' : ''}}>Denied</option>
 
                         </select>
                     </div>

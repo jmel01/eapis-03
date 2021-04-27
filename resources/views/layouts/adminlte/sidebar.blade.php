@@ -29,7 +29,7 @@
                 <li class="nav-item">
                     <a href="{{ route('newUser') }}" class="nav-link">
                         <i class="far fa-address-card nav-icon"></i>
-                        <p>Newly Registered</p>
+                        <p>New Registration</p>
                     </a>
                 </li>
 
@@ -131,29 +131,25 @@
                 </li>
                 @endcan
 
-                @hasanyrole('Admin|Executive Officer|Regional Officer|Provincial Officer|Community Service Officer')
-                <li class="nav-item">
-                    <a href="{{ route('myDocument') }}" class="nav-link">
-                        <i class="far fa-folder-open nav-icon"></i>
-                        <p>My Documents</p>
-                    </a>
-                </li>
-                @endhasanyrole
+                @canany(['user-browse', 'role-browse', 'requirements-browse', 'ethnogroups-browse'])
+                <li class="nav-header">SETTINGS</li>
+                @endcanany
 
-                @can('user-browse')
+                @canany(['user-browse', 'role-browse'])
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>User Management<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
+                        @can('user-browse')
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}" class="nav-link">
                                 <i class="far fa-address-book nav-icon"></i>
                                 <p>User List</p>
                             </a>
                         </li>
-
+                        @endcan
                         @can('role-browse')
                         <li class="nav-item">
                             <a href="{{ route('roles.index') }}" class="nav-link">
@@ -164,7 +160,7 @@
                         @endcan
                     </ul>
                 </li>
-                @endcan
+                @endcanany
 
                 @can('requirements-browse')
                 <li class="nav-item">
@@ -188,12 +184,28 @@
 
                 @role('Admin')
                 <li class="nav-item">
+                    <a href="/recycle" class="nav-link">
+                        <i class="fas fa-recycle nav-icon"></i>
+                        <p>Recycle Bin</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
                     <a href="/activity-logs" class="nav-link">
                         <i class="fas fa-clipboard-list nav-icon"></i>
                         <p>Activity Logs</p>
                     </a>
                 </li>
                 @endrole
+
+                @hasanyrole('Admin|Executive Officer|Regional Officer|Provincial Officer|Community Service Officer')
+                <li class="nav-item">
+                    <a href="{{ route('myDocument') }}" class="nav-link">
+                        <i class="far fa-folder-open nav-icon"></i>
+                        <p>My Documents</p>
+                    </a>
+                </li>
+                @endhasanyrole
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

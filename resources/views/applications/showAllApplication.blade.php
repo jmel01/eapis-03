@@ -12,7 +12,7 @@
         <h3 class="card-title">List of All Applications</h3>
     </div>
     <div class="card-body">
-        <table id="applicationList" class="table table-sm table-hover table-responsive">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -20,6 +20,7 @@
                     <th>Type</th>
                     <th>Level</th>
                     <th>Status</th>
+                    <th>Date</th>
                     <th>Remarks</th>
                     <th>Region</th>
                     <th>Province</th>
@@ -33,10 +34,23 @@
                     <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
                         {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                     </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>
+                        @if(isset($application->grant->acadYr)) 
+                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
+                        @else
+                            <p class="text-danger">Grant Deleted</p>
+                        @endif
+                    </td>
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
@@ -48,7 +62,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
@@ -60,10 +74,23 @@
                     <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
                         {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                     </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>
+                        @if(isset($application->grant->acadYr)) 
+                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
+                        @else
+                            <p class="text-danger">Grant Deleted</p>
+                        @endif
+                    </td>
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
@@ -75,7 +102,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
@@ -88,10 +115,23 @@
                     <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
                         {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                     </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                    <td>
+                        @if(isset($application->grant->acadYr)) 
+                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
+                        @else
+                            <p class="text-danger">Grant Deleted</p>
+                        @endif
+                    </td>
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
@@ -103,7 +143,7 @@
                         @can('profile-edit')
                         <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
                         <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>

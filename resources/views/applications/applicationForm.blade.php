@@ -28,7 +28,8 @@
         </p>
     </div>
     <div class="col-3">
-
+        <a href="{{ url()->previous() }}" class="btn btn-outline-primary float-right mr-1 d-print-none">BACK</a>
+        <button onclick="window.print()" class="btn btn-default float-right mr-1 d-print-none"><i class="fas fa-print"></i> Print</button>    
     </div>
 </div>
 

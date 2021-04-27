@@ -62,6 +62,7 @@
                             </thead>
                             <tbody>
                                 @forelse($applications as $application)
+                                @if (isset($application->grant))
                                 <tr>
                                     <td>{{ $application->grant->psgCode->name }} SY: {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1}}</td>
                                     <td>{{ $application->type }}</td>
@@ -75,6 +76,19 @@
                                         <a href="{{ route('documents.show', $application->grant_id) }}" class="btn btn-outline-info btn-sm mr-1 mb-1">VIEW FILES</a>
                                     </td>
                                 </tr>
+                                @else
+                                <tr class="text-danger">
+                                    <td>Grant already deleted!</td>
+                                    <td>{{ $application->type }}</td>
+                                    <td>{{ $application->level }}</td>
+                                    <td>{{ $application->school }}</td>
+                                    <td>{{ $application->course }}</td>
+                                    <td></td>
+                                    <td>
+                                        <a href="{{ route('documents.show', $application->grant_id) }}" class="btn btn-outline-info btn-sm mr-1 mb-1">VIEW FILES</a>
+                                    </td>
+                                </tr>
+                                @endif
                                 @empty
                                 @endforelse
                             </tbody>

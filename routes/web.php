@@ -13,6 +13,7 @@ use App\Http\Controllers\GrantController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PsgcController;
+use App\Http\Controllers\RecycleController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RequirementController;
 use App\Http\Controllers\RoleController;
@@ -95,6 +96,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('grants', GrantController::class);
     Route::resource('profiles', ProfileController::class);
 
+    Route::get('/recycle', [RecycleController::class, 'index'])->name('recycle');
+    Route::get('/destroyApplication/{id}', [RecycleController::class, 'destroyApplication'])->name('destroyApplication');
+    Route::get('/restoreApplication/{id}', [RecycleController::class, 'restoreApplication'])->name('restoreApplication');
+    Route::get('/destroyGrant/{id}', [RecycleController::class, 'destroyGrant'])->name('destroyGrant');
+    Route::get('/restoreGrant/{id}', [RecycleController::class, 'restoreGrant'])->name('restoreGrant');
+    Route::get('/destroyUser/{id}', [RecycleController::class, 'destroyUser'])->name('destroyUser');
+    Route::get('/restoreUser/{id}', [RecycleController::class, 'restoreUser'])->name('restoreUser');
+
     Route::get('/reports/formA', [ReportController::class, 'formA'])->name('formA');
     Route::get('/reports/formB', [ReportController::class, 'formB'])->name('formB');
     Route::get('/reports/formC', [ReportController::class, 'formC'])->name('formC');
@@ -108,6 +117,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('requirements', RequirementController::class);
     Route::resource('roles', RoleController::class);
 
+    Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
     Route::resource('users', UserController::class);
 
@@ -126,5 +136,5 @@ Route::group(['middleware' => ['auth']], function () {
         });
     });
 
-    //Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
+    Route::get('storage/users-avatar/{userAvatar?}', [DashboardController::class, 'getImage']);
 });

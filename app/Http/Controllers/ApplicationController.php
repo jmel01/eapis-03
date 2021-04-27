@@ -234,6 +234,20 @@ class ApplicationController extends Controller
         $grantid = [
             "id" => $request->id,
         ];
+
+        $current_date = now();
+        if ($request->status == 'On Process') {
+            $request->request->add(['date_process' => $current_date]);
+        } elseif ($request->status == 'Approved') {
+            $request->request->add(['date_approved' => $current_date]);
+        } elseif ($request->status == 'Graduated') {
+            $request->request->add(['date_graduated' => $current_date]);
+        } elseif ($request->status == 'Terminated-FSD' || $request->status == 'Terminated-FG' || $request->status == 'Terminated-DS' || $request->status == 'Terminated-NE' || $request->status == 'Terminated-FPD' || $request->status == 'Terminated-EOGS' || $request->status == 'Terminated-Others') {
+            $request->request->add(['date_terminated' => $current_date]);
+        } elseif ($request->status == 'Denied') {
+            $request->request->add(['date_denied' => $current_date]);
+        }
+
         $grantInformation = $request->all();
 
         Application::updateOrCreate($grantid, $grantInformation);

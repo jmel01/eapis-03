@@ -16,7 +16,7 @@
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
 
-        <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
                     <th>Name</th>
@@ -24,7 +24,9 @@
                     <th>Type</th>
                     <th>Level</th>
                     <th>Status</th>
+                    <th>Date</th>
                     <th>Remarks</th>
+                    <th>Region</th>
                     <th>Province</th>
                     <th>Actions</th>
                 </tr>
@@ -40,35 +42,45 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
-                    @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
                         @endcan
                         @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
+                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1">Files</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
+                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
 
                         @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
+                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
                         @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 btn-add-employment">Employment</button>
+                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
                         @endif
                         @endif
                     </td>
@@ -85,35 +97,45 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
-                    @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
                         @endcan
                         @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-application">Delete</button>
+                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1">Files</a>
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 btn-add-cost">Payment</button>
+                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
 
                         @if($application->status=='Graduated' && $application->level=='College')
                         @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 btn-add-employment">Employed</button>
+                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
                         @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 btn-add-employment">Employment</button>
+                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
                         @endif
                         @endif
                     </td>
@@ -131,14 +153,25 @@
                     <td>{{ $application->type }}</td>
                     <td>{{ $application->level }}</td>
                     <td>{{ $application->status }}</td>
+                    <td>
+                        @if($application->status=='On Process')
+                            {{ $application->date_process }}
+                        @elseif($application->status=='Approved')
+                            {{ $application->date_approved }}
+                        @elseif($application->status=='Graduated')
+                            {{ $application->date_graduated }}
+                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                            {{ $application->date_terminated }}
+                        @elseif($application->status=='Denied')
+                            {{ $application->date_denied }}
+                        @else
+                            {{ $application->created_at }} 
+                        @endif
+                    </td>
                     <td>{{ $application->remarks }}</td>
                     @php
-                    $provinceId = Str::substr($application->applicant->psgcBrgy->code, 0, 4).'00000';
-                    $psgcProvince = App\Models\Psgc::where([['code', '=' , $provinceId ], ['level', 'Prov']])->first();
-                    @endphp
-
-                    <td>{{ $psgcProvince->name ?? '' }}</td>
-
+                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
@@ -151,7 +184,7 @@
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ $provinceId }}" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
+                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                         @endif
                         @endcan
 
@@ -169,17 +202,7 @@
 
                 @endforeach
             </tbody>
-            <tfoot>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th class="text-right"></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </tfoot>
+           
         </table>
 
     </div>
