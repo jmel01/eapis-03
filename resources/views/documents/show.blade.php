@@ -36,7 +36,13 @@
             <tbody>
                 @forelse($documents as $document)
                 <tr>
-                    <td>{{ App\Models\Psgc::getRegion($document->grantDetails->region) }} ({{ $document->grantDetails->acadYr }}-{{ $document->grantDetails->acadYr + 1}})</td>
+                    <td>
+                        @if(isset($document->grantDetails->region)) 
+                            {{ App\Models\Psgc::getRegion($document->grantDetails->region) }} ({{ $document->grantDetails->acadYr }}-{{ $document->grantDetails->acadYr + 1}})
+                        @else
+                            <p class="text-danger">Grant Deleted</p>
+                        @endif
+                    </td>
                     <td>{{ $document->requirementDetails->description }}</td>
                     <td>{{ \Carbon\Carbon::parse($document->created_at)->format('F d, Y h:i:s A') }}</td>
                     <td>
