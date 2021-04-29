@@ -202,7 +202,7 @@
                 @endif
                 @endforeach
                 @endif
-                
+
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
                 @if($education->level == "Masteral")
@@ -277,7 +277,7 @@
                 @endif
                 @endforeach
                 @endif
-                
+
                 @if(!empty($data->education))
                 @foreach($data->education as $education)
                 @if($education->level == "Elementary")
