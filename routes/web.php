@@ -112,8 +112,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
     Route::resource('users', UserController::class);
 
-    Route::get('/activity-logs', [DashboardController::class, 'activityLogs']);
-    Route::get('/activity-logs/clear', [DashboardController::class, 'clearActivityLogs']);
+    Route::get('/activity-logs', [DashboardController::class, 'activityLogs'])->name('activityLogs');
+    Route::get('/activity-logs/clear', [DashboardController::class, 'clearActivityLogs'])->name('clearActivityLogs');
 
     Route::group(['prefix' => 'profile'], function () {
         Route::group(['prefix' => 'update'], function () {
