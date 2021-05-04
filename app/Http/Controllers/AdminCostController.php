@@ -51,19 +51,20 @@ class AdminCostController extends Controller
     public function index()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $locationId = '';
-            $subStrLen = '0';
+            $data = AdminCost::with('provname')->get();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
-            $subStrLen = '2';
+            $data = AdminCost::with('provname')
+                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $locationId]])
+                ->get();
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
-            $subStrLen = '4';
+            $data = AdminCost::with('provname')
+                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $locationId]])
+                ->get();
         }
 
-        $data = AdminCost::with('provname')->get();
-
-        return view('costs.index', compact('data', 'locationId', 'subStrLen'));
+        return view('costs.index', compact('data'));
     }
 
     /**

@@ -56,6 +56,22 @@
                     </a>
                 </li>
                 @endcan
+                @can('application-browse')
+                <li class="nav-item">
+                    <a href="/applications" class="nav-link {{ request()->routeIs('applications.*') ? 'active' : '' }}">
+                        <i class="far fa-list-alt nav-icon"></i>
+                        <p>Applications Management</p>
+                    </a>
+                </li>
+                @endcan
+                @can('expenses-browse')
+                <li class="nav-item">
+                    <a href="/costs" class="nav-link {{ request()->routeIs('costs.*') ? 'active' : '' }}">
+                        <i class="fas fa-hand-holding-usd nav-icon"></i>
+                        <p>Expenses Management</p>
+                    </a>
+                </li>
+                @endcan
 
                 @can('report-browse')
                 <li class="nav-item has-treeview {{ (request()->is('reports/*')) ? 'menu-open' : '' }}">
