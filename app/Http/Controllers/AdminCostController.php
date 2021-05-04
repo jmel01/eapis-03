@@ -6,6 +6,7 @@ use App\Models\AdminCost;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AdminCostController extends Controller
@@ -49,9 +50,20 @@ class AdminCostController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+            $subStrLen = '0';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+            $subStrLen = '2';
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
+            $subStrLen = '4';
+        }
+
         $data = AdminCost::with('provname')->get();
 
-        return view('costs.index', compact('data'));
+        return view('costs.index', compact('data', 'locationId', 'subStrLen'));
     }
 
     /**

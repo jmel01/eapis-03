@@ -28,26 +28,29 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $cost)
-                <tr>
-                    <td>{{ $cost->dateRcvd }}</td>
-                    <td>{{ $cost->payee }}</td>
-                    <td>{{ $cost->particulars }}</td>
-                    <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
-                    <td>{{ $cost->checkNo }}</td>
-                    <td>{{ $cost->provname->name }}</td>
+                @forelse ($data as $key => $cost)
+                    @if(substr($cost->province, 0, $subStrLen) == $locationId || $subStrLen == '0')
+                        <tr>
+                            <td>{{ $cost->dateRcvd }}</td>
+                            <td>{{ $cost->payee }}</td>
+                            <td>{{ $cost->particulars }}</td>
+                            <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
+                            <td>{{ $cost->checkNo }}</td>
+                            <td>{{ $cost->provname->name }}</td>
 
-                    <td>
-                    @can('expenses-edit')
-                        <button data-url="{{ route('costs.edit',$cost->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-cost">Edit</button>
-                    @endcan
-                    @can('expenses-edit')
-                        <button data-url="{{ route('costs.destroy', $cost->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-cost">Delete</button>
-                    @endcan
+                            <td>
+                            @can('expenses-edit')
+                                <button data-url="{{ route('costs.edit',$cost->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-cost">Edit</button>
+                            @endcan
+                            @can('expenses-edit')
+                                <button data-url="{{ route('costs.destroy', $cost->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-cost">Delete</button>
+                            @endcan
 
-                    </td>
-                </tr>
-                @endforeach
+                            </td>
+                        </tr>
+                    @endif
+                @empty
+                @endforelse
             </tbody>
             <tfoot>
                 <tr>
