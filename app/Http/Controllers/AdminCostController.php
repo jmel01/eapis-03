@@ -49,7 +49,9 @@ class AdminCostController extends Controller
      */
     public function index()
     {
-        //
+        $data = AdminCost::with('provname')->get();
+
+        return view('costs.index', compact('data'));
     }
 
     /**

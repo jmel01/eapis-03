@@ -9,14 +9,11 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Expenses for SY {{$grant->acadYr}}-{{$grant->acadYr+1}} ({{ App\Models\Psgc::getRegion($grant->region) }})</h3>
+        <h3 class="card-title">List of Expenses</h3>
     </div>
     <div class="card-body">
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
-        @can('expenses-edit')
-        <button class="btn btn-outline-primary btn-sm btn-add-cost float-right mr-1">ADD ADMIN COST</button>
-        @endcan
 
         <table id="costList" class="table table-sm table-hover table-responsive-lg">
             <thead>
@@ -71,7 +68,7 @@
     </div>
 </div>
 
-@include('costs.modalCost')
+@include('costs.modalGrantPayment')
 @include('layouts.adminlte.modalDelete')
 
 @endsection
@@ -119,12 +116,6 @@
             },
         });
 
-        $('.btn-add-cost').click(function() {
-            document.getElementById("formCost").reset();
-            $('#modalCost').modal('show')
-
-        });
-
         $('.btn-edit-cost').click(function() {
             var url_id = $(this).attr('data-url');
             $.get(url_id, function(data) {
@@ -136,9 +127,10 @@
                 $('[name="checkNo"]').val(data.cost.checkNo)
                 $('[name="province"]').val(data.cost.province)
                 $('[name="id"]').val(data.cost.id)
+                $('[name="grant_id"]').val(data.cost.grant_id)
                 $('[name="user_id"]').val(data.cost.user_id)
 
-                $('#modalCost').modal('show')
+                $('#modalGrantPayment').modal('show')
             })
         })
 
