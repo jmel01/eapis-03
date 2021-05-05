@@ -208,8 +208,8 @@ class ApplicationController extends Controller
         }
 
         $data = Application::with('applicant.psgcBrgy')
-        ->orderBy('id', 'DESC')
-        ->get();
+            ->orderBy('id', 'DESC')
+            ->get();
 
         return view('applications.index', compact('data', 'locationId', 'subStrLen'));
     }

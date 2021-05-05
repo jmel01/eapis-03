@@ -36,7 +36,13 @@
                             <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
                                 {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
                             </td>
-                            <td>{{ $application->grant->psgCode->name}} {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                            <td>
+                                @if(isset($application->grant)) 
+                                    {{ $application->grant->psgCode->name}} {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}
+                                @else
+                                    <p class="text-danger">Grant Deleted</p>
+                                @endif
+                            </td>
                             <td>{{ $application->type }}</td>
                             <td>{{ $application->level }}</td>
                             <td>{{ $application->status }}</td>

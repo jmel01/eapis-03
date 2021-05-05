@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
 use Illuminate\Http\Request;
@@ -112,8 +113,8 @@ class GrantController extends Controller
     public function destroy($id)
     {
         $grant = Grant::find($id);
-
         $grant->delete();
+        Application::where('grant_id', $id)->delete();
 
         $notification = array(
             'message' => 'Scholarship/Grant deleted successfully',
