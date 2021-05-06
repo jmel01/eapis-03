@@ -4,14 +4,18 @@ namespace App\Http\Controllers;
 
 use App\ChartArray\Registered;
 use App\Http\Controllers\Controller;
+use App\Models\AdminCost;
 use App\Models\Application;
+use App\Models\Calendar;
 use App\Models\Grant;
+use App\Models\Profile;
 use App\Models\Psgc;
 use App\Models\User;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
@@ -60,7 +64,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . Auth::id(),
             'password' => 'same:confirm-password'
         ]);
-        
+
         $input = $request->all();
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
@@ -186,7 +190,47 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $student = User::with('profile')->find($id);
+        $userProfile = Profile::where('user_id', $id)->first();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+        } else {
+            if (Auth::user()->region) {
+                $regions = Psgc::where('code', Auth::user()->region)->get();
+            } else {
+                $regions = Psgc::where('level', 'Reg')->get();
+            }
+        }
+
+        $data = Calendar::with('regionname')
+            ->where('region', Auth::user()->region)
+            ->orderBy('dateTimeStart', 'DESC')->get();
+
+        $psgCode = $userProfile->psgCode ?? '';
+        //$psgCode = Auth::user()->profile->psgCode;
+        $grants = array();
+        $userRegion = Str::substr($psgCode, 0, 2) . "0000000";
+
+        if ($psgCode != '') {
+            $userRegion = Str::substr($psgCode, 0, 2) . "0000000";
+            $grants = Grant::where('region', $userRegion)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+        }
+
+        $region = Psgc::where('code', Str::substr($psgCode, 0, 2) . "0000000")->first();
+        $province = Psgc::where('code', Str::substr($psgCode, 0, 4) . "00000")->first();
+        $city = Psgc::where('code', Str::substr($psgCode, 0, 6) . "000")->first();
+        $barangay = Psgc::where('code', $psgCode)->first();
+
+
+        $applications = Application::with('grant.psgCode')->where('user_id', $id)->get();
+
+        $payments = AdminCost::where('user_id', $id)->orderby('dateRcvd', 'desc')->get();
+
+        return view('users.show', compact('id', 'student', 'grants', 'applications', 'psgCode', 'regions', 'userProfile', 'userRegion', 'data', 'region', 'province', 'city', 'barangay', 'payments'));
     }
 
     /**

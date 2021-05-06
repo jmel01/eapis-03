@@ -61,6 +61,7 @@
                     </td>
                     <td>{{ $user->created_at }}</td>
                     <td>
+                        <a href="{{ route('users.show',$user->id) }}" class="btn btn-info btn-sm mr-1 mb-1">View User Info</a>
                         @can('user-edit')
                         <button data-url="{{ route('users.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-user">Update</button>
                         @endcan

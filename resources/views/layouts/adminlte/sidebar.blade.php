@@ -25,14 +25,15 @@
 
 
                 @unlessrole('Applicant')
-                @can('grant-browse')
+                @can('user-browse')
                 <li class="nav-item">
                     <a href="{{ route('newUser') }}" class="nav-link {{ request()->routeIs('newUser') ? 'active' : '' }}">
                         <i class="far fa-address-card nav-icon"></i>
                         <p>New Registration</p>
                     </a>
                 </li>
-
+                @endcan
+                @can('application-browse')
                 <li class="nav-item">
                     <a href="{{ route('showAllApplication') }}" class="nav-link {{ request()->routeIs('showAllApplication') ? 'active' : '' }}">
                         <i class="far fa-address-card nav-icon"></i>
