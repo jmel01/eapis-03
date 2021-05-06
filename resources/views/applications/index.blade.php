@@ -65,18 +65,25 @@
                         
                             <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                             <td>
+                                <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                                @can('application-read')
+                                <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                                @endcan
+                                @can('document-browse')
+                                <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                                @endcan
                                 @can('application-edit')
-                                <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
+                                <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
                                 @endcan
                                 @can('application-delete')
                                 <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                                 @endcan
 
-                                <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
+                                <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
 
                                 @can('expenses-add')
                                 @if($application->status=='Approved')
-                                <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" data-grantID="{{ $application->grant_id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
+                                <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                                 @endif
                                 @endcan
 

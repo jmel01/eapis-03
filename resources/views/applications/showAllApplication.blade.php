@@ -1,6 +1,6 @@
 @extends('layouts.adminlte.template')
 
-@section('title', 'All Applications Management')
+@section('title', 'Applications Management')
 
 @push('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
@@ -9,7 +9,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of All Applications</h3>
+        <h3 class="card-title">List of New and On Process Applications</h3>
     </div>
     <div class="card-body">
         <table id="applicationList" class="table table-sm table-hover table-responsive-sm">
@@ -56,14 +56,16 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
                 @endhasanyrole
@@ -96,14 +98,16 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
                 @endif
@@ -137,14 +141,16 @@
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
                         <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
                         @endcan
-                        @can('profile-edit')
-                        <button data-id="{{ $application->user_id }}" data-url="{{ route('profiles.edit',$application->user_id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
-                        @endcan
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
                     </td>
                 </tr>
                 @endif

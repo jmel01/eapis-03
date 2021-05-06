@@ -122,7 +122,7 @@
                                             <td>{{ $application->course }}</td>
                                             <td>{{ $application->status }}</td>
                                             <td>
-                                            @can('application-read')
+                                                @can('application-read')
                                                 <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-outline-success btn-sm mr-1 mb-1">VIEW APPLICATION</a>
                                                 @endcan
                                                 @can('document-add')

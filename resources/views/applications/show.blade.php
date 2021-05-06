@@ -61,14 +61,21 @@
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
                         @endcan
                         @can('application-delete')
                         <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
+                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
@@ -116,14 +123,21 @@
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
                         @endcan
                         @can('application-delete')
                         <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
+                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
 
                         @can('expenses-add')
                         @if($application->status=='Approved')
@@ -173,14 +187,21 @@
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
                     <td>
+                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                        @can('application-read')
+                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                        @endcan
+                        @can('document-browse')
+                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                        @endcan
                         @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit</button>
+                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
                         @endcan
                         @can('application-delete')
                         <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                         @endcan
 
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a>
+                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
 
                         @can('expenses-add')
                         @if($application->status=='Approved')

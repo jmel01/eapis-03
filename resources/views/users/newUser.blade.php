@@ -54,7 +54,7 @@
 
                         @can('profile-edit')
                         @if(!empty($user->profile))
-                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
+                        <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-profile">Update Profile</button>
                         @else
                         <button data-id="{{ $user->id }}" data-url="{{ route('profiles.edit',$user->id) }}" class="btn btn-success btn-sm mr-1 mb-1 btn-edit-profile">Create Profile</button>
                         @endif
