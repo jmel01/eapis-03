@@ -60,6 +60,7 @@ Route::get('ethnogroups/getEthnoGroups', [EthnogroupController::class, 'getEthno
 
 Route::group(['middleware' => ['auth']], function () {
 
+    Route::get('/alumni', [ApplicationController::class, 'alumni'])->name('alumni');
     Route::get('/applications/applicationForm/{id}', [ApplicationController::class, 'applicationForm'])->name('applicationForm');
     Route::get('/applications/showAllApplication', [ApplicationController::class, 'showAllApplication'])->name('showAllApplication');
     Route::get('/applications/showAllApproved', [ApplicationController::class, 'showAllApproved'])->name('showAllApproved');

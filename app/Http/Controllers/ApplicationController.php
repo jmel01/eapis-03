@@ -189,6 +189,30 @@ class ApplicationController extends Controller
         return view('applications.show', compact('data', 'grant', 'provinces', 'locationId'));
     }
 
+    public function alumni()
+    {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $locationId = '';
+            $subStrLen = '0';
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $locationId = Str::substr(Auth::user()->region, 0, 2);
+            $subStrLen = '2';
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
+            $subStrLen = '4';
+        }
+
+        $graduated = Application::with('applicant.psgcBrgy')
+            ->where('status', 'Graduated')
+
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $data =  $graduated->unique('user_id');
+
+        return view('applications.alumni', compact('data', 'locationId', 'subStrLen'));
+    }
+
     /**
      * Display a listing of the resource.
      *

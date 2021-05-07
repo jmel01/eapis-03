@@ -73,6 +73,14 @@
                     </a>
                 </li>
                 @endcan
+                @can('application-browse')
+                <li class="nav-item">
+                    <a href="/alumni" class="nav-link {{ request()->routeIs('alumni') ? 'active' : '' }}">
+                        <i class="fas fa-trophy nav-icon"></i>
+                        <p>Scholarship Alumni</p>
+                    </a>
+                </li>
+                @endcan
 
                 @can('report-browse')
                 <li class="nav-item has-treeview {{ (request()->is('reports/*')) ? 'menu-open' : '' }}">
