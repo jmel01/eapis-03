@@ -29,6 +29,7 @@
                     <th class="sum">High School</th>
                     <th class="sum">Elementary</th>
                     <th>No. of Years Availed</th>
+                    <th>Year Graduated</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
@@ -42,7 +43,7 @@
                     <td>{{ App\Models\Ethnogroup::find($application->applicant->ethnoGroup)->ipgroup }}</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
-                    <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($application->applicant->birthdate)->diff(\Carbon\Carbon::parse($application->date_graduated))->format('%y') }}</td>
                     <td>{{ $application->school }}</td>
                     <td>{{ $application->course }}</td>
                     <td class="text-center text-bold">@if ($application->level=='Post Study') &#10003; @endif</td>
@@ -51,6 +52,7 @@
                     <td class="text-center text-bold">@if ($application->level=='High School') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->level=='Elementary') &#10003; @endif</td>
                     <td class="text-center">{{ \Carbon\Carbon::parse($application->date_approved)->diff(\Carbon\Carbon::parse($application->date_graduated))->format('%y') }}</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($application->date_graduated)->format('Y') }}</td>
                     <td>{{ App\Models\Psgc::getProvince($application->applicant->psgCode) }}</td>
                     <td>{{ App\Models\Psgc::getRegion($application->applicant->psgCode) }}</td>
                 </tr>
@@ -67,6 +69,7 @@
                     <th></th>
                     <th></th>
                     <th></th>
+                    <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
                     <th class="text-center"></th>
@@ -200,6 +203,7 @@
                     $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(13)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(14)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(15)').css('text-align', 'center');
 
                     $(win.document.body).find('table tfoot th').css({
                         'vertical-align': 'middle',

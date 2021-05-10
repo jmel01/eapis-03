@@ -18,6 +18,7 @@
                     <th>Payee</th>
                     <th>Particulars (Administrative Cost)</th>
                     <th class="sum">Amount</th>
+                    <th>Date Received</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
@@ -28,6 +29,7 @@
                     <td>{{ $cost->payee }}</td>
                     <td>{{ $cost->particulars }}</td>
                     <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
+                    <td>{{ $cost->dateRcvd }}</td>
                     <td>{{ App\Models\Psgc::getProvince($cost->province) }}</td>
                     <td>{{ App\Models\Psgc::getRegion($cost->province) }}</td>
                 </tr>
@@ -38,6 +40,7 @@
                     <th></th>
                     <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -173,7 +176,12 @@
                         'text-align': 'center'
                     });
 
+                    $(win.document.body).find('table tbody td:nth-child(1)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(2)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(3)').css('text-align', 'right');
+                    $(win.document.body).find('table tbody td:nth-child(4)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(5)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(6)').css('text-align', 'center');
                     $(win.document.body).find('table tfoot th:nth-child(2)').css('text-align', 'right');
                     $(win.document.body).find('table tfoot th:nth-child(3)').css('text-align', 'right');
 

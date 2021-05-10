@@ -26,6 +26,7 @@
                     <th class="sum">FPD</th>
                     <th class="sum">EOGS</th>
                     <th class="sum">OTHER</th>
+                    <th>Year Terminated</th>
                 </tr>
             </thead>
             <tbody>
@@ -43,23 +44,25 @@
                     <td class="text-center text-bold">@if ($application->status=='Terminated-FPD') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->status=='Terminated-EOGS') &#10003; @endif</td>
                     <td class="text-center text-bold">@if ($application->status=='Terminated-Others') &#10003; @endif</td>
+                    <td class="text-center">{{ \Carbon\Carbon::parse($application->date_terminated)->format('Y') }}</td>
                 </tr>
                 @endif
                 @endforeach
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                     <th class="text-right">TOTAL:</th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
-                    <th class="text-right"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th class="text-center"></th>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>
@@ -182,6 +185,7 @@
                     $(win.document.body).find('table tbody td:nth-child(9)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(10)').css('text-align', 'center');
                     $(win.document.body).find('table tbody td:nth-child(11)').css('text-align', 'center');
+                    $(win.document.body).find('table tbody td:nth-child(12)').css('text-align', 'center');
 
                     $(win.document.body).find('table tfoot th').css({
                         'vertical-align': 'middle',
