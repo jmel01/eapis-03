@@ -48,10 +48,11 @@
                                     <div class="col-md-8">
                                         @can('profile-edit')
                                         <div>
+                                            <a href="{{ url()->previous() }}" class="btn btn-outline-primary btn-sm float-right mr-1 d-print-none">BACK</a>
                                             @if($userProfile == '')
-                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-warning btn-sm float-right btn-edit-profile">UPDATE PROFILE!</button>
+                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-warning btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE!</button>
                                             @else
-                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-outline-primary btn-sm float-right btn-edit-profile">UPDATE PROFILE</button>
+                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-outline-primary btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE</button>
                                             @endif
                                         </div>
                                         @endcan
