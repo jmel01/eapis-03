@@ -12,7 +12,7 @@
                 <div class="modal-body">
                 <div class="row">
                     <div class="col-12 text-center">
-                        <input type="file" class="form-control-file rounded-0" name="profilePicture" id="profilePicture">
+                        <input type="file" class="form-control-file rounded-0" name="profilePicture" id="profilePicture" accept="image/*">
                     </div>
                 </div>
                 </div>
