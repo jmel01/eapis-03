@@ -71,7 +71,7 @@
                                     <td>{{ $application->course }}</td>
                                     <td>{{ $application->status }}</td>
                                     <td>
-                                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" target="_blank" class="btn btn-outline-success btn-sm mr-1 mb-1">VIEW APPLICATION</a>
+                                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-outline-success btn-sm mr-1 mb-1">VIEW APPLICATION</a>
                                         <button class="btn btn-outline-primary btn-sm mr-1 mb-1 btn-add-document" data-grantID="{{ $application->grant_id }}">ADD FILE</button>
                                         <a href="{{ route('documents.show', $application->grant_id) }}" class="btn btn-outline-info btn-sm mr-1 mb-1">VIEW FILES</a>
                                     </td>

@@ -292,7 +292,7 @@ class ApplicationController extends Controller
         Application::updateOrCreate($grantid, $grantInformation);
 
         $notification = array(
-            'message' => 'Profile updated successfully',
+            'message' => 'Application updated successfully',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
