@@ -103,7 +103,7 @@ class AdminCostController extends Controller
         AdminCost::updateOrCreate(["id" => $request->id], $input);
 
         $notification = array(
-            'message' => 'Admin cost updated successfully',
+            'message' => 'Payment successful',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
