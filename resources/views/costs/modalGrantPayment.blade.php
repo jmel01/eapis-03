@@ -16,6 +16,20 @@
                     </div>
 
                     <div class="form-group">
+                        <label>School Year</label>
+                        <input name="schoolYear" type="text" value="{{old('schoolYear')}}" class="form-control {{$errors->cost->first('schoolYear') == null ? '' : 'is-invalid'}}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Semester</label>
+                        <select name="semester" class="form-control {!! $errors->cost->first('semester', 'is-invalid') !!}" required>
+                            <option value="" disabled selected>Select Semester</option>
+                            <option value="First Semester" {{ old('semester')=='First Semester' ? 'selected' : ''}}>First Semester</option>
+                            <option value="Second Semester" {{ old('semester')=='Second Semester' ? 'selected' : ''}}>Second Semester</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label>Payee</label>
                         <input name="payee" type="text" value="{{old('payee')}}" class="form-control {{$errors->cost->first('payee') == null ? '' : 'is-invalid'}}" required>
                     </div>

@@ -62,4 +62,70 @@ class Application extends Model
     {
         return $this->hasOne('App\Models\Employment', 'user_id', 'user_id');
     }
+
+    static function getCountGrantApplication($id)
+    {
+        $countGrantNewApplication = Application::where('grant_id', $id)->count();
+
+        return $countGrantNewApplication;
+    }
+
+    static function getCountGrantNewApplication($id)
+    {
+        $countGrantNewApplication = Application::where('grant_id', $id)
+            ->where('status', 'New')
+            ->count();
+
+        return $countGrantNewApplication;
+    }
+
+    static function getCountGrantOnProcessApplication($id)
+    {
+        $countGrantOnProcessApplication = Application::where('grant_id', $id)
+            ->where('status', 'On Process')
+            ->count();
+
+        return $countGrantOnProcessApplication;
+    }
+
+    static function getCountGrantApprovedApplication($id)
+    {
+        $countGrantApprovedApplication = Application::where('grant_id', $id)
+            ->where('status', 'Approved')
+            ->count();
+
+        return $countGrantApprovedApplication;
+    }
+
+    static function getCountGrantDeniedApplication($id)
+    {
+        $countGrantDeniedApplication = Application::where('grant_id', $id)
+            ->where('status', 'Graduated')
+            ->count();
+
+        return $countGrantDeniedApplication;
+    }
+
+    static function getCountGrantGraduatedApplication($id)
+    {
+        $countGrantGraduatedApplication = Application::where('grant_id', $id)
+            ->where('status', 'Graduated')
+            ->count();
+
+        return $countGrantGraduatedApplication;
+    }
+
+    static function getCountGrantTerminatedApplication($id)
+    {
+        $countGrantTerminatedApplication = Application::where('grant_id', $id)
+            ->where('status', '!=', 'New')
+            ->where('status', '!=', 'Denied')
+            ->where('status', '!=', 'Approved')
+            ->where('status', '!=', 'On Process')
+            ->where('status', '!=', 'Graduated')
+            ->whereNotNull('status')
+            ->count();
+
+        return $countGrantTerminatedApplication;
+    }
 }

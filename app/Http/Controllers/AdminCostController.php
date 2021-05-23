@@ -16,6 +16,7 @@ class AdminCostController extends Controller
         $data = AdminCost::with('provname')
             ->where('grant_id', $id)
             ->whereNull('user_id')
+            ->orderBy('updated_at', 'DESC')
             ->get();
         $grant = Grant::where('id', $id)->first();
 
@@ -32,6 +33,7 @@ class AdminCostController extends Controller
         $data = AdminCost::with('provname')
             ->where('grant_id', $id)
             ->whereNotNull('user_id')
+            ->orderBy('updated_at', 'DESC')
             ->get();
         $grant = Grant::where('id', $id)->first();
 
@@ -51,20 +53,31 @@ class AdminCostController extends Controller
     public function index()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = AdminCost::with('provname')->get();
+            $data = AdminCost::with('provname')->orderBy('updated_at', 'DESC')->get();
+            $provinces=Psgc::where([['level', 'Prov']])
+            ->orwhere([['level', 'Dist']])
+            ->get();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $locationId = Str::substr(Auth::user()->region, 0, 2);
             $data = AdminCost::with('provname')
                 ->where([[\DB::raw('substr(province, 1, 2)'), '=', $locationId]])
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+            $provinces = Psgc::where([[\DB::raw('substr(code, 1, 2)'), '=', $locationId], ['level', 'Prov']])
+                ->orwhere([[\DB::raw('substr(code, 1, 2)'), '=', $locationId], ['level', 'Dist']])
                 ->get();
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
             $data = AdminCost::with('provname')
-                ->where([[\DB::raw('substr(province, 1, 2)'), '=', $locationId]])
+                ->where([[\DB::raw('substr(province, 1, 4)'), '=', $locationId]])
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+            $provinces = Psgc::where([[\DB::raw('substr(code, 1, 4)'), '=', $locationId], ['level', 'Prov']])
+                ->orwhere([[\DB::raw('substr(code, 1, 4)'), '=', $locationId], ['level', 'Dist']])
                 ->get();
         }
 
-        return view('costs.index', compact('data'));
+        return view('costs.index', compact('data','provinces'));
     }
 
     /**
@@ -103,8 +116,8 @@ class AdminCostController extends Controller
         AdminCost::updateOrCreate(["id" => $request->id], $input);
 
         $notification = array(
-            'message' => 'Payment successful',
-            'alert-type' => 'success'
+            'message' => $request->id == "" ? 'Payment successful' : 'Updated successful',
+            'alert-type' => $request->id == "" ? 'success' : 'info'
         );
         return redirect()->back()->with($notification);
     }
@@ -117,7 +130,7 @@ class AdminCostController extends Controller
      */
     public function show($id)
     {
-        $data = AdminCost::with('provname')->where('grant_id', $id)->get();
+        $data = AdminCost::with('provname')->where('grant_id', $id)->orderBy('updated_at', 'DESC')->get();
         $grant = Grant::where('id', $id)->first();
 
         $regionId = Str::substr($grant->region, 0, 2);

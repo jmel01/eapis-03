@@ -61,7 +61,7 @@ class ProfileController extends Controller
             'civilStatus' => 'required',
             'ethnoGroup' => 'required',
             'contactNumber' => 'required',
-            'email',
+            'email' => 'required',
             'address' => 'required',
             'region' => 'required',
             'province' => 'required',

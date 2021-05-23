@@ -49,16 +49,59 @@
                     <td>
                         @can('application-browse')
                         <div class="btn-group mr-1 mb-1" role="group">
-                            <a href="{{ route('applications.show',$grant->id) }}" type="button" class="btn btn-info btn-sm">Applications</a>
+                            <a href="{{ route('applications.show',$grant->id) }}" type="button" class="btn btn-info btn-sm">Applications
+                                @if(App\Models\Application::getCountGrantApplication($grant->id) > 0)
+                                <span class="badge badge-success navbar-badge ml-1">{{ App\Models\Application::getCountGrantApplication($grant->id) }}</span>
+                                @else
+                                <span class="badge badge-danger navbar-badge ml-1">0</span>
+                                @endif
+                            </a>
 
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
                                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                    <a class="dropdown-item" href="{{ route('showAllNew',$grant->id) }}">New Applicant</a>
-                                    <a class="dropdown-item" href="{{ route('showOnProcess',$grant->id) }}">On Process</a>
-                                    <a class="dropdown-item" href="{{ route('showApproved',$grant->id) }}">Approved</a>
-                                    <a class="dropdown-item" href="{{ route('showGraduated',$grant->id) }}">Graduated</a>
-                                    <a class="dropdown-item" href="{{ route('showTerminated',$grant->id) }}">Terminated</a>
+                                    <a class="dropdown-item" href="{{ route('showAllNew',$grant->id) }}">New Applicant
+                                        @if(App\Models\Application::getCountGrantNewApplication($grant->id) > 0)
+                                        <span class="badge badge-info">{{ App\Models\Application::getCountGrantNewApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-danger">0</span>
+                                        @endif
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('showOnProcess',$grant->id) }}">On Process
+                                        @if(App\Models\Application::getCountGrantOnProcessApplication($grant->id) > 0)
+                                        <span class="badge badge-warning">{{ App\Models\Application::getCountGrantOnProcessApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-danger">0</span>
+                                        @endif
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('showApproved',$grant->id) }}">Approved
+                                        @if(App\Models\Application::getCountGrantApprovedApplication($grant->id) > 0)
+                                        <span class="badge badge-success">{{ App\Models\Application::getCountGrantApprovedApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-danger">0</span>
+                                        @endif
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('showDenied',$grant->id) }}">Denied
+                                        @if(App\Models\Application::getCountGrantDeniedApplication($grant->id) > 0)
+                                        <span class="badge badge-warning">{{ App\Models\Application::getCountGrantDeniedApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-success">0</span>
+                                        @endif
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('showGraduated',$grant->id) }}">Graduated
+                                        @if(App\Models\Application::getCountGrantGraduatedApplication($grant->id) > 0)
+                                        <span class="badge badge-success">{{ App\Models\Application::getCountGrantGraduatedApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-danger">0</span>
+                                        @endif
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('showTerminated',$grant->id) }}">Terminated
+                                        @if(App\Models\Application::getCountGrantTerminatedApplication($grant->id) > 0)
+                                        <span class="badge badge-danger">{{ App\Models\Application::getCountGrantTerminatedApplication($grant->id) }}</span>
+                                        @else
+                                        <span class="badge badge-success">0</span>
+                                        @endif
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +139,7 @@
 
     </div>
     <div class="card-footer">
-        
+
     </div>
 </div>
 

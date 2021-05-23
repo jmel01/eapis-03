@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Http\View\Composers\NotificationComposer;
+use App\Http\View\Composers\UserComposer;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,5 +37,7 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         Schema::defaultStringLength(191);
 
+        View::composer('*', NotificationComposer::class);
+        View::composer('*', UserComposer::class);
     }
 }

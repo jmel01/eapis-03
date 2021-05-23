@@ -5,7 +5,7 @@
 
 @endpush
 @section('content')
-    
+    {{ $totalAllApplication}}
 @endsection
 
 @push('scripts')

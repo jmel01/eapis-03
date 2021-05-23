@@ -19,6 +19,8 @@ class CreateAdminCostsTable extends Migration
             $table->string('grant_id');
             $table->string('user_id')->nullable();
             $table->date('dateRcvd');
+            $table->string('schoolYear')->nullable();
+            $table->string('semester')->nullable();
             $table->string('payee');
             $table->string('particulars')->nullable();
             $table->string('amount');

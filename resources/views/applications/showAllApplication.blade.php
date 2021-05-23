@@ -28,135 +28,50 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $application)
-                @hasanyrole('Admin|Executive Officer')
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>
-                        @if(isset($application->grant->acadYr)) 
-                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
-                        @else
-                            <p class="text-danger">Grant Deleted</p>
-                        @endif
-                    </td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+                @forelse ($data as $key => $application)
+                    @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
+                    <tr>
+                        <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                            {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                        </td>
+                        <td>
+                            @if(isset($application->grant->acadYr)) 
+                                {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
+                            @else
+                                <p class="text-danger">Grant Deleted</p>
+                            @endif
+                        </td>
+                        <td>{{ $application->type }}</td>
+                        <td>{{ $application->level }}</td>
+                        <td>{{ $application->status }}</td>
+                        <td>
+                            @if($application->status=='On Process')
+                                {{ $application->date_process }}
+                            @else
+                                {{ $application->created_at }} 
+                            @endif
+                        </td>
+                        <td>{{ $application->remarks }}</td>
+                        <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                        <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
 
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
-                        @endcan
-                    </td>
-                </tr>
-                @endhasanyrole
+                        <td>
+                            <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                            @can('application-read')
+                            <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                            @endcan
+                            @can('document-browse')
+                            <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                            @endcan
+                            @can('application-edit')
+                            <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
+                            @endcan
+                        </td>
+                    </tr>
+                    @endif
+                @empty
 
-                @hasanyrole('Regional Officer')
-                @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $locationId)
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>
-                        @if(isset($application->grant->acadYr)) 
-                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
-                        @else
-                            <p class="text-danger">Grant Deleted</p>
-                        @endif
-                    </td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
-                        @endcan
-                    </td>
-                </tr>
-                @endif
-                @endhasanyrole
-
-                @hasanyrole('Provincial Officer|Community Service Officer')
-                @if(substr($application->applicant->psgcBrgy->code, 0, 4) == $locationId)
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>
-                        @if(isset($application->grant->acadYr)) 
-                            {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
-                        @else
-                            <p class="text-danger">Grant Deleted</p>
-                        @endif
-                    </td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Update Application</button>
-                        @endcan
-                    </td>
-                </tr>
-                @endif
-                @endhasanyrole
-
-                @endforeach
+                @endforelse
             </tbody>
         </table>
 

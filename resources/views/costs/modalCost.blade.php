@@ -48,7 +48,7 @@
                 </div>
                 <div class="modal-footer">
                     <input name="id" value="{{old('id')}}" type="hidden">
-                    <input name="grant_id" value="{{old('grant_id',$grant->id)}}" type="hidden">
+                    <input name="grant_id" value="{{old('grant_id',$grant->id ?? '')}}" type="hidden">
                     <input name="user_id" value="{{old('user_id')}}" type="hidden">
                     <input name="application_id" value="{{old('application_id')}}" type="hidden">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

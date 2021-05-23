@@ -146,7 +146,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>E-mail Address</label>
-                                        <input name="email" type="email" value="{{old('email')}}" class="form-control {!! $errors->profile->first('email', 'is-invalid') !!}">
+                                        <input name="email" type="email" value="{{old('email')}}" class="form-control {!! $errors->profile->first('email', 'is-invalid') !!}" required>
                                     </div>
                                 </div>
                             </div>

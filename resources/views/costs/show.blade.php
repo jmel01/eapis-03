@@ -67,7 +67,7 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
@@ -83,6 +83,41 @@
 
 <script>
     $(document).ready(function() {
+
+        $('.btn-add-cost').click(function() {
+            document.getElementById("formCost").reset();
+            $('[name="id"]').val('')
+            $('[name="user_id"]').val('')
+            $('[name="application_id"]').val('')
+            $('#modalCost').modal('show')
+
+        });
+
+        $('.btn-edit-cost').click(function() {
+            var url_id = $(this).attr('data-url');
+            $.get(url_id, function(data) {
+                console.log(data)
+                $('[name="dateRcvd"]').val(data.cost.dateRcvd)
+                $('[name="payee"]').val(data.cost.payee)
+                $('[name="particulars"]').val(data.cost.particulars)
+                $('[name="amount"]').val(data.cost.amount)
+                $('[name="checkNo"]').val(data.cost.checkNo)
+                $('[name="province"]').val(data.cost.province)
+                $('[name="id"]').val(data.cost.id)
+                $('[name="user_id"]').val(data.cost.user_id)
+                $('[name="application_id"]').val(data.cost.application_id)
+
+                $('#modalCost').modal('show')
+            })
+        })
+
+        $('.btn-delete-cost').click(function() {
+            var url_id = $(this).attr('data-url');
+            document.getElementById("formDelete").action = url_id;
+            $('#modalDelete').modal('show')
+
+        });
+
         // Create DataTable
         var table = $('#costList').DataTable({
             "fixedHeader": {
@@ -117,36 +152,6 @@
                     this.footer().innerHTML = pageSum.toLocaleString("us-US");
                 });
             },
-        });
-
-        $('.btn-add-cost').click(function() {
-            document.getElementById("formCost").reset();
-            $('#modalCost').modal('show')
-
-        });
-
-        $('.btn-edit-cost').click(function() {
-            var url_id = $(this).attr('data-url');
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="dateRcvd"]').val(data.cost.dateRcvd)
-                $('[name="payee"]').val(data.cost.payee)
-                $('[name="particulars"]').val(data.cost.particulars)
-                $('[name="amount"]').val(data.cost.amount)
-                $('[name="checkNo"]').val(data.cost.checkNo)
-                $('[name="province"]').val(data.cost.province)
-                $('[name="id"]').val(data.cost.id)
-                $('[name="user_id"]').val(data.cost.user_id)
-
-                $('#modalCost').modal('show')
-            })
-        })
-
-        $('.btn-delete-cost').click(function() {
-            var url_id = $(this).attr('data-url');
-            document.getElementById("formDelete").action = url_id;
-            $('#modalDelete').modal('show')
-
         });
     });
 </script>

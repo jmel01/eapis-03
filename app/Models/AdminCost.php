@@ -21,6 +21,8 @@ class AdminCost extends Model
         'grant_id',
         'user_id',
         'dateRcvd',
+        'schoolYear',
+        'semester',
         'payee',
         'particulars',
         'amount',

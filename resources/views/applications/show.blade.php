@@ -32,209 +32,81 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $application)
-                @hasanyrole('Admin|Executive Officer')
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @elseif($application->status=='Approved')
-                            {{ $application->date_approved }}
-                        @elseif($application->status=='Graduated')
-                            {{ $application->date_graduated }}
-                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
-                            {{ $application->date_terminated }}
-                        @elseif($application->status=='Denied')
-                            {{ $application->date_denied }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
-                        @endcan
-                        @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
-                        @endcan
+                @forelse ($data as $key => $application)
+                    @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
+                    <tr>
+                        <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
+                            {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                        </td>
+                        <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
+                        <td>{{ $application->type }}</td>
+                        <td>{{ $application->level }}</td>
+                        <td>{{ $application->status }}</td>
+                        <td>
+                            @if($application->status=='On Process')
+                                {{ $application->date_process }}
+                            @elseif($application->status=='Approved')
+                                {{ $application->date_approved }}
+                            @elseif($application->status=='Graduated')
+                                {{ $application->date_graduated }}
+                            @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
+                                {{ $application->date_terminated }}
+                            @elseif($application->status=='Denied')
+                                {{ $application->date_denied }}
+                            @else
+                                {{ $application->created_at }} 
+                            @endif
+                        </td>
+                        <td>{{ $application->remarks }}</td>
+                        <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
+                        <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
+                        <td>
+                            <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
+                            @can('application-read')
+                            <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
+                            @endcan
+                            @can('document-browse')
+                            <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
+                            @endcan
+                            @can('application-edit')
+                            <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
+                            @endcan
+                            @can('application-delete')
+                            <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
+                            @endcan
 
-                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
+                            @can('expenses-add')
+                            @if($application->status=='Approved')
+                            <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-grantId="{{ $application->grant_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
+                            @endif
+                            @endcan
 
-                        @can('expenses-add')
-                        @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
-                        @endif
-                        @endcan
+                            @if($application->status=='Graduated' && $application->level=='College')
+                            @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
+                            <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
+                            @else
+                            <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
+                            @endif
+                            @endif
+                        </td>
+                    </tr>
+                    @endif
+                @empty
 
-                        @if($application->status=='Graduated' && $application->level=='College')
-                        @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
-                        @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
-                        @endif
-                        @endif
-                    </td>
-                </tr>
-                @endhasanyrole
-
-                @hasanyrole('Regional Officer')
-                @if(substr($application->applicant->psgcBrgy->code, 0, 2) == $locationId)
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @elseif($application->status=='Approved')
-                            {{ $application->date_approved }}
-                        @elseif($application->status=='Graduated')
-                            {{ $application->date_graduated }}
-                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
-                            {{ $application->date_terminated }}
-                        @elseif($application->status=='Denied')
-                            {{ $application->date_denied }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
-                        @endcan
-                        @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
-                        @endcan
-
-                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
-
-                        @can('expenses-add')
-                        @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
-                        @endif
-                        @endcan
-
-                        @if($application->status=='Graduated' && $application->level=='College')
-                        @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
-                        @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
-                        @endif
-                        @endif
-                    </td>
-                </tr>
-                @endif
-                @endhasanyrole
-
-                @hasanyrole('Provincial Officer|Community Service Officer')
-                @if(substr($application->applicant->psgcBrgy->code, 0, 4) == $locationId)
-                <tr>
-                    <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                        {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                    </td>
-                    <td>{{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}</td>
-                    <td>{{ $application->type }}</td>
-                    <td>{{ $application->level }}</td>
-                    <td>{{ $application->status }}</td>
-                    <td>
-                        @if($application->status=='On Process')
-                            {{ $application->date_process }}
-                        @elseif($application->status=='Approved')
-                            {{ $application->date_approved }}
-                        @elseif($application->status=='Graduated')
-                            {{ $application->date_graduated }}
-                        @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
-                            {{ $application->date_terminated }}
-                        @elseif($application->status=='Denied')
-                            {{ $application->date_denied }}
-                        @else
-                            {{ $application->created_at }} 
-                        @endif
-                    </td>
-                    <td>{{ $application->remarks }}</td>
-                    @php
-                    <td>{{ App\Models\Psgc::getRegion($application->applicant->psgcBrgy->code) }}</td>
-                    <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-                    <td>
-                        <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                        @can('application-read')
-                        <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                        @endcan
-                        @can('document-browse')
-                        <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                        @endcan
-                        @can('application-edit')
-                        <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
-                        @endcan
-                        @can('application-delete')
-                        <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
-                        @endcan
-
-                        <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
-
-                        @can('expenses-add')
-                        @if($application->status=='Approved')
-                        <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
-                        @endif
-                        @endcan
-
-                        @if($application->status=='Graduated' && $application->level=='College')
-                        @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                        <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
-                        @else
-                        <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
-                        @endif
-                        @endif
-                    </td>
-                </tr>
-                @endif
-                @endhasanyrole
-
-                @endforeach
+                @endforelse
             </tbody>
            
         </table>
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
 @include('applications.modalApplication')
 @include('applications.modalApplicationEdit')
-@include('costs.modalCost')
+@include('costs.modalGrantPayment')
 @include('employment.modalEmployment')
 @include('layouts.adminlte.modalDelete')
 
@@ -250,19 +122,23 @@
     $(document).ready(function() {
 
         $('.btn-add-cost').click(function() {
-            document.getElementById("formCost").reset();
-            $('#modalCost').modal('show')
+            document.getElementById("formGrantPayment").reset();
+            
             var payee = $(this).attr('data-payee');
             var particular = $(this).attr('data-particular');
             var province = $(this).attr('data-province');
             var userId = $(this).attr('data-userId');
+            var grantId = $(this).attr('data-grantId');
             var applicationId = $(this).attr('data-applicationId');
 
             $('[name="payee"]').val(payee)
             $('[name="particulars"]').val(particular)
             $('[name="province"]').val(province)
             $('[name="user_id"]').val(userId)
+            $('[name="grant_id"]').val(grantId)
             $('[name="application_id"]').val(applicationId)
+
+            $('#modalGrantPayment').modal('show')
         });
 
         $('.btn-add-employment').click(function() {
@@ -343,6 +219,14 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#modalEmployment').modal('show');
+    });
+</script>
+@endif
+
+@if (count($errors->cost) > 0)
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#modalGrantPayment').modal('show');
     });
 </script>
 @endif

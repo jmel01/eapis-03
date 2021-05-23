@@ -19,6 +19,8 @@
             <thead>
                 <tr>
                     <th>Date Received</th>
+                    <th>School Year</th>
+                    <th>Semester</th>
                     <th>Payee</th>
                     <th>Particulars</th>
                     <th class="sum">Amount</th>
@@ -28,29 +30,34 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $cost)
-                <tr>
-                    <td>{{ $cost->dateRcvd }}</td>
-                    <td>{{ $cost->payee }}</td>
-                    <td>{{ $cost->particulars }}</td>
-                    <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
-                    <td>{{ $cost->checkNo }}</td>
-                    <td>{{ $cost->provname->name }}</td>
+                @forelse ($data as $key => $cost)
+                    <tr>
+                        <td>{{ $cost->dateRcvd }}</td>
+                        <td>{{ $cost->schoolYear }}</td>
+                        <td>{{ $cost->semester }}</td>
+                        <td>{{ $cost->payee }}</td>
+                        <td>{{ $cost->particulars }}</td>
+                        <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
+                        <td>{{ $cost->checkNo }}</td>
+                        <td>{{ $cost->provname->name }}</td>
 
-                    <td>
-                    @can('expenses-edit')
-                        <button data-url="{{ route('costs.edit',$cost->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-cost">Edit</button>
-                    @endcan
-                    @can('expenses-edit')
-                        <button data-url="{{ route('costs.destroy', $cost->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-cost">Delete</button>
-                    @endcan
+                        <td>
+                        @can('expenses-edit')
+                            <button data-url="{{ route('costs.edit',$cost->id) }}" class="btn btn-primary btn-sm mr-1 btn-edit-cost">Edit</button>
+                        @endcan
+                        @can('expenses-edit')
+                            <button data-url="{{ route('costs.destroy', $cost->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-cost">Delete</button>
+                        @endcan
 
-                    </td>
-                </tr>
-                @endforeach
+                        </td>
+                    </tr>
+                @empty
+                @endforelse
             </tbody>
             <tfoot>
                 <tr>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th class="text-right">TOTAL:</th>
@@ -64,11 +71,11 @@
 
     </div>
     <div class="card-footer">
-        Footer
+        
     </div>
 </div>
 
-@include('costs.modalCost')
+@include('costs.modalGrantPayment')
 @include('layouts.adminlte.modalDelete')
 
 @endsection
@@ -80,6 +87,35 @@
 
 <script>
     $(document).ready(function() {
+
+        $('.btn-edit-cost').click(function() {
+            var url_id = $(this).attr('data-url');
+            $.get(url_id, function(data) {
+                console.log(data)
+                $('[name="dateRcvd"]').val(data.cost.dateRcvd)
+                $('[name="schoolYear"]').val(data.cost.schoolYear)
+                $('[name="semester"]').val(data.cost.semester)
+                $('[name="payee"]').val(data.cost.payee)
+                $('[name="particulars"]').val(data.cost.particulars)
+                $('[name="amount"]').val(data.cost.amount)
+                $('[name="checkNo"]').val(data.cost.checkNo)
+                $('[name="province"]').val(data.cost.province)
+                $('[name="id"]').val(data.cost.id)
+                $('[name="grant_id"]').val(data.cost.grant_id)
+                $('[name="user_id"]').val(data.cost.user_id)
+                $('[name="application_id"]').val(data.cost.application_id)
+
+                $('#modalGrantPayment').modal('show')
+            })
+        });
+
+        $('.btn-delete-cost').click(function() {
+            var url_id = $(this).attr('data-url');
+            document.getElementById("formDelete").action = url_id;
+            $('#modalDelete').modal('show')
+
+        });
+
         // Create DataTable
         var table = $('#costList').DataTable({
             "fixedHeader": {
@@ -114,36 +150,6 @@
                     this.footer().innerHTML = pageSum.toLocaleString("us-US");
                 });
             },
-        });
-
-        $('.btn-add-cost').click(function() {
-            document.getElementById("formCost").reset();
-            $('#modalCost').modal('show')
-
-        });
-
-        $('.btn-edit-cost').click(function() {
-            var url_id = $(this).attr('data-url');
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="dateRcvd"]').val(data.cost.dateRcvd)
-                $('[name="payee"]').val(data.cost.payee)
-                $('[name="particulars"]').val(data.cost.particulars)
-                $('[name="amount"]').val(data.cost.amount)
-                $('[name="checkNo"]').val(data.cost.checkNo)
-                $('[name="province"]').val(data.cost.province)
-                $('[name="id"]').val(data.cost.id)
-                $('[name="user_id"]').val(data.cost.user_id)
-
-                $('#modalCost').modal('show')
-            })
-        })
-
-        $('.btn-delete-cost').click(function() {
-            var url_id = $(this).attr('data-url');
-            document.getElementById("formDelete").action = url_id;
-            $('#modalDelete').modal('show')
-
         });
     });
 </script>
