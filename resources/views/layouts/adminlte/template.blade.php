@@ -14,6 +14,8 @@
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('/bower_components/admin-lte/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{{ asset('/bower_components/admin-lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('/bower_components/admin-lte/dist/css/adminlte.min.css') }}">
     <!-- Toastr -->
@@ -55,7 +57,7 @@
             object-fit: none;
         }
     </style>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
     @stack('style')
 
@@ -95,6 +97,8 @@
     <script src="{{ asset('/bower_components/admin-lte/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('/bower_components/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- overlayScrollbars -->
+    <script src="{{ asset('/bower_components/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('/bower_components/admin-lte/dist/js/adminlte.min.js') }}"></script>
 
