@@ -22,6 +22,8 @@
             <thead>
                 <tr>
                     <th>Date Received</th>
+                    <th>School Year</th>
+                    <th>Semester</th>
                     <th>Payee</th>
                     <th>Particulars</th>
                     <th class="sum">Amount</th>
@@ -34,6 +36,8 @@
                 @foreach ($data as $key => $cost)
                 <tr>
                     <td>{{ $cost->dateRcvd }}</td>
+                    <td>{{ $cost->schoolYear }}</td>
+                    <td>{{ $cost->semester }}</td>
                     <td>{{ $cost->payee }}</td>
                     <td>{{ $cost->particulars }}</td>
                     <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
@@ -56,6 +60,8 @@
                 <tr>
                     <th></th>
                     <th></th>
+                    <th></th>
+                    <th></th>
                     <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
                     <th></th>
@@ -71,6 +77,7 @@
     </div>
 </div>
 
+@include('costs.modalGrantPayment')
 @include('costs.modalCost')
 @include('layouts.adminlte.modalDelete')
 
@@ -98,18 +105,25 @@
             $.get(url_id, function(data) {
                 console.log(data)
                 $('[name="dateRcvd"]').val(data.cost.dateRcvd)
+                $('[name="schoolYear"]').val(data.cost.schoolYear)
+                $('[name="semester"]').val(data.cost.semester)
                 $('[name="payee"]').val(data.cost.payee)
                 $('[name="particulars"]').val(data.cost.particulars)
                 $('[name="amount"]').val(data.cost.amount)
                 $('[name="checkNo"]').val(data.cost.checkNo)
                 $('[name="province"]').val(data.cost.province)
                 $('[name="id"]').val(data.cost.id)
+                $('[name="grant_id"]').val(data.cost.grant_id)
                 $('[name="user_id"]').val(data.cost.user_id)
                 $('[name="application_id"]').val(data.cost.application_id)
 
-                $('#modalCost').modal('show')
+                if(data.cost.user_id){
+                    $('#modalGrantPayment').modal('show') 
+                }else{
+                    $('#modalCost').modal('show')
+                } 
             })
-        })
+        });
 
         $('.btn-delete-cost').click(function() {
             var url_id = $(this).attr('data-url');
