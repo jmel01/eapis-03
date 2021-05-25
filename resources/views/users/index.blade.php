@@ -37,7 +37,10 @@
                     <td>
                         <div class="user-block">
                             <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
-                        </div>
+                            @if($user->active_status)
+                                <i class="fa fa-circle text-success text-xs"></i>
+                            @endif
+                        </div>                        
                     </td>
                     <td> {{ $user->name }}</td>
                     <td>
@@ -141,10 +144,7 @@
 
         // Create DataTable
         var table = $('#userList').DataTable({
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
+            stateSave: true,
             lengthMenu: [
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]

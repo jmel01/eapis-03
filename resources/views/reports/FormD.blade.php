@@ -3,7 +3,6 @@
 
 @push('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
-
 @endpush
 @section('content')
 <div class="card">
@@ -12,7 +11,7 @@
     </div>
     <div class="card-body">
 
-        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-lg">
+        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive" style="width:100%">
             <thead>
                 <tr>
                     <th>Region</th>
@@ -83,33 +82,28 @@
     </div>
     <div class="card-footer">
         Note:<br>
-        *FE -<br>
-        *PE -<br>
-        *SE -<br>
-        *GO/NGO/CSO - Government Organization/ Non-Government Organization/ Civil Service Organization
+        *FE - Fully Employed<br>
+        *PE - Partially Employed<br>
+        *SE - Self-Employed<br>
+        *GO/NGO/CSO - Government Organization/ Non-Government Organization/ Civil Society Organization
     </div>
 </div>
 @endsection
 
 @push('scripts')
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
 
 <script>
     $(document).ready(function() {
         // Create DataTable
         var table = $('#graduateList').DataTable({
-            "fixedHeader": {
-                header: true,
-                footer: true
-            },
+            stateSave: true,
             "lengthMenu": [
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
             "order": [],
-
             "footerCallback": function(row, data, start, end, display) {
                 var api = this.api(),
                     data;
@@ -136,8 +130,12 @@
                 '<"row"<"col-md-6"Q>>',
 
             buttons: [{
-                title: 'Report of Graduates (FORM D)',
+                filename: 'Report_of_Graduates_(FORM_D)_{{ Auth::user()->name }}_{{ date('YmdHis') }}',
+                title: '',
                 extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel"></i> Excel',
+                autoFilter: true,
+                sheetName: 'Graduates Where-abouts',
                 footer: true,
                 exportOptions: {
                     columns: ':visible',
@@ -145,6 +143,7 @@
                 }
             }, {
                 extend: 'print',
+                text: '<i class="fas fa-print"></i> Print', 
                 footer: true,
                 exportOptions: {
                     columns: ':visible',
@@ -169,21 +168,10 @@
                     '</div>',
 
                 messageBottom: '<div class="row mt-5">' +
-                    '<div class="col-1">' +
-                    '</div>' +
-                    '<div class="col-3">' +
-                    '<p class="text-left">Prepared by:<br><br>NAME NAME NAME<br>' +
-                    'Position<br><br>' +
-                    '</div>' +
-                    '<div class="col-3">' +
-                    '</div>' +
-                    '<div class="col-3">' +
-                    '<p class="text-left">Reviewed by:<br><br>NAME NAME NAME<br>' +
-                    'Position<br><br>' +
-                    '</div>' +
-                    '<div class="col-2">' +
-                    '</div>' +
+                    '<div class="col-12">' +
+                    '<p class="text-left text-sm">This report was generated using Educational Assistance Program Information System on {{ date('Y/m/d H:i:s') }} by {{ Auth::user()->name }};<p>' +
                     '</div>',
+                    
                 customize: function(win) {
 
                     var css = '@page { size: landscape; }',
@@ -219,7 +207,7 @@
 
                     head.appendChild(style);
                 }
-            }, 'colvis']
+            }, 'colvis'],
         });
 
     });
