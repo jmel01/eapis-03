@@ -9,8 +9,7 @@
             '<option value="Elementary">Elementary</option>' +
             '<option value="High School">High School</option>' +
             '<option value="Vocational">Vocational</option>' +
-            '<option value="College/Undergraduate">College/Undergraduate</option>' +
-            '<option value="Post Graduate">Post Graduate</option>' +
+            '<option value="College">College</option>' +
             '<option value="Masteral">Masteral</option>' +
             '<option value="Doctorate">Doctorate</option>' +
             '</select></td>' +

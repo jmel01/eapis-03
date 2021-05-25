@@ -179,8 +179,7 @@
                                                     <option {{$education->level == 'Elementary' ? 'selected' : ''}} value="Elementary">Elementary</option>
                                                     <option {{$education->level == 'High School' ? 'selected' : ''}} value="High School">High School</option>
                                                     <option {{$education->level == 'Vocational' ? 'selected' : ''}} value="Vocational">Vocational</option>
-                                                    <option {{$education->level == 'College/Undergraduate' ? 'selected' : ''}} value="College/Undergraduate">College/Undergraduate</option>
-                                                    <option {{$education->level == 'Post Graduate' ? 'selected' : ''}} value="Post Graduate">Post Graduate</option>
+                                                    <option {{$education->level == 'College' ? 'selected' : ''}} value="College">College</option>
                                                     <option {{$education->level == 'Masteral' ? 'selected' : ''}} value="Masteral">Masteral</option>
                                                     <option {{$education->level == 'Doctorate' ? 'selected' : ''}} value="Doctorate">Doctorate</option>
                                                 </select>
