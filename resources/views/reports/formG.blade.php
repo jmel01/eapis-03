@@ -15,7 +15,7 @@
             <thead>
                 <tr>
                     <th>Payee</th>
-                    <th>Date Received</th>
+                    <th>Date of Payment</th>
                     <th class="sum">Amount</th>
                     <th>Mode of Payment/Reference No.</th>
                     <th>Province/District</th>

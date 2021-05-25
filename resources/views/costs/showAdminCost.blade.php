@@ -21,7 +21,7 @@
         <table id="costList" class="table table-sm table-hover table-responsive-sm" style="width:100%">
             <thead>
                 <tr>
-                    <th>Date Received</th>
+                    <th>Date of Payment</th>
                     <th>Payee</th>
                     <th>Particulars</th>
                     <th class="sum">Amount</th>

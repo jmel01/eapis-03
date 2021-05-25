@@ -17,7 +17,7 @@
                     <th>Payee</th>
                     <th>Particulars (Administrative Cost)</th>
                     <th class="sum">Amount</th>
-                    <th>Date Received</th>
+                    <th>Date of Payment</th>
                     <th>Province/District</th>
                     <th>Region</th>
                 </tr>
