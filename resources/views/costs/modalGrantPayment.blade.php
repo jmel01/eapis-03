@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Disbursement Form</h4>
+                <h4 class="modal-title">Disbursement Form<br/>(IP Educational Allowance)</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -11,7 +11,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Date Received <span class="text-danger">*</span></label>
+                        <label>Date of Payment <span class="text-danger">*</span></label>
                         <input name="dateRcvd" type="date" value="{{old('dateRcvd')}}" class="form-control {{$errors->cost->first('dateRcvd') == null ? '' : 'is-invalid'}}" required>
                     </div>
 
@@ -26,7 +26,8 @@
                             <option value="" disabled selected>Select Semester</option>
                             <option value="First Semester" {{ old('semester')=='First Semester' ? 'selected' : ''}}>First Semester</option>
                             <option value="Second Semester" {{ old('semester')=='Second Semester' ? 'selected' : ''}}>Second Semester</option>
-                            <option value="Not Applicable" {{ old('semester')=='First SNot Applicable' ? 'selected' : ''}}>Not Applicable</option>
+                            <option value="Trimester" {{ old('semester')=='Trimester' ? 'selected' : ''}}>Trimester</option>
+                            <option value="Not Applicable" {{ old('semester')=='Not Applicable' ? 'selected' : ''}}>Not Applicable</option>
                         </select>
                     </div>
 
