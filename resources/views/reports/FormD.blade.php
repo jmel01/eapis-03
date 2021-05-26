@@ -41,8 +41,20 @@
                     <td>{{ $application->applicant->lastName ?? '' }}, {{ $application->applicant->firstName ?? '' }} {{ $application->applicant->middleName ?? '' }}</td>
                     <td>{{ $application->type }}</td>
                     <td>{{ \App\Models\Ethnogroup::getEthno($application->applicant->ethnoGroup ?? '') }}</td>
-                    <td class="text-center text-bold">@if ($application->applicant->gender=='Male') &#10003; @endif</td>
-                    <td class="text-center text-bold">@if ($application->applicant->gender=='Female') &#10003; @endif</td>
+                    <td class="text-center text-bold">
+                        @if (isset($application->applicant->gender))
+                            @if ($application->applicant->gender == 'Male')
+                                &#10003;
+                            @endif
+                        @endif
+                    </td>
+                    <td class="text-center text-bold">
+                        @if (isset($application->applicant->gender))
+                            @if ($application->applicant->gender == 'Female')
+                                &#10003;
+                            @endif
+                        @endif
+                    </td>
                     <td>{{ $application->course ?? '' }}</td>
                     <td>{{ $application->employment->yearEmployed }}</td>
                     <td class="text-center text-bold">@if ($application->employment->employerType=='FE') &#10003; @endif</td>
@@ -143,7 +155,7 @@
                 }
             }, {
                 extend: 'print',
-                text: '<i class="fas fa-print"></i> Print', 
+                text: '<i class="fas fa-print"></i> Print',
                 footer: true,
                 exportOptions: {
                     columns: ':visible',
@@ -171,7 +183,7 @@
                     '<div class="col-12">' +
                     '<p class="text-left text-sm">This report was generated using Educational Assistance Program Information System on {{ date('Y/m/d H:i:s') }} by {{ Auth::user()->name }};<p>' +
                     '</div>',
-                    
+
                 customize: function(win) {
 
                     var css = '@page { size: landscape; }',

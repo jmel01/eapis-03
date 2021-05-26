@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col-3 mt-5">
-        <img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />
+        <img src="{{asset('/images/app/NCIP_logo150x150.png')}}" style="width:100px; height:100px; float:right;" />
     </div>
     <div class="col-6">
         <p class="text-center">Republic of the Philippines<br>Office of the President<br>
@@ -29,7 +29,7 @@
     </div>
     <div class="col-3">
         <a href="{{ url()->previous() }}" class="btn btn-outline-primary float-right mr-1 d-print-none">BACK</a>
-        <button onclick="window.print()" class="btn btn-default float-right mr-1 d-print-none"><i class="fas fa-print"></i> Print</button>    
+        <button onclick="window.print()" class="btn btn-default float-right mr-1 d-print-none"><i class="fas fa-print"></i> Print</button>
     </div>
 </div>
 
