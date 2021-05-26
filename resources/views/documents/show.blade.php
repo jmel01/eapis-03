@@ -46,7 +46,7 @@
                     <td>{{ $document->requirementDetails->description }}</td>
                     <td>{{ \Carbon\Carbon::parse($document->created_at)->format('F d, Y h:i:s A') }}</td>
                     <td>
-                        <a href="/uploads/{{ $document->filepath }}" target="_blank" class="btn btn-info btn-sm">View</a>
+                        <a href="{{asset('/uploads/'}}{{ $document->filepath }}" target="_blank" class="btn btn-info btn-sm">View</a>
                        
                         <button data-url="{{ route('documents.destroy', $document->id) }}" class="btn btn-danger btn-sm mr-1 btn-delete-document">Delete</button>
                         
