@@ -35,6 +35,7 @@
             <tbody>
                 @forelse($data as $application)
                 @if(!is_null($application->employment))
+                @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
                 <tr>
                     <td>{{ \App\Models\Psgc::getRegion($application->applicant->psgCode ?? '') }}</td>
                     <td>{{ \App\Models\Psgc::getProvince($application->applicant->psgCode ?? '') }}</td>
@@ -65,6 +66,7 @@
                     <td>{{ $application->employment->employerName }}</td>
                     <td>{{ $application->employment->employerAddress }}</td>
                 </tr>
+                @endif
                 @endif
                 @empty
                 @endforelse
