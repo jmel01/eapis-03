@@ -270,7 +270,7 @@
                 footer: true,
                 messageTop: '<div class="row">' +
                     '<div class="col-4">' +
-                    '<img src="/images/app/NCIP_logo150x150.png" style="width:100px; height:100px; float:right;" />' +
+                    '<img src="{{asset('/images/app/NCIP_logo150x150.png')}}" style="width:100px; height:100px; float:right;" />' +
                     '</div>' +
                     '<div class="col-4">' +
                     '<p class="text-center">Republic of the Philippines<br>Office of the President<br><strong>NATIONAL COMMISSION ON INDIGENOUS PEOPLES</strong><br>' +
