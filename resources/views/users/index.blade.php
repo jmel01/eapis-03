@@ -60,8 +60,8 @@
                     </td>
                     <td> {{ $user->name }}</td>
                     <td>
-                        @if(!empty($user->profile))
-                        {{ ucwords($user->profile->lastName ?? '') }}, {{ ucwords($user->profile->firstName ?? '') }} {{ ucwords(substr($user->profile->middleName ?? '',1,'1')) }}.
+                        @if(!empty($user->profile)) 
+                            {{ ucwords($user->profile->firstName ?? '') }} {{ ucwords(substr($user->profile->middleName ?? '',0,'1')) }}. {{ ucwords($user->profile->lastName ?? '') }}
                         @endif
                     </td>
                     <td>{{ $user->email }}</td>

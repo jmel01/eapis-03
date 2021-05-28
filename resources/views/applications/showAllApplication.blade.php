@@ -31,9 +31,7 @@
                 @forelse ($data as $key => $application)
                     @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
                     <tr>
-                        <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                            {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
-                        </td>
+                        <td>{{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,0,'1')) }}. {{ ucwords($application->applicant->lastName) }}</td>
                         <td>
                             @if(isset($application->grant->acadYr)) 
                                 {{ $application->grant->acadYr }} - {{ $application->grant->acadYr + 1}}
