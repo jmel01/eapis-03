@@ -15,7 +15,7 @@
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
 
-        <table id="applicationList" class="table table-sm table-hover table-responsive" style="width:100%">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm" style="width:100%">
             <thead>
                 <tr>
                     <th>Name</th>

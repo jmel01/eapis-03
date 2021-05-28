@@ -16,6 +16,8 @@
                 <tr>
                     <th>Payee</th>
                     <th>Date of Payment</th>
+                    <th>School Year</th>
+                    <th>Semester</th>
                     <th class="sum">Amount</th>
                     <th>Mode of Payment/Reference No.</th>
                     <th>Province/District</th>
@@ -23,19 +25,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $key => $cost)
+                @forelse ($data as $key => $cost)
                 <tr>
                     <td>{{ $cost->payee }}</td>
                     <td>{{ $cost->dateRcvd }}</td>
+                    <td>{{ $cost->schoolYear }}</td>
+                    <td>{{ $cost->semester }}</td>
                     <td class="text-right">{{ number_format($cost->amount, 2, '.', ',') }}</td>
                     <td>{{ $cost->checkNo }}</td>
                     <td>{{ App\Models\Psgc::getProvince($cost->province) }}</td>
                     <td>{{ App\Models\Psgc::getRegion($cost->province) }}</td>
                 </tr>
-                @endforeach
+                @empty
+                @endforelse
             </tbody>
             <tfoot>
                 <tr>
+                    <th></th>
+                    <th></th>
                     <th></th>
                     <th class="text-right">TOTAL:</th>
                     <th class="text-right"></th>
