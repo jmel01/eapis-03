@@ -18,8 +18,8 @@
             '<option value="Private">Private</option>' +
             '<option value="Public">Public</option>' +
             '</select></td>' +
-            '<td><input name="schYear[]" type="number" step="1" min="1980" max="2030" class="form-control"required></td>' +
-            '<td><input name="schAve[]" type="number" step=".01" min="0" max="100" class="form-control" required></td>' +
+            '<td><input name="schYear[]" type="text" class="form-control"required></td>' +
+            '<td><input name="schAve[]" type="text" class="form-control" required></td>' +
             '<td><input name="schRank[]" type="text" class="form-control" required></td>' +
             '<td><button type="button" class="btn btn-danger btn-sm remove-tr-school">Remove</button></td>' +
             '</tr>');
