@@ -11,7 +11,7 @@
     </div>
     <div class="card-body">
 
-        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive" style="width:100%">
+        <table id="graduateList" class="table table-sm table-bordered table-hover table-responsive-sm" style="width:100%">
             <thead>
                 <tr>
                     <th>Region</th>
@@ -39,7 +39,7 @@
                 <tr>
                     <td>{{ \App\Models\Psgc::getRegion($application->applicant->psgCode ?? '') }}</td>
                     <td>{{ \App\Models\Psgc::getProvince($application->applicant->psgCode ?? '') }}</td>
-                    <td>{{ $application->applicant->lastName ?? '' }}, {{ $application->applicant->firstName ?? '' }} {{ $application->applicant->middleName ?? '' }}</td>
+                    <td>{{ $application->applicant->lastName ?? '' }}, {{ $application->applicant->firstName ?? '' }} {{ ucwords(substr($application->applicant->middleName,0,'1')).'.' ?? '' }}</td>
                     <td>{{ $application->type }}</td>
                     <td>{{ \App\Models\Ethnogroup::getEthno($application->applicant->ethnoGroup ?? '') }}</td>
                     <td class="text-center text-bold">

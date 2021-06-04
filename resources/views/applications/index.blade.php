@@ -34,7 +34,7 @@
                     @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
                         <tr>
                             <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                                {{ ucwords(substr($application->applicant->middleName,1,'1')) }}.
+                                {{ ucwords(substr($application->applicant->middleName,0,'1')) }}.
                             </td>
                             <td>
                                 @if(isset($application->grant)) 
@@ -83,7 +83,7 @@
 
                                 @can('expenses-add')
                                 @if($application->status=='Approved')
-                                <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,1,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" data-grantId="{{ $application->grant_id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
+                                <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,0,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" data-grantId="{{ $application->grant_id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                                 @endif
                                 @endcan
 

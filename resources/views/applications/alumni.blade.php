@@ -34,7 +34,7 @@
                 @if(substr($alumni->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
                 <tr>
                     <td>{{ ucwords($alumni->applicant->lastName) }}, {{ ucwords($alumni->applicant->firstName) }}
-                        {{ ucwords(substr($alumni->applicant->middleName,1,'1')) }}.
+                        {{ ucwords(substr($alumni->applicant->middleName,0,'1')) }}.
                     </td>
 
                     <td>{{ $alumni->type }}</td>
