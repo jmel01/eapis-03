@@ -36,7 +36,7 @@
         <table id="userList" class="table table-sm table-hover table-responsive-sm">
             <thead>
                 <tr>
-                    <th>Avatar</th>
+                    <!-- <th>Avatar</th> -->
                     <th>Username</th>
                     <th>Profile Name</th>
                     <th>Email</th>
@@ -50,14 +50,14 @@
             <tbody>
                 @foreach ($data as $key => $user)
                 <tr>
-                    <td>
+                    <!-- <td>
                         <div class="user-block icon-container">
                             <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
                             @if($user->active_status)
                                 <div class='status-circle'>
                             @endif
                         </div>
-                    </td>
+                    </td> -->
                     <td> {{ $user->name }}</td>
                     <td>
                         @if(!empty($user->profile)) 

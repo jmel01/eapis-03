@@ -16,7 +16,7 @@
         <table id="userList" class="table table-sm table-hover table-responsive-sm" style="width:100%">
             <thead>
                 <tr>
-                    <th class="align-middle">Avatar</th>
+                    <!-- <th class="align-middle">Avatar</th> -->
                     <th class="align-middle">Username</th>
                     <th class="align-middle">Profile Name</th>
                     <th class="align-middle">Email</th>
@@ -29,11 +29,11 @@
             <tbody>
                 @foreach ($data as $key => $user)
                 <tr>
-                    <td>
+                    <!-- <td>
                         <div class="user-block">
                             <img src="/storage/users-avatar/{{$user->avatar}}" class="img-circle img-bordered-sm cover" alt="User Image">
                         </div>
-                    </td>
+                    </td> -->
                     <td> {{ $user->name }}</td>
                     <td>
                         @if(!empty($user->profile))
