@@ -72,11 +72,13 @@
                             <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
                             @endcan
 
+                            @hasanyrole('Admin|Regional Officer')
                             @can('expenses-add')
                             @if($application->status=='Approved')
                             <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,0,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-grantId="{{ $application->grant_id }}" data-applicationId="{{ $application->id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
                             @endif
                             @endcan
+                            @endhasanyrole
 
                             @if($application->status=='Graduated' && $application->level=='College')
                             @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
