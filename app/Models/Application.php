@@ -100,7 +100,7 @@ class Application extends Model
     static function getCountGrantDeniedApplication($id)
     {
         $countGrantDeniedApplication = Application::where('grant_id', $id)
-            ->where('status', 'Graduated')
+            ->where('status', 'Denied')
             ->count();
 
         return $countGrantDeniedApplication;
