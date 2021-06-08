@@ -16,8 +16,10 @@
                         <label>Status</label>
                         <select name="status" class="form-control {{$errors->application->first('status') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Status</option>
-
+                            @hasanyrole('Admin|Regional Officer|Provincial Officer|Community Service Officer')
                             <option value="On Process" {{ old('status') == "On Process" ? 'selected' : ''}}>On Process</option>
+                            @endhasanyrole
+                            @hasanyrole('Admin|Regional Officer')
                             <option value="Approved" {{ old('status')== "Approved" ? 'selected' : ''}}>Approved</option>
                             <option value="Graduated" {{ old('status') == "Graduated" ? 'selected' : ''}}>Graduated</option>
                             <option value="Terminated-FSD" {{ old('tystatuspe')== "Terminated-FSD" ? 'selected' : ''}}>Terminated-FSD</option>
@@ -27,8 +29,8 @@
                             <option value="Terminated-FPD" {{ old('status')== "Terminated-FPD" ? 'selected' : ''}}>Terminated-FPD</option>
                             <option value="Terminated-EOGS" {{ old('status')== "Terminated-EOGS" ? 'selected' : ''}}>Terminated-EOGS</option>
                             <option value="Terminated-Others" {{ old('status')== "Terminated-Others" ? 'selected' : ''}}>Terminated-Others</option>
+                            @endhasanyrole
                             <option value="Denied" {{ old('status')== "Denied" ? 'selected' : ''}}>Denied</option>
-
                         </select>
                     </div>
                     <div class="form-group">
