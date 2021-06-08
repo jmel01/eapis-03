@@ -34,22 +34,17 @@ class NotificationComposer
 
                 $totalNoApplication = count(Registered::whereNotApplied($student));
 
-                $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
+                $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')->count();
 
                 $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'New')
-                    ->orWhere('status', 'On Process')
+                    ->whereIn('status', ['New', 'On Process'])
                     ->count();
 
                 $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
                     ->where('status', 'Approved')
                     ->count();
 
                 $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
                     ->where('status', 'Graduated')
                     ->count();
             } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
@@ -69,15 +64,9 @@ class NotificationComposer
                 $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
                     ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
 
-                // $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
-                //     ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                //     ->where('status', 'New')
-                //     ->orWhere('status', 'On Process')
-                //     ->count();
-
                 $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
                     ->whereIn('status', ['New', 'On Process'])
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,2)'), $locationId]])
+                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
                     ->count();
 
                 $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
@@ -107,9 +96,8 @@ class NotificationComposer
                     ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
 
                 $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
+                    ->whereIn('status', ['New', 'On Process'])
                     ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'New')
-                    ->orWhere('status', 'On Process')
                     ->count();
 
                 $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
