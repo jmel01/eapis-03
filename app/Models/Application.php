@@ -65,9 +65,9 @@ class Application extends Model
 
     static function getCountGrantApplication($id)
     {
-        $countGrantNewApplication = Application::where('grant_id', $id)->count();
+        $countGrantApplication = Application::where('grant_id', $id)->count();
 
-        return $countGrantNewApplication;
+        return $countGrantApplication;
     }
 
     static function getCountGrantNewApplication($id)
