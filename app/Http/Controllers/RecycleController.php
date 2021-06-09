@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Application;
+use App\Models\Education;
+use App\Models\Employment;
+use App\Models\Profile;
 use App\Models\Grant;
 use App\Models\User;
+use App\Models\Siblings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -74,6 +78,11 @@ class RecycleController extends Controller
 
     public function destroyUser($id)
     {
+        Profile::where('user_id', $id)->first();
+        Education::where('user_id', $id)->delete();
+        Siblings::where('user_id', $id)->delete();
+        Employment::where('user_id', $id)->delete();
+
         $user = User::withTrashed()->find($id);
         $user->forceDelete();
 
