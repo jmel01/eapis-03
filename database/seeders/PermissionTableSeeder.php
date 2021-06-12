@@ -74,6 +74,7 @@ class PermissionTableSeeder extends Seeder
             'role-edit',
             'role-add',
             'role-delete',
+            'role-assign',
             
             'user-browse',
             'user-read',
