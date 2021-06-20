@@ -29,11 +29,11 @@
                 <li class="nav-item">
                     <a href="{{ route('newUser') }}" class="nav-link {{ request()->routeIs('newUser') ? 'active' : '' }}">
                         <i class="far fa-address-card nav-icon">
-                            @if($totalNoApplication > 0)
+                            <!-- @if($totalNoApplication > 0)
                             <span class="badge badge-warning navbar-badge">{{ $totalNoApplication }}</span>
                             @else
                             <span class="badge badge-danger navbar-badge">0</span>
-                            @endif
+                            @endif -->
                         </i>
                         <p>New Registration</p>
                     </a>
@@ -43,11 +43,11 @@
                 <li class="nav-item">
                     <a href="{{ route('showAllApplication') }}" class="nav-link {{ request()->routeIs('showAllApplication') ? 'active' : '' }}">
                         <i class="far fa-address-card nav-icon">
-                            @if($totalNewApplication > 0)
+                            <!-- @if($totalNewApplication > 0)
                             <span class="badge badge-info navbar-badge">{{ $totalNewApplication }}</span>
                             @else
                             <span class="badge badge-danger navbar-badge">0</span>
-                            @endif
+                            @endif -->
                         </i>
                         <p>Applicants</p>
                     </a>
@@ -56,11 +56,11 @@
                 <li class="nav-item">
                     <a href="{{ route('showAllApproved') }}" class="nav-link {{ request()->routeIs('showAllApproved') ? 'active' : '' }}">
                         <i class="fas fa-user-graduate nav-icon">
-                            @if($totalApprovedApplication > 0)
+                            <!-- @if($totalApprovedApplication > 0)
                             <span class="badge badge-success navbar-badge">{{ $totalApprovedApplication }}</span>
                             @else
                             <span class="badge badge-danger navbar-badge">0</span>
-                            @endif
+                            @endif -->
                         </i>
                         <p>Scholars</p>
                     </a>
@@ -79,11 +79,11 @@
                 <li class="nav-item">
                     <a href="/applications" class="nav-link {{ request()->routeIs('applications.*') ? 'active' : '' }}">
                         <i class="far fa-list-alt nav-icon">
-                            @if($totalAllApplication > 0)
+                            <!-- @if($totalAllApplication > 0)
                             <span class="badge badge-info navbar-badge">{{ $totalAllApplication }}</span>
                             @else
                             <span class="badge badge-danger navbar-badge">0</span>
-                            @endif
+                            @endif -->
                         </i>
                         <p>Applications Management</p>
                     </a>
@@ -101,11 +101,11 @@
                 <li class="nav-item">
                     <a href="/alumni" class="nav-link {{ request()->routeIs('alumni') ? 'active' : '' }}">
                         <i class="fas fa-trophy nav-icon">
-                            @if($totalGraduatedApplication > 0)
+                            <!-- @if($totalGraduatedApplication > 0)
                             <span class="badge badge-success navbar-badge">{{ $totalGraduatedApplication }}</span>
                             @else
                             <span class="badge badge-danger navbar-badge">0</span>
-                            @endif
+                            @endif -->
                         </i>
                         <p>Scholarship Alumni</p>
                     </a>

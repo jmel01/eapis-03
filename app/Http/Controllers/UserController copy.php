@@ -11,7 +11,6 @@ use App\Models\Grant;
 use App\Models\Profile;
 use App\Models\Psgc;
 use App\Models\User;
-use DataTables;
 use DB;
 use Hash;
 use Illuminate\Http\Request;
@@ -22,7 +21,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    public function newUser(Request $request)
+    public function newUser()
     {
         $data = User::with('profile')
             ->where(function ($query) {
@@ -55,44 +54,7 @@ class UserController extends Controller
                 ->get();
         }
 
-        if ($request->ajax()) {
-            return Datatables::of($data)
-                ->addColumn('fullname', function (User $user) {
-                    if ($user->profile !== null) {
-                        return $user->profile->firstName . ' ' . substr($user->profile->middleName, 0, 1) . '. ' . $user->profile->lastName;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userRegion', function (User $user) {
-                    if ($user->userRegion !== null) {
-                        return $user->userRegion->name;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userProv', function (User $user) {
-                    if ($user->profile !== null) {
-                        //$province = Psgc::getProvince($user->profile->psgCode);
-                        //return $province;
-                        return $user->profile->psgCode;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userCity', function (User $user) {
-                    if ($user->profile !== null) {
-                        //$province = Psgc::getProvince($user->profile->psgCode);
-                        //return $province;
-                        return $user->profile->psgCode;
-                    } else {
-                        return '';
-                    }
-                })
-                ->make(true);
-        }
-
-        return view('users.newUser', compact('grants', 'regions'));
+        return view('users.newUser', compact('data', 'grants', 'regions'));
     }
 
     public function updateCredential(Request $request)
@@ -124,10 +86,10 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-            $data = User::with('profile')->with('roles')->with('userRegion')->orderBy('id', 'DESC')->get();
+            $data = User::with('profile')->orderBy('id', 'DESC')->get();
             $regions = Psgc::where('level', 'Reg')->get();
             $roles = Role::pluck('name', 'name')->all();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
@@ -173,49 +135,7 @@ class UserController extends Controller
                 ->all();
         }
 
-        if ($request->ajax()) {
-            return Datatables::of($data)
-                ->addColumn('fullname', function (User $user) {
-                    if ($user->profile !== null) {
-                        return $user->profile->firstName . ' ' . substr($user->profile->middleName, 0, 1) . '. ' . $user->profile->lastName;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userRegion', function (User $user) {
-                    if ($user->userRegion !== null) {
-                        return $user->userRegion->name;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userProv', function (User $user) {
-                    if ($user->profile !== null) {
-                        //$province = Psgc::getProvince($user->profile->psgCode);
-                        //return $province;
-                        return $user->profile->psgCode;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('userCity', function (User $user) {
-                    if ($user->profile !== null) {
-                        //$province = Psgc::getProvince($user->profile->psgCode);
-                        //return $province;
-                        return $user->profile->psgCode;
-                    } else {
-                        return '';
-                    }
-                })
-                ->addColumn('roles', function (User $user) {
-                    return $user->roles->map(function ($roles) {
-                        return  $roles->name;
-                    })->implode(', ');
-                })
-                ->make(true);
-        }
-
-        return view('users.index', compact('regions', 'roles'));
+        return view('users.index', compact('data',  'regions', 'roles'));
     }
 
     /**

@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->hasOne('App\Models\Profile');
     }
 
+    public function userRegion()
+    {
+        return $this->hasOne('App\Models\Psgc', 'code', 'region');
+    }
+    
     public function educations()
     {
         return $this->hasMany(Education::class, 'user_id', 'id');

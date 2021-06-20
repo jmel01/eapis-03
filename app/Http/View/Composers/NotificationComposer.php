@@ -20,105 +20,105 @@ class NotificationComposer
      */
     public function compose(View $view)
     {
-        if (Auth::check()) {
-            if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-                $locationId = '';
-                $subStrLen = '0';
-                $student = User::with('profile')
-                    ->where(function ($query) {
-                        $query->role(['Applicant'])
-                            ->ordoesntHave('roles');
-                    })
-                    ->orderBy('id', 'DESC')
-                    ->get();
+        // if (Auth::check()) {
+        //     if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+        //         $locationId = '';
+        //         $subStrLen = '0';
+        //         $student = User::with('profile')
+        //             ->where(function ($query) {
+        //                 $query->role(['Applicant'])
+        //                     ->ordoesntHave('roles');
+        //             })
+        //             ->orderBy('id', 'DESC')
+        //             ->get();
 
-                $totalNoApplication = count(Registered::whereNotApplied($student));
+        //         $totalNoApplication = count(Registered::whereNotApplied($student));
 
-                $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')->count();
+        //         $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')->count();
 
-                $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
-                    ->whereIn('status', ['New', 'On Process'])
-                    ->count();
+        //         $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
+        //             ->whereIn('status', ['New', 'On Process'])
+        //             ->count();
 
-                $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where('status', 'Approved')
-                    ->count();
+        //         $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where('status', 'Approved')
+        //             ->count();
 
-                $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where('status', 'Graduated')
-                    ->count();
-            } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-                $locationId = Str::substr(Auth::user()->region, 0, 2);
-                $subStrLen = '2';
+        //         $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where('status', 'Graduated')
+        //             ->count();
+        //     } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+        //         $locationId = Str::substr(Auth::user()->region, 0, 2);
+        //         $subStrLen = '2';
 
-                $student = User::with('profile')
-                    ->where(function ($query) {
-                        $query->role(['Applicant'])
-                            ->ordoesntHave('roles');
-                    })
-                    ->orderBy('id', 'DESC')
-                    ->get();
+        //         $student = User::with('profile')
+        //             ->where(function ($query) {
+        //                 $query->role(['Applicant'])
+        //                     ->ordoesntHave('roles');
+        //             })
+        //             ->orderBy('id', 'DESC')
+        //             ->get();
 
-                $totalNoApplication = count(Registered::whereNotApplied($student));
+        //         $totalNoApplication = count(Registered::whereNotApplied($student));
 
-                $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
+        //         $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
 
-                $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
-                    ->whereIn('status', ['New', 'On Process'])
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->count();
+        //         $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
+        //             ->whereIn('status', ['New', 'On Process'])
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->count();
 
-                $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'Approved')
-                    ->count();
+        //         $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->where('status', 'Approved')
+        //             ->count();
 
-                $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'Graduated')
-                    ->count();
-            } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-                $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
-                $subStrLen = '4';
+        //         $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->where('status', 'Graduated')
+        //             ->count();
+        //     } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+        //         $locationId = !empty(Auth::user()->profile->psgCode) ?  Str::substr(Auth::user()->profile->psgCode, 0, 4) : '';
+        //         $subStrLen = '4';
 
-                $student = User::with('profile')
-                    ->where(function ($query) {
-                        $query->role(['Applicant'])
-                            ->ordoesntHave('roles');
-                    })
-                    ->orderBy('id', 'DESC')
-                    ->get();
+        //         $student = User::with('profile')
+        //             ->where(function ($query) {
+        //                 $query->role(['Applicant'])
+        //                     ->ordoesntHave('roles');
+        //             })
+        //             ->orderBy('id', 'DESC')
+        //             ->get();
 
-                $totalNoApplication = count(Registered::whereNotApplied($student));
+        //         $totalNoApplication = count(Registered::whereNotApplied($student));
 
-                $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
+        //         $totalAllApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'),  $locationId]])->count();
 
-                $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
-                    ->whereIn('status', ['New', 'On Process'])
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->count();
+        //         $totalNewApplication = Application::join('profiles', 'profiles.user_id',  'applications.user_id')
+        //             ->whereIn('status', ['New', 'On Process'])
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->count();
 
-                $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'Approved')
-                    ->count();
+        //         $totalApprovedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->where('status', 'Approved')
+        //             ->count();
 
-                $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
-                    ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
-                    ->where('status', 'Graduated')
-                    ->count();
-            } else {
-                $locationId = '';
-                $subStrLen = '';
-                $totalNoApplication = '';
-                $totalAllApplication = '';
-                $totalNewApplication = '';
-                $totalApprovedApplication = '';
-                $totalGraduatedApplication = '';
-            }
-        } else {
+        //         $totalGraduatedApplication = Application::join('profiles', 'profiles.user_id', 'applications.user_id')
+        //             ->where([[\DB::raw('substr(profiles.psgCode, 1,' . $subStrLen . ')'), $locationId]])
+        //             ->where('status', 'Graduated')
+        //             ->count();
+        //     } else {
+        //         $locationId = '';
+        //         $subStrLen = '';
+        //         $totalNoApplication = '';
+        //         $totalAllApplication = '';
+        //         $totalNewApplication = '';
+        //         $totalApprovedApplication = '';
+        //         $totalGraduatedApplication = '';
+        //     }
+        // } else {
             $locationId = '';
             $subStrLen = '';
             $totalNoApplication = '';
@@ -126,7 +126,7 @@ class NotificationComposer
             $totalNewApplication = '';
             $totalApprovedApplication = '';
             $totalGraduatedApplication = '';
-        }
+        // }
 
         $view->with(compact(
             'totalNoApplication',
