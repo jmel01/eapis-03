@@ -29,24 +29,29 @@ class UserController extends Controller
                 $query->role(['Applicant'])
                     ->ordoesntHave('roles');
             })
+            ->whereNotIn('id', function ($query) {
+                $query->select('user_id')->from('applications');
+            })
             ->orderBy('id', 'DESC')
             ->get();
 
-        $data = Registered::whereNotApplied($data);
-
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
-
             $regions = Psgc::where('level', 'Reg')->get();
             $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regionId = Auth::user()->region;
+            $data =  $data->whereIn('region', [$regionId, '']);
+
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
                 ->where('applicationOpen', '<=', date('Y-m-d'))
                 ->where('applicationClosed', '>=', date('Y-m-d'))
                 ->get();
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regionId = Auth::user()->region;
+            $data =  $data->whereIn('region', [$regionId, '']);
 
             $regions = Psgc::where('code', Auth::user()->region)->get();
             $grants = Grant::where('region', Auth::user()->region)
