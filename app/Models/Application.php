@@ -31,6 +31,7 @@ class Application extends Model
         'date_graduated',
         'date_terminated',
         'date_denied',
+        'remarks',
     ];
 
     // Set default value

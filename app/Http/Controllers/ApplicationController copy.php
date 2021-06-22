@@ -5,10 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
-use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
@@ -49,7 +47,7 @@ class ApplicationController extends Controller
 
     public function showApproved($id)
     {
-        $data = Application::with('applicant.psgcBrgy')
+       $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'Approved')
             ->orderBy('id', 'DESC')
@@ -67,7 +65,7 @@ class ApplicationController extends Controller
 
     public function showDenied($id)
     {
-        $data = Application::with('applicant.psgcBrgy')
+       $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->where('status', 'Denied')
             ->orderBy('id', 'DESC')
@@ -174,38 +172,13 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-
-        $data = DB::table('applications')
-            ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
-            ->join('grants', 'applications.grant_id', '=', 'grants.id')
-            ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
-            ->leftJoin('users', 'applications.user_id', '=', 'users.id')
-            ->whereNull('applications.deleted_at')
-            ->select('applications.*', 'profiles.firstName', 'profiles.middleName', 'profiles.lastName', 'profiles.psgCode', 'grants.acadYr', 'employments.yearEmployed', 'employments.employerType', 'employments.position', 'employments.employerName', 'employments.employerAddress', 'users.avatar')
-
-            ->orderBy('profiles.lastName', 'ASC')
+        $data = Application::with('applicant.psgcBrgy')
+            ->orderBy('id', 'DESC')
             ->get();
 
-
-        if ($request->ajax()) {
-            return Datatables::of($data)
-                ->addColumn('fullname', function ($data) {
-                    return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
-                })
-                ->addColumn('batch', function ($data) {
-                    return $data->acadYr . '-' . ($data->acadYr + 1);
-                })
-                // ->addColumn('province', function ($data) {
-                //     $provinceCode = Str::substr($data->psgCode, 0, 4).'00000';
-                //     $getProvince = Psgc::where('code', $provinceCode)->first();
-                //     return $getProvince['name'];
-                // })
-                ->make(true);
-        }
-
-        return view('applications.index');
+        return view('applications.index', compact('data'));
     }
 
     /**
@@ -276,7 +249,7 @@ class ApplicationController extends Controller
      */
     public function show($id)
     {
-        $data = Application::with('applicant.psgcBrgy')
+       $data = Application::with('applicant.psgcBrgy')
             ->where('grant_id', $id)
             ->orderBy('id', 'DESC')
             ->get();

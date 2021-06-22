@@ -3,7 +3,7 @@
 @section('title', 'Applications Management')
 
 @push('style')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.css"/>
 @endpush
 
 @section('content')
@@ -15,100 +15,30 @@
 
         <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
 
-        <table id="applicationList" class="table table-sm table-hover table-responsive-sm" style="width:100%">
+        <table id="applicationList" class="table table-sm table-hover table-responsive-sm compact nowrap" style="width:100%">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Batch</th>
-                    <th>Type</th>
-                    <th>Level</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Remarks</th>
-                    <th>Province</th>
-                    <th>Actions</th>
+                    <th data-priority="1">Avatar</th>
+                    <th data-priority="2">Name</th>
+                    <th data-priority="10001">Batch</th>
+                    <th data-priority="10001">Type</th>
+                    <th data-priority="10001">Level</th>
+                    <th data-priority="10001">Status</th>
+                    <th data-priority="10001">Date</th>
+                    <th data-priority="10001">Remarks</th>
+                    <th data-priority="10001">Province</th>
+                    <th data-priority="10001">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($data as $key => $application)
-                    @if(substr($application->applicant->psgcBrgy->code, 0, $subStrLen) == $locationId || $subStrLen == '0')
-                        <tr>
-                            <td>{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }}
-                                {{ ucwords(substr($application->applicant->middleName,0,'1')) }}.
-                            </td>
-                            <td>
-                                @if(isset($application->grant)) 
-                                    {{ $application->grant->psgCode->name}} {{ $application->grant->acadYr }}-{{ $application->grant->acadYr + 1 }}
-                                @else
-                                    <p class="text-danger">Grant Deleted</p>
-                                @endif
-                            </td>
-                            <td>{{ $application->type }}</td>
-                            <td>{{ $application->level }}</td>
-                            <td>{{ $application->status }}</td>
-                            <td>
-                                @if($application->status=='On Process')
-                                    {{ $application->date_process }}
-                                @elseif($application->status=='Approved')
-                                    {{ $application->date_approved }}
-                                @elseif($application->status=='Graduated')
-                                    {{ $application->date_graduated }}
-                                @elseif($application->status == 'Terminated-FSD' || $application->status == 'Terminated-FG' || $application->status == 'Terminated-DS' || $application->status == 'Terminated-NE' || $application->status == 'Terminated-FPD' || $application->status == 'Terminated-EOGS' || $application->status == 'Terminated-Others')
-                                    {{ $application->date_terminated }}
-                                @elseif($application->status=='Denied')
-                                    {{ $application->date_denied }}
-                                @else
-                                    {{ $application->created_at }} 
-                                @endif
-                            </td>
-                            <td>{{ $application->remarks }}</td>
-                        
-                            <td>{{ App\Models\Psgc::getProvince($application->applicant->psgcBrgy->code) }}</td>
-                            <td>
-                                <a href="{{ route('users.show',$application->user_id) }}" class="btn btn-info btn-sm mr-1 mb-1">View Student Info</a>
-                                @can('application-read')
-                                <a href="{{ url('/applications/applicationForm/' . $application->id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Application</a>
-                                @endcan
-                                @can('document-browse')
-                                <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>
-                                @endcan
-                                @can('application-edit')
-                                <button data-url="{{ route('applications.edit',$application->id) }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-edit-application">Edit Application</button>
-                                @endcan
-                                @can('application-delete')
-                                <button data-url="{{ route('applications.destroy', $application->id) }}" class="btn btn-danger btn-sm mr-1 mb-1 btn-delete-application">Delete</button>
-                                @endcan
 
-                                <!-- <a href="{{ url('showAttachment/' . $application->grant_id . '/' . $application->user_id)}}" class="btn btn-info btn-sm mr-1 mb-1">Files</a> -->
-
-                                @hasanyrole('Admin|Regional Officer')
-                                @can('expenses-add')
-                                @if($application->status=='Approved')
-                                <button data-payee="{{ ucwords($application->applicant->lastName) }}, {{ ucwords($application->applicant->firstName) }} {{ ucwords(substr($application->applicant->middleName,0,'1')) }}." data-particular="Grant Payment" data-province="{{ substr($application->applicant->psgcBrgy->code, 0, 4) }}00000" data-userId="{{ $application->user_id }}" data-applicationId="{{ $application->id }}" data-grantId="{{ $application->grant_id }}" class="btn btn-success btn-sm mr-1 mb-1 btn-add-cost">Payment</button>
-                                @endif
-                                @endcan
-                                @endhasanyrole
-
-                                @if($application->status=='Graduated' && $application->level=='College')
-                                @if(App\Models\Employment::where('user_id',$application->user_id )->count() > 0)
-                                <button data-userID="{{ $application->employment->user_id }}" data-yearEmployed="{{ $application->employment->yearEmployed }}" data-employerType="{{ $application->employment->employerType }}" data-position="{{ $application->employment->position }}" data-employerName="{{ $application->employment->employerName }}" data-employerAddress="{{ $application->employment->employerAddress }}" class="btn btn-primary btn-sm mr-1 mb-1 btn-add-employment">Employed</button>
-                                @else
-                                <button data-userID="{{ $application->user_id }}" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Employment</button>
-                                @endif
-                                @endif
-                            </td>
-                        </tr>
-                    @endif    
-                @empty
-
-                @endforelse
             </tbody>
-           
+
         </table>
 
     </div>
     <div class="card-footer">
-        
+
     </div>
 </div>
 
@@ -121,90 +51,203 @@
 @endsection
 
 @push('scripts')
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
-</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.js"></script>
+<script>
+    function appEdit(data_attr) {
+        var url_id = data_attr.getAttribute('data-url');
+        $.get(url_id, function(data) {
+            console.log(data)
+            $('[name="type"]').val(data.application.type)
+            $('[name="level"]').val(data.application.level)
+            $('[name="school"]').val(data.application.school)
+            $('[name="course"]').val(data.application.course)
+            $('[name="contribution"]').val(data.application.contribution)
+            $('[name="plans"]').val(data.application.plans)
+            $('[name="status"]').val(data.application.status)
+            $('[name="remarks"]').val(data.application.remarks)
+            $('[name="user_id"]').val(data.application.user_id)
+            $('[name="grant_id"]').val(data.application.grant_id)
+            $('[name="id"]').val(data.application.id)
 
+            $('#modalApplicationEdit').modal('show')
+        })
+    }
+
+    function appDel(data_attr) {
+        var url_id = data_attr.getAttribute('data-url');
+        document.getElementById("formDelete").action = url_id;
+        $('#modalDelete').modal('show')
+    }
+
+    function appPayment(data_attr) {
+        document.getElementById("formGrantPayment").reset();
+
+        var payee = data_attr.getAttribute('data-payee');
+        var particular = data_attr.getAttribute('data-particular');
+        var province = data_attr.getAttribute('data-province');
+        var userId = data_attr.getAttribute('data-userId');
+        var applicationId = data_attr.getAttribute('data-applicationId');
+        var grantId = data_attr.getAttribute('data-grantId');
+
+        $('[name="payee"]').val(payee)
+        $('[name="particulars"]').val(particular)
+        $('[name="province"]').val(province)
+        $('[name="user_id"]').val(userId)
+        $('[name="application_id"]').val(applicationId)
+        $('[name="grant_id"]').val(grantId)
+        $('#modalGrantPayment').modal('show')
+    }
+
+    function Employment(data_attr) {
+        document.getElementById("formEmployment").reset();
+
+        var userID = data_attr.getAttribute('data-userID');
+        var yearEmployed = data_attr.getAttribute('data-yearEmployed');
+        var employerType = data_attr.getAttribute('data-employerType');
+        var position = data_attr.getAttribute('data-position');
+        var employerName = data_attr.getAttribute('data-employerName');
+        var employerAddress = data_attr.getAttribute('data-employerAddress');
+
+        $('[name="user_id"]').val(userID)
+        $('[name="yearEmployed"]').val(yearEmployed)
+        $('[name="employerType"]').val(employerType)
+        $('[name="position"]').val(position)
+        $('[name="employerName"]').val(employerName)
+        $('[name="employerAddress"]').val(employerAddress)
+        $('#modalEmployment').modal('show')
+    }
+</script>
 <script>
     $(document).ready(function() {
 
-        $('.btn-add-cost').click(function() {
-            document.getElementById("formGrantPayment").reset();
-            $('#modalGrantPayment').modal('show')
-            var payee = $(this).attr('data-payee');
-            var particular = $(this).attr('data-particular');
-            var province = $(this).attr('data-province');
-            var userId = $(this).attr('data-userId');
-            var applicationId = $(this).attr('data-applicationId');
-            var grantId = $(this).attr('data-grantId');
-
-            $('[name="payee"]').val(payee)
-            $('[name="particulars"]').val(particular)
-            $('[name="province"]').val(province)
-            $('[name="user_id"]').val(userId)
-            $('[name="application_id"]').val(applicationId)
-            $('[name="grant_id"]').val(grantId)
-        });
-
-        $('.btn-add-employment').click(function() {
-            document.getElementById("formEmployment").reset();
-            $('#modalEmployment').modal('show')
-            var userID = $(this).attr('data-userID');
-            var yearEmployed = $(this).attr('data-yearEmployed');
-            var employerType = $(this).attr('data-employerType');
-            var position = $(this).attr('data-position');
-            var employerName = $(this).attr('data-employerName');
-            var employerAddress = $(this).attr('data-employerAddress');
-
-            $('[name="user_id"]').val(userID)
-            $('[name="yearEmployed"]').val(yearEmployed)
-            $('[name="employerType"]').val(employerType)
-            $('[name="position"]').val(position)
-            $('[name="employerName"]').val(employerName)
-            $('[name="employerAddress"]').val(employerAddress)
-        });
-
-        $('.btn-add-application').click(function() {
-            document.getElementById("formApplication").reset();
-            $('#modalApplication').modal('show')
-        });
-
-        $('.btn-edit-application').click(function() {
-            var url_id = $(this).attr('data-url');
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="type"]').val(data.application.type)
-                $('[name="level"]').val(data.application.level)
-                $('[name="school"]').val(data.application.school)
-                $('[name="course"]').val(data.application.course)
-                $('[name="contribution"]').val(data.application.contribution)
-                $('[name="plans"]').val(data.application.plans)
-                $('[name="status"]').val(data.application.status)
-                $('[name="remarks"]').val(data.application.remarks)
-                $('[name="user_id"]').val(data.application.user_id)
-                $('[name="grant_id"]').val(data.application.grant_id)
-                $('[name="id"]').val(data.application.id)
-
-                $('#modalApplicationEdit').modal('show')
-            })
-        });
-
-        $('.btn-delete-application').click(function() {
-            var url_id = $(this).attr('data-url');
-            document.getElementById("formDelete").action = url_id;
-            $('#modalDelete').modal('show')
-
-        });
-
-         // Create DataTable
-         var table = $('#applicationList').DataTable({
-            stateSave: true,
+        // Create DataTable
+        var table = $('#applicationList').DataTable({
+            processing: true,
+            serverSide: true,
+            responsive: true,
+            ajax: '{{ route("applications.index") }}',
+            deferRender: true,
             lengthMenu: [
                 [10, 25, 50, 100, -1],
                 [10, 25, 50, 100, "All"]
             ],
             order: [],
-            dom:'<"row"<"col-md-6 mb-3"B><"col-md-6"Q>>' +
+            columns: [{
+                    data: 'avatar',
+                    defaultContent: ''
+                }, {
+                    data: 'fullname',
+                    defaultContent: ''
+                },
+                {
+                    data: 'batch',
+                    defaultContent: ''
+                },
+                {
+                    data: 'type',
+                    defaultContent: ''
+                },
+                {
+                    data: 'level',
+                    defaultContent: ''
+                },
+                {
+                    data: 'status',
+                    defaultContent: ''
+                },
+                {
+                    data: 'created_at',
+                    defaultContent: ''
+                },
+                {
+                    data: 'remarks',
+                    defaultContent: ''
+                },
+                {
+                    data: 'psgCode',
+                    defaultContent: ''
+                },
+                {
+                    data: 'action',
+                    defaultContent: ''
+                },
+            ],
+            columnDefs: [{
+                    targets: 0,
+                    data: "avatar",
+                    searchable: false,
+                    orderable: false,
+                    render: function(data, type, row, meta) {
+                        var img = '<div class="user-block icon-container"><img src="/storage/users-avatar/:imgID" class="img-circle img-bordered-sm cover" alt="User Image">:online</div>';
+                        var online = (row.active_status == 1 ? "<div class='status-circle'>" : "");
+                        img = img.replace(':imgID', row.avatar);
+                        img = img.replace(':online', online);
+                        return img;
+                    },
+                }, {
+                    targets: 6,
+                    render: function(data) {
+                        return moment(data).format('LL');
+                    }
+                },
+                {
+                    targets: -1,
+                    render: function(data, type, row, meta) {
+                        var btnUserInfo = '<a href="' + '{{ route("users.show",":userID") }}' + '" class="btn btn-info btn-sm mr-1 mb-1">Student Info</a>';
+                        btnUserInfo = btnUserInfo.replace(':userID', row.user_id);
+
+                        var btnViewApplication = '@can("application-read")<a href="' + '{{ url("/applications/applicationForm/:appID") }}' + '" class="btn btn-info btn-sm mr-1 mb-1">Application Form</a> @endcan';
+                        btnViewApplication = btnViewApplication.replace(':appID', row.id);
+
+                        var btnViewDocs = '@can("document-browse")<a href="' + '{{ url("showAttachment/:grantID/:userID") }}' + '" class="btn btn-info btn-sm mr-1 mb-1">View Files</a> @endcan';
+                        btnViewDocs = btnViewDocs.replace(':grantID', row.grant_id);
+                        btnViewDocs = btnViewDocs.replace(':userID', row.user_id);
+
+                        var btnAppEdit = ' @can("application-edit")<button onclick="appEdit(this)" data-url="' + '{{ route("applications.edit",":appID") }}' + '" class="btn btn-primary btn-sm mr-1 mb-1">Edit Application</button>@endcan';
+                        btnAppEdit = btnAppEdit.replace(':appID', row.id);
+
+                        var btnAppDel = '@can("application-delete")<button onclick="appDel(this)" data-url="' + '{{ route("applications.destroy",":appID") }}' + '" class="btn btn-danger btn-sm mr-1 mb-1">Delete</button>@endcan';
+                        btnAppDel = btnAppDel.replace(':appID', row.id);
+
+                        if (row.status == "Approved") {
+                            var btnPayment = '@hasanyrole("Admin|Regional Officer") @can("expenses-add")<button onclick="appPayment(this)" data-payee=":appPayee" data-particular="Grant Payment" data-province=":appProv" data-userId=":appUserID" data-applicationId=":appID" data-grantId=":appGrantID" class="btn btn-success btn-sm mr-1 mb-1">Payment</button>@endcan @endhasanyrole';
+                            btnPayment = btnPayment.replace(':appPayee', row.firstName + ' ' + row.middleName.substr(0, 1) + '. ' + row.lastName);
+                            btnPayment = btnPayment.replace(':appProv', row.psgCode.substr(0, 4) + '00000');
+                            btnPayment = btnPayment.replace(':appUserID', row.user_id);
+                            btnPayment = btnPayment.replace(':appID', row.id);
+                            btnPayment = btnPayment.replace(':appGrantID', row.grant_id);
+                        } else {
+                            btnPayment = "";
+                        }
+
+                        if (row.status == "Graduated" && row.level == "College") {
+                            if (row.employerName) {
+                                var btnEmployment = '<button onclick="Employment(this)" data-userID=":appUserID" data-yearEmployed=":empYear" data-employerType=":empType" data-position=":empPost" data-employerName=":empName" data-employerAddress=":empAddr" class="btn btn-primary btn-sm mr-1 mb-1">Employed</button>';
+                                btnEmployment = btnEmployment.replace(':appUserID', row.user_id);
+                                btnEmployment = btnEmployment.replace(':empYear', row.yearEmployed);
+                                btnEmployment = btnEmployment.replace(':empType', row.employerType);
+                                btnEmployment = btnEmployment.replace(':empPost', row.position);
+                                btnEmployment = btnEmployment.replace(':empName', row.employerName);
+                                btnEmployment = btnEmployment.replace(':empAddr', row.employerAddress);
+                            } else {
+                                var btnEmployment = '<button onclick="Employment(this)" data-userID=":appUserID" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Not Employed</button>';
+                                btnEmployment = btnEmployment.replace(':appUserID', row.user_id);
+                            }
+                        } else {
+                            btnEmployment = "";
+                        }
+
+
+                        return btnUserInfo + btnViewApplication + btnViewDocs + btnAppEdit + btnAppDel + btnPayment + btnEmployment;
+                    },
+                    searchable: false,
+                    orderable: false
+                }
+            ],dom:
                 '<"row"<"col-md-5"l><"col-md-7"f>>' +
+                '<"row"<"col-md-12 mb-3"B>>' +
                 '<"row"<"col-md-12"t>>' +
                 '<"row"<"col-md-5"i><"col-md-7"p>>',
 

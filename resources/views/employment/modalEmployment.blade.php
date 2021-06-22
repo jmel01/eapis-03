@@ -19,9 +19,9 @@
                         <label>Type of Employment</label>
                         <select name="employerType" class="form-control {{$errors->employment->first('employerType') == null ? '' : 'is-invalid'}}">
                             <option disabled selected>Select Level</option>
-                            <option value="FE" {{ old('employerType') == "FE" ? 'selected' : ''}}>FE</option>
-                            <option value="PE" {{ old('employerType') == "PE" ? 'selected' : ''}}>PE</option>
-                            <option value="SE" {{ old('employerType')== "SE" ? 'selected' : ''}}>SE</option>
+                            <option value="FE" {{ old('employerType') == "FE" ? 'selected' : ''}}>Fully Employed</option>
+                            <option value="PE" {{ old('employerType') == "PE" ? 'selected' : ''}}>Partially Employed</option>
+                            <option value="SE" {{ old('employerType')== "SE" ? 'selected' : ''}}>Self Employed</option>
                             <option value="GO/NGO/CSO" {{ old('employerType')== "GO/NGO/CSO" ? 'selected' : ''}}>GO/NGO/CSO</option>
                         </select>
                     </div>
