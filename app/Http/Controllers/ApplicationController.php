@@ -176,14 +176,66 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
+        // $userBrgy = DB::table('profiles')
+        //     ->leftJoin('psgc', 'profiles.psgCode', '=', 'psgc.code')
+        //     ->select('profiles.user_id', 'psgc.name')
+        //     ->get();
+
+        // $userCity = DB::table('profiles')
+        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000')"), '=', 'psgc.code')
+        //     ->select('profiles.user_id', 'psgc.name as userCity')
+        //     ->get();
+        // $userProv = DB::table('profiles')
+        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000')"), '=', 'psgc.code')
+        //     ->select('profiles.user_id', 'psgc.name')
+        //     ->get();
+        // $userRegion = DB::table('profiles')
+        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000')"), '=', 'psgc.code')
+        //     ->select('profiles.user_id', 'psgc.name')
+        //     ->get();
+        // dd($userRegion);
+
+        // $location = DB::table('profiles')
+        //     ->select(
+        //         'profiles.user_id',
+        //         'profiles.psgCode as brgy',
+        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
+        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
+        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region")
+        //     )
+
+        //     ->get();
 
         $data = DB::table('applications')
             ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
             ->join('grants', 'applications.grant_id', '=', 'grants.id')
             ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
             ->leftJoin('users', 'applications.user_id', '=', 'users.id')
+          
+            // ->leftJoin('psgc as city', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000')"), '=', 'city.code')
+            // ->leftJoin('psgc as prov', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000')"), '=', 'prov.code')
+            // ->leftJoin('psgc as reg', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000')"), '=', 'reg.code')
             ->whereNull('applications.deleted_at')
-            ->select('applications.*', 'profiles.firstName', 'profiles.middleName', 'profiles.lastName', 'profiles.psgCode', 'grants.acadYr', 'employments.yearEmployed', 'employments.employerType', 'employments.position', 'employments.employerName', 'employments.employerAddress', 'users.avatar')
+            ->select(
+                'applications.*',
+                'profiles.firstName',
+                'profiles.middleName',
+                'profiles.lastName',
+                'profiles.psgCode as brgy',
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region"),
+                'grants.acadYr',
+                'employments.yearEmployed',
+                'employments.employerType',
+                'employments.position',
+                'employments.employerName',
+                'employments.employerAddress',
+                'users.avatar',
+                // 'city.name as cityName',
+                // 'prov.name as provName',
+                // 'reg.name as regName'
+            )
 
             ->orderBy('profiles.lastName', 'ASC')
             ->get();
@@ -197,6 +249,16 @@ class ApplicationController extends Controller
                 ->addColumn('batch', function ($data) {
                     return $data->acadYr . '-' . ($data->acadYr + 1);
                 })
+                // Works but slow
+                // ->addColumn('region', function ($data) {
+                //     return Psgc::where('code', $data->region)->first()->name;
+                // })
+                // ->addColumn('province', function ($data) {
+                //     return Psgc::where('code', $data->province)->first()->name;
+                // })
+                // ->addColumn('city', function ($data) {
+                //     return Psgc::where('code', $data->city)->first()->name;
+                // })
                 // ->addColumn('province', function ($data) {
                 //     $provinceCode = Str::substr($data->psgCode, 0, 4).'00000';
                 //     $getProvince = Psgc::where('code', $provinceCode)->first();

@@ -3,30 +3,35 @@
 @section('title', 'Applications Management')
 
 @push('style')
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.css" />
 @endpush
 
 @section('content')
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">List of Applications</h3>
+        <div class="card-tools">
+            <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
+        </div>
     </div>
     <div class="card-body">
 
-        <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
+
 
         <table id="applicationList" class="table table-sm table-hover table-responsive-sm compact nowrap" style="width:100%">
             <thead>
                 <tr>
                     <th data-priority="1">Avatar</th>
                     <th data-priority="2">Name</th>
-                    <th data-priority="10001">Batch</th>
-                    <th data-priority="10001">Type</th>
-                    <th data-priority="10001">Level</th>
-                    <th data-priority="10001">Status</th>
-                    <th data-priority="10001">Date</th>
-                    <th data-priority="10001">Remarks</th>
-                    <th data-priority="10001">Province</th>
+                    <th data-priority="3">Batch</th>
+                    <th data-priority="4">Type</th>
+                    <th data-priority="5">Level</th>
+                    <th data-priority="6">Status</th>
+                    <th data-priority="10006">Date</th>
+                    <th data-priority="10005">Remarks</th>
+                    <th data-priority="10004">City/Mun/SubMun</th>
+                    <th data-priority="10003">Province</th>
+                    <th data-priority="10002">Region</th>
                     <th data-priority="10001">Actions</th>
                 </tr>
             </thead>
@@ -166,7 +171,15 @@
                     defaultContent: ''
                 },
                 {
-                    data: 'psgCode',
+                    data: 'city',
+                    defaultContent: ''
+                },
+                {
+                    data: 'province',
+                    defaultContent: ''
+                },
+                {
+                    data: 'region',
                     defaultContent: ''
                 },
                 {
@@ -192,6 +205,7 @@
                         return moment(data).format('LL');
                     }
                 },
+
                 {
                     targets: -1,
                     render: function(data, type, row, meta) {
@@ -214,7 +228,7 @@
                         if (row.status == "Approved") {
                             var btnPayment = '@hasanyrole("Admin|Regional Officer") @can("expenses-add")<button onclick="appPayment(this)" data-payee=":appPayee" data-particular="Grant Payment" data-province=":appProv" data-userId=":appUserID" data-applicationId=":appID" data-grantId=":appGrantID" class="btn btn-success btn-sm mr-1 mb-1">Payment</button>@endcan @endhasanyrole';
                             btnPayment = btnPayment.replace(':appPayee', row.firstName + ' ' + row.middleName.substr(0, 1) + '. ' + row.lastName);
-                            btnPayment = btnPayment.replace(':appProv', row.psgCode.substr(0, 4) + '00000');
+                            btnPayment = btnPayment.replace(':appProv', row.province);
                             btnPayment = btnPayment.replace(':appUserID', row.user_id);
                             btnPayment = btnPayment.replace(':appID', row.id);
                             btnPayment = btnPayment.replace(':appGrantID', row.grant_id);
@@ -245,14 +259,14 @@
                     searchable: false,
                     orderable: false
                 }
-            ],dom:
-                '<"row"<"col-md-5"l><"col-md-7"f>>' +
+            ],
+            dom: '<"row"<"col-md-5"l><"col-md-7"f>>' +
                 '<"row"<"col-md-12 mb-3"B>>' +
                 '<"row"<"col-md-12"t>>' +
                 '<"row"<"col-md-5"i><"col-md-7"p>>',
 
             buttons: [{
-                title: 'Applications_Management_{{ Auth::user()->name }}_{{ date('YmdHis') }}',
+                title: 'Applications_Management_{{ Auth::user()->name }}_{{ date("YmdHis") }}',
                 extend: 'excelHtml5',
                 text: '<i class="fas fa-file-excel"></i> Excel',
                 autoFilter: true,
