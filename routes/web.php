@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/applications/showGraduated/{id}', [ApplicationController::class, 'showGraduated'])->name('showGraduated');
     Route::resource('applications', ApplicationController::class);
 
+    Route::post('/applications/indexDT', [ApplicationController::class, 'indexDT']);
+
     Route::get('adminCost/{id}', [AdminCostController::class, 'showAdminCost'])->name('adminCost');
     Route::get('paymentToGrantee/{id}', [AdminCostController::class, 'showPaymentToGrantee'])->name('paymentToGrantee');
     Route::resource('costs', AdminCostController::class);

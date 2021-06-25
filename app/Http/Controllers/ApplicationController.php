@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\GlobalClass\Datatables as GlobalClassDatatables;
 use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
@@ -176,6 +177,7 @@ class ApplicationController extends Controller
      */
     public function index(Request $request)
     {
+        // return $this->indexDT($request);
         // $userBrgy = DB::table('profiles')
         //     ->leftJoin('psgc', 'profiles.psgCode', '=', 'psgc.code')
         //     ->select('profiles.user_id', 'psgc.name')
@@ -206,12 +208,12 @@ class ApplicationController extends Controller
 
         //     ->get();
 
-        $data = DB::table('applications')
+        $countOfTable = DB::table('applications')
             ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
             ->join('grants', 'applications.grant_id', '=', 'grants.id')
             ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
             ->leftJoin('users', 'applications.user_id', '=', 'users.id')
-          
+
             // ->leftJoin('psgc as city', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000')"), '=', 'city.code')
             // ->leftJoin('psgc as prov', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000')"), '=', 'prov.code')
             // ->leftJoin('psgc as reg', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000')"), '=', 'reg.code')
@@ -238,38 +240,75 @@ class ApplicationController extends Controller
             )
 
             ->orderBy('profiles.lastName', 'ASC')
-            ->get();
+            ->count();
 
 
         if ($request->ajax()) {
-            return Datatables::of($data)
-                ->addColumn('fullname', function ($data) {
+            // return Datatables::of($data)
+            //     ->addColumn('fullname', function ($data) {
+            //         return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
+            //     })
+            //     ->addColumn('batch', function ($data) {
+            //         return $data->acadYr . '-' . ($data->acadYr + 1);
+            //     })
+            //     ->make(true);
+        }
+
+        return view('applications.index', compact('countOfTable'));
+    }
+
+    public function indexDT(Request $request){
+        $query = DB::table('applications')
+            ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
+            ->join('grants', 'applications.grant_id', '=', 'grants.id')
+            ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
+            ->leftJoin('users', 'applications.user_id', '=', 'users.id')
+            ->whereNull('applications.deleted_at')
+            ->select(
+                'applications.*',
+                'profiles.firstName',
+                'profiles.middleName',
+                'profiles.lastName',
+                'profiles.psgCode as brgy',
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
+                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region"),
+                'grants.acadYr',
+                'employments.yearEmployed',
+                'employments.employerType',
+                'employments.position',
+                'employments.employerName',
+                'employments.employerAddress',
+                'users.avatar',
+            )
+            ->toSql();
+
+        return GlobalClassDatatables::of($query)
+                ->addAction('fullname', function ($data) {
                     return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
                 })
-                ->addColumn('batch', function ($data) {
+                ->addAction('batch', function ($data) {
                     return $data->acadYr . '-' . ($data->acadYr + 1);
                 })
                 // Works but slow
-                // ->addColumn('region', function ($data) {
-                //     return Psgc::where('code', $data->region)->first()->name;
+                ->addAction('region', function ($data) {
+                    return Psgc::where('code', $data->region)->first()->name;
+                })
+                ->addAction('province', function ($data) {
+                    return Psgc::where('code', $data->province)->first()->name;
+                })
+                ->addAction('city', function ($data) {
+                    return Psgc::where('code', $data->city)->first()->name;
+                })
+                ->addAction('avatar', function($data){
+                    return '<div class="user-block icon-container"><img src="/storage/users-avatar/'.$data->avatar.'" class="img-circle img-bordered-sm cover" alt="User Image"></div>';
+                })
+                // ->addAction('action', function($data){
+                //     return '<a href="" class="btn btn-info btn-sm mr-1 mb-1">Application Form</a>';
                 // })
-                // ->addColumn('province', function ($data) {
-                //     return Psgc::where('code', $data->province)->first()->name;
-                // })
-                // ->addColumn('city', function ($data) {
-                //     return Psgc::where('code', $data->city)->first()->name;
-                // })
-                // ->addColumn('province', function ($data) {
-                //     $provinceCode = Str::substr($data->psgCode, 0, 4).'00000';
-                //     $getProvince = Psgc::where('code', $provinceCode)->first();
-                //     return $getProvince['name'];
-                // })
-                ->make(true);
-        }
-
-        return view('applications.index');
+                ->request($request)
+                ->make();
     }
-
     /**
      * Show the form for creating a new resource.
      *
