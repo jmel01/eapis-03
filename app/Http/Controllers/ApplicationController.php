@@ -175,139 +175,109 @@ class ApplicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        // return $this->indexDT($request);
-        // $userBrgy = DB::table('profiles')
-        //     ->leftJoin('psgc', 'profiles.psgCode', '=', 'psgc.code')
-        //     ->select('profiles.user_id', 'psgc.name')
-        //     ->get();
-
-        // $userCity = DB::table('profiles')
-        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000')"), '=', 'psgc.code')
-        //     ->select('profiles.user_id', 'psgc.name as userCity')
-        //     ->get();
-        // $userProv = DB::table('profiles')
-        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000')"), '=', 'psgc.code')
-        //     ->select('profiles.user_id', 'psgc.name')
-        //     ->get();
-        // $userRegion = DB::table('profiles')
-        //     ->leftJoin('psgc', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000')"), '=', 'psgc.code')
-        //     ->select('profiles.user_id', 'psgc.name')
-        //     ->get();
-        // dd($userRegion);
-
-        // $location = DB::table('profiles')
-        //     ->select(
-        //         'profiles.user_id',
-        //         'profiles.psgCode as brgy',
-        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
-        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
-        //         DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region")
-        //     )
-
-        //     ->get();
-
-        $countOfTable = DB::table('applications')
-            ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
-            ->join('grants', 'applications.grant_id', '=', 'grants.id')
-            ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
-            ->leftJoin('users', 'applications.user_id', '=', 'users.id')
-
-            // ->leftJoin('psgc as city', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000')"), '=', 'city.code')
-            // ->leftJoin('psgc as prov', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000')"), '=', 'prov.code')
-            // ->leftJoin('psgc as reg', DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000')"), '=', 'reg.code')
-            ->whereNull('applications.deleted_at')
-            ->select(
-                'applications.*',
-                'profiles.firstName',
-                'profiles.middleName',
-                'profiles.lastName',
-                'profiles.psgCode as brgy',
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region"),
-                'grants.acadYr',
-                'employments.yearEmployed',
-                'employments.employerType',
-                'employments.position',
-                'employments.employerName',
-                'employments.employerAddress',
-                'users.avatar',
-                // 'city.name as cityName',
-                // 'prov.name as provName',
-                // 'reg.name as regName'
-            )
-
-            ->orderBy('profiles.lastName', 'ASC')
-            ->count();
-
-
-        if ($request->ajax()) {
-            // return Datatables::of($data)
-            //     ->addColumn('fullname', function ($data) {
-            //         return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
-            //     })
-            //     ->addColumn('batch', function ($data) {
-            //         return $data->acadYr . '-' . ($data->acadYr + 1);
-            //     })
-            //     ->make(true);
-        }
+        $countOfTable = Application::count();
 
         return view('applications.index', compact('countOfTable'));
     }
 
-    public function indexDT(Request $request){
-        $query = DB::table('applications')
-            ->join('profiles', 'applications.user_id', '=', 'profiles.user_id')
-            ->join('grants', 'applications.grant_id', '=', 'grants.id')
-            ->leftJoin('employments', 'applications.user_id', '=', 'employments.user_id')
-            ->leftJoin('users', 'applications.user_id', '=', 'users.id')
-            ->whereNull('applications.deleted_at')
-            ->select(
-                'applications.*',
-                'profiles.firstName',
-                'profiles.middleName',
-                'profiles.lastName',
-                'profiles.psgCode as brgy',
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,6),'000') as city"),
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,4),'00000') as province"),
-                DB::raw("CONCAT( SUBSTRING(profiles.psgCode,1,2),'0000000') as region"),
-                'grants.acadYr',
-                'employments.yearEmployed',
-                'employments.employerType',
-                'employments.position',
-                'employments.employerName',
-                'employments.employerAddress',
-                'users.avatar',
-            )
-            ->toSql();
+    public function indexDT(Request $request)
+    {
+        $query = "SELECT applications.*, profiles.firstName, profiles.middleName, profiles.lastName, profiles.psgCode ,grants.acadYr, 
+        employments.yearEmployed, employments.employerType, employments.position, employments.employerName, employments.employerAddress,
+        users.avatar, cityCode.name AS city_name, provinceCode.name AS province_name, regionCode.name AS region_name
+
+        FROM applications
+       
+        INNER JOIN profiles ON applications.user_id  = profiles.user_id
+        INNER JOIN  grants  ON  applications . grant_id  =  grants.id
+        LEFT JOIN  employments  ON  applications . user_id  =  employments . user_id 
+        LEFT JOIN  users  ON  applications . user_id  =  users . id 
+        
+
+        INNER JOIN (
+            SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')
+        ) AS cityCode ON CONCAT(SUBSTRING(profiles .psgCode,1,6),'000') = cityCode.code
+
+        INNER JOIN (
+            SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')
+        ) AS provinceCode ON CONCAT(SUBSTRING(profiles.psgCode,1,4),'00000') = provinceCode.code
+
+        INNER JOIN (
+            SELECT * FROM psgc WHERE LEVEL IN ('Reg')
+        ) AS regionCode ON CONCAT(SUBSTRING(profiles.psgCode,1,2),'0000000') = regionCode.code
+        
+        WHERE applications.deleted_at IS NULL";
+
+        if (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
 
         return GlobalClassDatatables::of($query)
-                ->addAction('fullname', function ($data) {
-                    return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
-                })
-                ->addAction('batch', function ($data) {
-                    return $data->acadYr . '-' . ($data->acadYr + 1);
-                })
-                // Works but slow
-                ->addAction('region', function ($data) {
-                    return Psgc::where('code', $data->region)->first()->name;
-                })
-                ->addAction('province', function ($data) {
-                    return Psgc::where('code', $data->province)->first()->name;
-                })
-                ->addAction('city', function ($data) {
-                    return Psgc::where('code', $data->city)->first()->name;
-                })
-                ->addAction('avatar', function($data){
-                    return '<div class="user-block icon-container"><img src="/storage/users-avatar/'.$data->avatar.'" class="img-circle img-bordered-sm cover" alt="User Image"></div>';
-                })
-                // ->addAction('action', function($data){
-                //     return '<a href="" class="btn btn-info btn-sm mr-1 mb-1">Application Form</a>';
-                // })
-                ->request($request)
-                ->make();
+            ->addAction('avatar', function ($data) {
+                return '<div class="user-block icon-container"><img src="/storage/users-avatar/' . $data->avatar . '" class="img-circle img-bordered-sm cover" alt="User Image"></div>';
+            })
+            ->addAction('fullname', function ($data) {
+                return '<a href="' .  route("users.show", $data->user_id)  . '" title="Student Info">' . $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName . '</a>';
+            })
+            ->addAction('batch', function ($data) {
+                return $data->acadYr . '-' . ($data->acadYr + 1);
+            })
+            ->addAction('action', function ($data) {
+
+                if (Auth::user()->can('application-read')) {
+                    $btnViewApplication = '<a href="' . url("/applications/applicationForm/" . $data->id) . '" class="btn btn-info btn-sm mr-1 mb-1">Application Form</a>';
+                } else {
+                    $btnViewApplication = '';
+                }
+
+                if (Auth::user()->can('document-browse')) {
+                    $btnViewDocs = '<a href="' . url("showAttachment/" . $data->grant_id . '/' . $data->user_id) . '" class="btn btn-info btn-sm mr-1 mb-1">View Files</a>';
+                } else {
+                    $btnViewDocs = '';
+                }
+
+                if (Auth::user()->can('application-edit')) {
+                    $btnAppEdit = '<button onclick="appEdit(this)" data-url="' .  route("applications.edit", $data->id) . '" class="btn btn-primary btn-sm mr-1 mb-1">Edit Application</button>';
+                } else {
+                    $btnAppEdit = '';
+                }
+
+                if (Auth::user()->can('application-delete')) {
+                    $btnAppDel = '<button onclick="appDel(this)" data-url="' .  route("applications.destroy", $data->id) . '" class="btn btn-danger btn-sm mr-1 mb-1">Delete</button>';
+                } else {
+                    $btnAppDel = '';
+                }
+
+                if (Auth::user()->hasAnyRole(['Admin|Regional Officer'])) {
+                    if (Auth::user()->can('expenses-add')) {
+                        ($data->status == "Approved") ? $btnPayment = '<button onclick="appPayment(this)" data-payee="' . $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName . '" data-particular="Grant Payment" data-province="' . substr($data->psgCode, 0, 4) . '00000" data-userId="' . $data->user_id . '" data-applicationId="' . $data->id . '" data-grantId="' . $data->grant_id . '" class="btn btn-success btn-sm mr-1 mb-1">Payment</button>' : $btnPayment = '';
+                    } else {
+                        $btnPayment = '';
+                    }
+                } else {
+                    $btnPayment = '';
+                }
+
+                if ($data->status == "Graduated" && $data->level == "College") {
+                    if ($data->employerName != '') {
+                        $btnEmployment = '<button onclick="Employment(this)" data-userID="' . $data->user_id . '" data-yearEmployed="' . $data->yearEmployed . '" data-employerType="' . $data->employerType . '" data-position="' . $data->position . '" data-employerName="' . $data->employerName . '" data-employerAddress="' . $data->employerAddress . '" class="btn btn-primary btn-sm mr-1 mb-1">Employed</button>';
+                    } else {
+                        $btnEmployment = '<button onclick="Employment(this)" data-userID="' . $data->user_id . '" class="btn btn-warning btn-sm mr-1 mb-1 btn-add-employment">Not Employed</button>';
+                    }
+                } else {
+                    $btnEmployment = '';
+                }
+
+                return $btnViewApplication . $btnViewDocs . $btnAppEdit . $btnAppDel . $btnPayment . $btnEmployment;
+            })
+            ->request($request)
+            ->searchable(['firstName', 'middleName', 'lastName', 'acadYr', 'type', 'applications.level', 'status', 'remarks', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
+            ->make();
     }
     /**
      * Show the form for creating a new resource.
