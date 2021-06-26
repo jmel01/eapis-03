@@ -219,7 +219,7 @@ class ApplicationController extends Controller
 
         return GlobalClassDatatables::of($query)
             ->addAction('avatar', function ($data) {
-                return '<div class="user-block icon-container"><img src="/storage/users-avatar/' . $data->avatar . '" class="img-circle img-bordered-sm cover" alt="User Image"></div>';
+                return '<div class="user-block icon-container"><img src="/storage/users-avatar/' . $data->avatar . '" class="img-circle img-bordered-sm cover" alt="' . $data->firstName . ' Avatar" loading="lazy"></div>';
             })
             ->addAction('fullname', function ($data) {
                 return '<a href="' .  route("users.show", $data->user_id)  . '" title="Student Info">' . $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName . '</a>';

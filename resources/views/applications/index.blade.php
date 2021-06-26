@@ -58,6 +58,7 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.js"></script>
 <script>
+
     function appEdit(data_attr) {
         var url_id = data_attr.getAttribute('data-url');
         $.get(url_id, function(data) {
@@ -138,13 +139,14 @@
                 type: 'post',
             },
             lengthMenu: [
-                [10, 25, 50, 100, 500,'{{$countOfTable}}'],
+                [10, 25, 50, 100, 500, '{{$countOfTable}}'],
                 [10, 25, 50, 100, 500, 'All']
             ],
             responsive: true,
-            searchDelay: 500,
+            deferRender: true,
+            searchDelay: 2000,
             pagingType: 'full_numbers',
-            iDisplayLength: 10,
+
             columns: [{
                     data: 'avatar',
                     name: 'avatar',
