@@ -62,6 +62,11 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/alumni', [ApplicationController::class, 'alumni'])->name('alumni');
     Route::get('/applications/applicationForm/{id}', [ApplicationController::class, 'applicationForm'])->name('applicationForm');
+    Route::get('/applications/approved', [ApplicationController::class, 'approved'])->name('approved');
+    Route::get('/applications/denied', [ApplicationController::class, 'denied'])->name('denied');
+    Route::get('/applications/graduated', [ApplicationController::class, 'graduated'])->name('graduated');
+    Route::get('/applications/newOnProcess', [ApplicationController::class, 'newOnProcess'])->name('newOnProcess');
+    Route::get('/applications/terminated', [ApplicationController::class, 'terminated'])->name('terminated');
     Route::get('/applications/showAllApplication', [ApplicationController::class, 'showAllApplication'])->name('showAllApplication');
     Route::get('/applications/showAllApproved', [ApplicationController::class, 'showAllApproved'])->name('showAllApproved');
     Route::get('/applications/showAllNew/{id}', [ApplicationController::class, 'showAllNew'])->name('showAllNew');

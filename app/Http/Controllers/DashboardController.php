@@ -533,7 +533,7 @@ class DashboardController extends Controller
         if ($ProfileSet == '') {
             $notification = array(
                 'message' => 'Update your profile first.',
-                'alert-type' => 'info'
+                'alert-type' => 'warning'
             );
             return redirect('profiles/' . Auth::id())->with($notification);
         }

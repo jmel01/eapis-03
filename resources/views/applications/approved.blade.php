@@ -9,7 +9,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of Applications</h3>
+        <h3 class="card-title">List of Applications (Approved/Ongoing Scholarship)</h3>
         <div class="card-tools">
             <a href="/grants" class="btn btn-outline-primary btn-sm float-right mr-1">BACK</a>
         </div>
@@ -136,6 +136,9 @@
             ajax: {
                 url: '/applications/indexDT',
                 type: 'post',
+                data: {
+                    "statusFilter": 'approved'
+                }
             },
             lengthMenu: [
                 [10, 25, 50, 100, 500, '{{$countOfTable}}'],
@@ -145,42 +148,57 @@
             deferRender: true,
             searchDelay: 2000,
 
-            columns: [
-                {
-                    data: 'avatar', name: 'avatar', searchable: false, orderable: false
+            columns: [{
+                    data: 'avatar',
+                    name: 'avatar',
+                    searchable: false,
+                    orderable: false
                 },
                 {
-                    data: 'fullname', name: 'fullname'
+                    data: 'fullname',
+                    name: 'fullname'
                 },
                 {
-                    data: 'batch', name: 'batch'
+                    data: 'batch',
+                    name: 'batch'
                 },
                 {
-                    data: 'type', defaultContent: ''
+                    data: 'type',
+                    defaultContent: ''
                 },
                 {
-                    data: 'level', defaultContent: ''
+                    data: 'level',
+                    defaultContent: ''
                 },
                 {
-                    data: 'status', defaultContent: ''
+                    data: 'status',
+                    defaultContent: ''
                 },
                 {
-                    data: 'date', defaultContent: '', searchable: false, orderable: false
+                    data: 'date_approved',
+                    defaultContent: '',
                 },
                 {
-                    data: 'remarks', defaultContent: ''
+                    data: 'remarks',
+                    defaultContent: ''
                 },
                 {
-                    data: 'city_name', defaultContent: ''
+                    data: 'city_name',
+                    defaultContent: ''
                 },
                 {
-                    data: 'province_name', defaultContent: ''
+                    data: 'province_name',
+                    defaultContent: ''
                 },
                 {
-                    data: 'region_name', defaultContent: ''
+                    data: 'region_name',
+                    defaultContent: ''
                 },
                 {
-                    data: 'action', defaultContent: '', searchable: false, orderable: false
+                    data: 'action',
+                    defaultContent: '',
+                    searchable: false,
+                    orderable: false
                 },
             ],
             columnDefs: [{

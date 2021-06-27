@@ -6,10 +6,9 @@ use App\GlobalClass\Datatables as GlobalClassDatatables;
 use App\Models\Application;
 use App\Models\Grant;
 use App\Models\Psgc;
-use DataTables;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ApplicationController extends Controller
@@ -170,16 +169,77 @@ class ApplicationController extends Controller
         return view('applications.alumni', compact('data'));
     }
 
+    public function approved()
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = Application::where('status', 'Approved')->count();
+
+        return view('applications.approved', compact('countOfTable'));
+    }
+
+    public function denied()
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = Application::where('status', 'Denied')->count();
+
+        return view('applications.denied', compact('countOfTable'));
+    }
+
+    public function graduated()
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = Application::where('status', 'Graduated')->count();
+
+        return view('applications.graduated', compact('countOfTable'));
+    }
+
+
+    public function newOnProcess()
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = Application::where('status', '')
+            ->orWhere('status', 'New')
+            ->orWhere('status', 'On Process')
+            ->count();
+
+        return view('applications.newOnProcess', compact('countOfTable'));
+    }
+
+    public function terminated()
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = Application::whereNotIn('status', ['New', 'Denied', 'Approved', 'On Process', 'Graduated'])
+            ->whereNotNull('status')
+            ->count();
+
+        return view('applications.terminated', compact('countOfTable'));
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $this->cscProvProfileSet();
         $countOfTable = Application::count();
 
         return view('applications.index', compact('countOfTable'));
+    }
+
+    public function cscProvProfileSet()
+    {
+        if (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $ProfileSet = Profile::firstWhere('user_id', Auth::id());
+            if ($ProfileSet == '') {
+                $notification = array(
+                    'message' => 'Update your profile first.',
+                    'alert-type' => 'warning'
+                );
+                return redirect('profiles/' . Auth::id())->with($notification);
+            }
+        }
     }
 
     public function indexDT(Request $request)
@@ -195,7 +255,6 @@ class ApplicationController extends Controller
         LEFT JOIN  employments  ON  applications . user_id  =  employments . user_id 
         LEFT JOIN  users  ON  applications . user_id  =  users . id 
         
-
         INNER JOIN (
             SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')
         ) AS cityCode ON CONCAT(SUBSTRING(profiles .psgCode,1,6),'000') = cityCode.code
@@ -210,11 +269,31 @@ class ApplicationController extends Controller
         
         WHERE applications.deleted_at IS NULL";
 
+        switch ($request->statusFilter) {
+            case 'newOnProcess':
+                $query = $query . " AND applications.status IN ('New','On Process','')";
+                break;
+            case 'approved':
+                $query = $query . " AND applications.status = 'Approved'";
+                break;
+            case 'denied':
+                $query = $query . " AND applications.status = 'Denied'";
+                break;
+            case 'graduated':
+                $query = $query . " AND applications.status = 'Graduated'";
+                break;
+            case 'terminated':
+                $query = $query . " AND applications.status NOT IN ('New','On Process','Denied','Approved','Graduated','')";
+                break;
+            default:
+        }
+
         if (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
         }
+
 
 
         return GlobalClassDatatables::of($query)
@@ -226,6 +305,21 @@ class ApplicationController extends Controller
             })
             ->addAction('batch', function ($data) {
                 return $data->acadYr . '-' . ($data->acadYr + 1);
+            })
+            ->addAction('date', function ($data) {
+                if ($data->status == "New" || $data->status == "") {
+                    return $data->created_at;
+                } elseif ($data->status == "On Process") {
+                    return $data->date_process;
+                } elseif ($data->status == "Denied") {
+                    return $data->date_denied;
+                } elseif ($data->status == "Approved") {
+                    return $data->date_approved;
+                } elseif ($data->status == "Graduated") {
+                    return $data->date_graduated;
+                } else {
+                    return $data->date_terminated;
+                }
             })
             ->addAction('action', function ($data) {
 
