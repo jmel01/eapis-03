@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\GlobalClass\Datatables as GlobalClassDatatables;
 use App\ChartArray\Registered;
 use App\Http\Controllers\Controller;
 use App\Models\AdminCost;
@@ -25,7 +26,7 @@ class UserController extends Controller
     public function newUser(Request $request)
     {
         $coverage = Str::substr(Auth::user()->region, 0, 2);
-        
+
         $data = User::with('profile')
             ->whereNotIn('id', function ($query) {
                 $query->select('user_id')->from('applications');
@@ -251,6 +252,112 @@ class UserController extends Controller
 
         return view('users.index', compact('regions', 'roles'));
     }
+
+    public function index2(Request $request)
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->where('name', '<>', 'Regional Officer')
+                ->pluck('name', 'name')
+                ->all();
+        }
+
+        return view('users.index2', compact('countOfTable', 'regions', 'roles'));
+    }
+
+    public function cscProvProfileSet()
+    {
+        if (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $ProfileSet = Profile::firstWhere('user_id', Auth::id());
+            if ($ProfileSet == '') {
+                $notification = array(
+                    'message' => 'Update your profile first.',
+                    'alert-type' => 'warning'
+                );
+                return redirect('profiles/' . Auth::id())->with($notification);
+            }
+        }
+    }
+
+    public function indexDT(Request $request)
+    {
+        $query = "SELECT users.id, users.name, users.email, users.avatar, users.active_status, users.created_at,
+        profiles.firstName, profiles.middleName, profiles.lastName, profiles.psgCode,
+        cityCode.name AS city_name, provinceCode.name AS province_name, regionCode.name AS region_name
+        
+        FROM users
+
+        LEFT JOIN profiles ON users.id = profiles.user_id
+        LEFT JOIN model_has_roles ON users.id = model_has_roles.model_id
+        LEFT JOIN roles ON roles.id = model_has_roles.role_id
+        
+        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')) AS cityCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 6), '000') = cityCode.code
+        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')) AS provinceCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 4), '00000') = provinceCode.code
+        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Reg')) AS regionCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 2), '0000000') = regionCode.code
+        
+        WHERE users.deleted_at IS NULL";
+
+        // WHERE users.deleted_at IS NULL GROUP BY model_has_roles.model_id";
+        //GROUP_CONCAT(roles.name) as userRoles,
+        
+        if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
+        
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
+        }
+
+        return GlobalClassDatatables::of($query)
+            ->addAction('avatar', function ($data) {
+                return '<div class="user-block icon-container"><img src="/storage/users-avatar/' . $data->avatar . '" class="img-circle img-bordered-sm cover" alt="' . $data->firstName . ' Avatar" loading="lazy"></div>';
+            })
+            ->addAction('name', function ($data) {
+                return '<a href="' .  route("users.show", $data->id)  . '" title="Student Info">' . $data->name . '</a>';
+            })
+
+            ->addAction('fullname', function ($data) {
+                if ($data->firstName != '') {
+                    return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
+                }
+            })
+
+            ->addAction('action', function ($data) {
+                if (Auth::user()->can('user-edit')) {
+                    $btnUserEdit = '<button onclick="userEdit(this)" data-url="' . route("users.edit", $data->id) . '" class="btn btn-primary btn-sm mr-1 mb-1">Update</button>';
+                } else {
+                    $btnUserEdit = '';
+                }
+
+                if (Auth::user()->can('user-delete')) {
+                    $btnUserDel = '<button onclick="userDel(this)" data-url="' . route("users.destroy", $data->id) . '" class="btn btn-danger btn-sm mr-1 mb-1">Delete</button>';
+                } else {
+                    $btnUserDel = '';
+                }
+
+                return  $btnUserEdit . $btnUserDel;
+            })
+            ->request($request)
+            ->searchable(['firstName', 'middleName', 'lastName', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
+            ->make();
+    }
+
 
     /**
      * Show the form for creating a new resource.

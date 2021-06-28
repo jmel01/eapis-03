@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('applications', ApplicationController::class);
 
     Route::post('/applications/indexDT', [ApplicationController::class, 'indexDT']);
+    Route::post('/users/indexDT', [UserController::class, 'indexDT']);
 
     Route::get('adminCost/{id}', [AdminCostController::class, 'showAdminCost'])->name('adminCost');
     Route::get('paymentToGrantee/{id}', [AdminCostController::class, 'showPaymentToGrantee'])->name('paymentToGrantee');
@@ -128,6 +129,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
+    Route::get('index2', [UserController::class, 'index2'])->name('index2');
     Route::resource('users', UserController::class);
 
     Route::get('/activity-logs', [DashboardController::class, 'activityLogs'])->name('activityLogs');

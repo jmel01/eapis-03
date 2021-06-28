@@ -294,8 +294,6 @@ class ApplicationController extends Controller
             $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
         }
 
-
-
         return GlobalClassDatatables::of($query)
             ->addAction('avatar', function ($data) {
                 return '<div class="user-block icon-container"><img src="/storage/users-avatar/' . $data->avatar . '" class="img-circle img-bordered-sm cover" alt="' . $data->firstName . ' Avatar" loading="lazy"></div>';
