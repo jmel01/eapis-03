@@ -368,15 +368,23 @@ class UserController extends Controller
 
         if ($request->statusFilter == 'eapFocal') {
             $query = $query . " AND users.id IN ($eapFocal)";
-        } elseif($request->statusFilter == 'student') {
+        } elseif ($request->statusFilter == 'student') {
             $query = $query . " AND users.id NOT IN ($eapFocal)";
         }
 
         if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-            $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
+            if ($request->statusFilter == 'eapFocal') {
+                $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
+            } elseif ($request->statusFilter == 'student') {
+                $query = $query . " AND (SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2) . " OR users.region IS NULL)";
+            }
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
+            if ($request->statusFilter == 'eapFocal') {
+                $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->region, 0, 4);
+            } elseif ($request->statusFilter == 'student') {
+                $query = $query . " AND (SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->region, 0, 4) . " OR users.region IS NULL)";
+            }
         }
 
         return GlobalClassDatatables::of($query)
