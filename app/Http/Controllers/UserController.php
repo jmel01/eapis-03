@@ -355,9 +355,9 @@ class UserController extends Controller
 
         LEFT JOIN profiles ON users.id = profiles.user_id 
        
-        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')) AS cityCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 6), '000') = cityCode.code 
-        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')) AS provinceCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 4), '00000') = provinceCode.code 
-        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Reg')) AS regionCode ON CONCAT(SUBSTRING(PROFILES.psgCode, 1, 2), '0000000') = regionCode.code 
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')) AS cityCode ON CONCAT (SUBSTRING(profiles.psgCode, 1, 6), '000') = cityCode.code 
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')) AS provinceCode ON CONCAT (SUBSTRING(profiles.psgCode, 1, 4), '00000') = provinceCode.code 
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Reg')) AS regionCode ON CONCAT(SUBSTRING(profiles.psgCode, 1, 2), '0000000') = regionCode.code 
 
         WHERE users.deleted_at IS NULL";
 
