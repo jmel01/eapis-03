@@ -11,7 +11,7 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-flat nav-legacy nav-compact" data-widget="treeview" role="menu" data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-flat nav-compact nav-child-indent nav-collapse-hide-child" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
@@ -83,7 +83,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('applications.index') }}" class="nav-link {{ request()->routeIs('applications') ? 'active' : '' }}">
+                            <a href="{{ route('applications.index') }}" class="nav-link {{ request()->is('applications') ? 'active' : '' }}">
                                 <i class="far fa-list-alt nav-icon">
                                 </i>
                                 <p>All Application</p>
@@ -204,17 +204,23 @@
                 @endcanany
 
                 @canany(['user-browse', 'role-browse'])
-                <li class="nav-item has-treeview {{ request()->routeIs('users.*') || request()->routeIs('roles.*') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ request()->routeIs('users.*') || request()->routeIs('roles.*') ? 'active' : '' }}">
+                <li class="nav-item has-treeview {{ request()->is('users*') || request()->routeIs('roles.*') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('users*') || request()->routeIs('roles.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>User Management<i class="right fas fa-angle-left"></i></p>
                     </a>
                     <ul class="nav nav-treeview">
                         @can('user-browse')
                         <li class="nav-item">
-                            <a href="{{ route('users.index') }}" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <a href="{{ route('student') }}" class="nav-link {{ request()->routeIs('student') ? 'active' : '' }}">
                                 <i class="far fa-address-book nav-icon"></i>
-                                <p>User List</p>
+                                <p>Student</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('eapFocal') }}" class="nav-link {{ request()->routeIs('eapFocal') ? 'active' : '' }}">
+                                <i class="far fa-address-book nav-icon"></i>
+                                <p>EAP Focal Person</p>
                             </a>
                         </li>
                         @endcan

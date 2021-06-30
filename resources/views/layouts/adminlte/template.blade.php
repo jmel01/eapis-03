@@ -64,7 +64,7 @@
 
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+<body class="hold-transition sidebar-mini layout-fixed sidebar-collapse layout-navbar-fixed">
     <div class="wrapper">
 
         @include('layouts.adminlte.topbar')

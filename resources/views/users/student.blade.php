@@ -27,7 +27,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of Users</h3>
+        <h3 class="card-title">List of Users (Student)</h3>
         <div class="card-tools">
             @can('user-add')
             <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
@@ -129,6 +129,9 @@
             ajax: {
                 url: '/users/indexDT',
                 type: 'post',
+                data: {
+                    "statusFilter": 'student'
+                }
             },
             lengthMenu: [
                 [10, 25, 50, 100, 500, '{{$countOfTable}}'],
@@ -149,8 +152,8 @@
                     name: 'name'
                 },
                 {
-                    data: 'fullname',
-                    name: 'fullname',
+                    data: 'lastName',
+                    name: 'lastName',
                     defaultContent: ''
                 },
                 {
@@ -158,9 +161,11 @@
                     name: 'email'
                 },
                 {
-                    data: 'userRole',
-                    name: 'userRole',
-                    defaultContent: ''
+                    data: 'userRoles',
+                    name: 'userRoles',
+                    defaultContent: '',
+                    searchable: false,
+                    orderable: false
                 },
                 {
                     data: 'created_at',

@@ -129,7 +129,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
-    Route::get('index2', [UserController::class, 'index2'])->name('index2');
+    Route::get('users/eapFocal', [UserController::class, 'eapFocal'])->name('eapFocal');
+    Route::get('users/student', [UserController::class, 'student'])->name('student');
     Route::resource('users', UserController::class);
 
     Route::get('/activity-logs', [DashboardController::class, 'activityLogs'])->name('activityLogs');

@@ -159,7 +159,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function indexYajra(Request $request)
     {
         if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
             $data = User::with('profile')->with('roles')->with('userRegion')->orderBy('id', 'DESC')->get();
@@ -253,7 +253,7 @@ class UserController extends Controller
         return view('users.index', compact('regions', 'roles'));
     }
 
-    public function index2(Request $request)
+    public function eapFocal(Request $request)
     {
         $this->cscProvProfileSet();
         $countOfTable = User::count();
@@ -263,14 +263,12 @@ class UserController extends Controller
             $roles = Role::pluck('name', 'name')->all();
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $regions = Psgc::where('code', Auth::user()->region)->get();
-
             $roles = Role::where('name', '<>', 'Admin')
                 ->where('name', '<>', 'Executive Officer')
                 ->pluck('name', 'name')
                 ->all();
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             $regions = Psgc::where('code', Auth::user()->region)->get();
-
             $roles = Role::where('name', '<>', 'Admin')
                 ->where('name', '<>', 'Executive Officer')
                 ->where('name', '<>', 'Regional Officer')
@@ -278,7 +276,59 @@ class UserController extends Controller
                 ->all();
         }
 
-        return view('users.index2', compact('countOfTable', 'regions', 'roles'));
+        return view('users.eapFocal', compact('countOfTable', 'regions', 'roles'));
+    }
+
+    public function student(Request $request)
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->where('name', '<>', 'Regional Officer')
+                ->pluck('name', 'name')
+                ->all();
+        }
+
+        return view('users.student', compact('countOfTable', 'regions', 'roles'));
+    }
+
+    public function index(Request $request)
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->where('name', '<>', 'Regional Officer')
+                ->pluck('name', 'name')
+                ->all();
+        }
+
+        return view('users.index', compact('countOfTable', 'regions', 'roles'));
     }
 
     public function cscProvProfileSet()
@@ -297,27 +347,32 @@ class UserController extends Controller
 
     public function indexDT(Request $request)
     {
-        $query = "SELECT users.id, users.name, users.email, users.avatar, users.active_status, users.created_at,
+        $query = "SELECT users.id, users.name, users.email, users.avatar, users.created_at, 
         profiles.firstName, profiles.middleName, profiles.lastName, profiles.psgCode,
-        cityCode.name AS city_name, provinceCode.name AS province_name, regionCode.name AS region_name
-        
-        FROM users
+        cityCode.name AS city_name, provinceCode.name AS province_name, regionCode.name AS region_name 
 
-        LEFT JOIN profiles ON users.id = profiles.user_id
-        LEFT JOIN model_has_roles ON users.id = model_has_roles.model_id
-        LEFT JOIN roles ON roles.id = model_has_roles.role_id
-        
-        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')) AS cityCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 6), '000') = cityCode.code
-        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')) AS provinceCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 4), '00000') = provinceCode.code
-        LEFT JOIN (SELECT * FROM psgc WHERE LEVEL IN ('Reg')) AS regionCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 2), '0000000') = regionCode.code
-        
+        FROM users 
+
+        LEFT JOIN profiles ON users.id = profiles.user_id 
+       
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Mun', 'City', 'SubMun')) AS cityCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 6), '000') = cityCode.code 
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Prov', 'Dist')) AS provinceCode ON CONCAT (SUBSTRING(PROFILES.psgCode, 1, 4), '00000') = provinceCode.code 
+        LEFT JOIN ( SELECT * FROM psgc WHERE LEVEL IN ('Reg')) AS regionCode ON CONCAT(SUBSTRING(PROFILES.psgCode, 1, 2), '0000000') = regionCode.code 
+
         WHERE users.deleted_at IS NULL";
 
-        // WHERE users.deleted_at IS NULL GROUP BY model_has_roles.model_id";
-        //GROUP_CONCAT(roles.name) as userRoles,
-        
+        $eapFocal = User::whereHas('roles', function ($query) {
+            return $query->where('name', '!=', 'Applicant');
+        })->pluck('id');
+        $eapFocal = str_replace(['[', ']'], '', $eapFocal);
+
+        if ($request->statusFilter == 'eapFocal') {
+            $query = $query . " AND users.id IN ($eapFocal)";
+        } elseif($request->statusFilter == 'student') {
+            $query = $query . " AND users.id NOT IN ($eapFocal)";
+        }
+
         if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
-        
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
             $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
@@ -332,12 +387,14 @@ class UserController extends Controller
                 return '<a href="' .  route("users.show", $data->id)  . '" title="Student Info">' . $data->name . '</a>';
             })
 
-            ->addAction('fullname', function ($data) {
+            ->addAction('lastName', function ($data) {
                 if ($data->firstName != '') {
                     return $data->firstName . ' ' . substr($data->middleName, 0, 1) . '. ' . $data->lastName;
                 }
             })
-
+            ->addAction('userRoles', function ($data) {
+                return User::find($data->id)->getRoleNames();
+            })
             ->addAction('action', function ($data) {
                 if (Auth::user()->can('user-edit')) {
                     $btnUserEdit = '<button onclick="userEdit(this)" data-url="' . route("users.edit", $data->id) . '" class="btn btn-primary btn-sm mr-1 mb-1">Update</button>';
@@ -354,7 +411,8 @@ class UserController extends Controller
                 return  $btnUserEdit . $btnUserDel;
             })
             ->request($request)
-            ->searchable(['firstName', 'middleName', 'lastName', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
+            ->searchable(['firstName', 'middleName', 'lastName', 'users.email', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
+            //->orderBy('ORDER BY users.id DESC')
             ->make();
     }
 

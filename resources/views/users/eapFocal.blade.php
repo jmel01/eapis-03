@@ -27,7 +27,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of All Users</h3>
+        <h3 class="card-title">List of Users (EAP Focal Person)</h3>
         <div class="card-tools">
             @can('user-add')
             <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
@@ -129,6 +129,9 @@
             ajax: {
                 url: '/users/indexDT',
                 type: 'post',
+                data: {
+                    "statusFilter": 'eapFocal'
+                }
             },
             lengthMenu: [
                 [10, 25, 50, 100, 500, '{{$countOfTable}}'],
