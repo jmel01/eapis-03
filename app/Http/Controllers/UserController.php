@@ -381,9 +381,9 @@ class UserController extends Controller
             }
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             if ($request->statusFilter == 'eapFocal') {
-                $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->region, 0, 4);
+                $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
             } elseif ($request->statusFilter == 'student') {
-                $query = $query . " AND (SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->region, 0, 4) . " OR users.region IS NULL)";
+                $query = $query . " AND (SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4) . " OR users.region IS NULL)";
             }
         }
 
