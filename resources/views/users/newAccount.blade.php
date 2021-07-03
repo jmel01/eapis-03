@@ -27,7 +27,7 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of Users (Student)</h3>
+        <h3 class="card-title">List of New Users Account Without Profile</h3>
         <div class="card-tools">
             @can('user-add')
             <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
@@ -130,7 +130,7 @@
                 url: '/users/indexDT',
                 type: 'post',
                 data: {
-                    "statusFilter": 'student'
+                    "statusFilter": 'new'
                 }
             },
             lengthMenu: [

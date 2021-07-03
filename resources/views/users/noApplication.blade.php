@@ -27,11 +27,9 @@
 @section('content')
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">List of Users (Student)</h3>
+        <h3 class="card-title">List of users with no application</h3>
         <div class="card-tools">
-            @can('user-add')
-            <button class="btn btn-outline-primary btn-sm btn-add-user float-right">CREATE NEW USER</button>
-            @endcan
+          
         </div>
     </div>
     <div class="card-body">
@@ -64,46 +62,63 @@
 </div>
 
 @include('layouts.adminlte.modalDelete')
-@include('users.modalUser')
+@include('applications.modalApplication')
+@include('applications.modalApplicationNotAvailable')
+@include('profiles.modalProfile')
 
 @endsection
 
 @push('scripts')
+
+@include('psgc.scriptPsgc')
+@include('ethnogroups.scriptEthno')
+@include('profiles.scriptAddSibling')
+@include('profiles.scriptAddSchool')
+
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/jszip-2.5.0/dt-1.10.25/b-1.7.1/b-colvis-1.7.1/b-html5-1.7.1/b-print-1.7.1/date-1.1.0/r-2.2.9/sc-2.0.4/sb-1.1.0/datatables.min.js"></script>
 <!-- Select2 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.full.min.js" integrity="sha512-RtZU3AyMVArmHLiW0suEZ9McadTdegwbgtiQl5Qqo9kunkVg1ofwueXD8/8wv3Af8jkME3DDe3yLfR8HSJfT2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    function userEdit(data_attr) {
+    function profileEdit(data_attr) {
+        var id = data_attr.getAttribute('data-id');
         var url_id = data_attr.getAttribute('data-url');
-        $.get(url_id, function(data) {
-            console.log(data)
-            $('[name="id"]').val(data.user.id)
-            $('[name="region"]').val(data.user.region)
-            $('[name="name"]').val(data.user.name)
-            $('[name="email"]').val(data.user.email)
 
-            var roles = $('#roles');
+        $('[name="id"]').val(id)
 
-            let selectArray = []
-
-            $.each(data.user.roles, (key, value) => {
-                if (roles.find("option[value='" + value.name + "']").length) {
-                    selectArray.push(value.name)
-                }
-            })
-
-            roles.val(selectArray).trigger('change');
-
-            $('#modalUser').modal('show')
+        $.ajax({
+            url: '/profile/update/show-modal',
+            type: 'GET',
+            data: {
+                id: id
+            },
+        }).done(result => {
+            $('#modalProfile .modal-body').empty()
+            $('#modalProfile .modal-body').append(result)
+            $('#modalProfile').modal('show')
+            $('#region').trigger("change")
         })
     }
 
-    function userDel(data_attr) {
-        var url_id = data_attr.getAttribute('data-url');
-        document.getElementById("formDelete").action = url_id;
-        $('#modalDelete').modal('show')
+    function userApply(data_attr) {
+
+      
+        var id = data_attr.getAttribute('data-id');
+
+        $.ajax({
+            url: '/user/validate/apply',
+            type: 'GET',
+            data: {
+                id: id
+            },
+        }).done(result => {
+            if (result.message == 'success') {
+                $('[name="user_id"]').val(id)
+                $('#modalApplication').modal('show')
+            } 
+        })
+        document.getElementById("formApplication").reset();
     }
 </script>
 <script>
@@ -130,7 +145,7 @@
                 url: '/users/indexDT',
                 type: 'post',
                 data: {
-                    "statusFilter": 'student'
+                    "statusFilter": 'noApplication'
                 }
             },
             lengthMenu: [

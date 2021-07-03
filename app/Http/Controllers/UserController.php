@@ -19,12 +19,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
+
+
     public function newUser(Request $request)
     {
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
         $coverage = Str::substr(Auth::user()->region, 0, 2);
 
         $data = User::with('profile')
@@ -305,6 +312,65 @@ class UserController extends Controller
         return view('users.student', compact('countOfTable', 'regions', 'roles'));
     }
 
+    public function newAccount(Request $request)
+    {
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+            $roles = Role::pluck('name', 'name')->all();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->pluck('name', 'name')
+                ->all();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $roles = Role::where('name', '<>', 'Admin')
+                ->where('name', '<>', 'Executive Officer')
+                ->where('name', '<>', 'Regional Officer')
+                ->pluck('name', 'name')
+                ->all();
+        }
+
+        return view('users.newAccount', compact('countOfTable', 'regions', 'roles'));
+    }
+
+    public function noApplication(Request $request)
+    {
+        // $name = route('noApplication');
+        // $route = Route::current(); // Illuminate\Routing\Route
+        // $name = Route::currentRouteName(); // string
+        // $action = Route::currentRouteAction(); // string
+        // dd(Route::currentRouteName());
+
+        $this->cscProvProfileSet();
+        $countOfTable = User::count();
+
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $regions = Psgc::where('level', 'Reg')->get();
+            $grants = Grant::where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $regions = Psgc::where('code', Auth::user()->region)->get();
+            $grants = Grant::where('region', Auth::user()->region)
+                ->where('applicationOpen', '<=', date('Y-m-d'))
+                ->where('applicationClosed', '>=', date('Y-m-d'))
+                ->get();
+        }
+
+        return view('users.noApplication', compact('countOfTable', 'regions', 'grants'));
+    }
+
     public function index(Request $request)
     {
         $this->cscProvProfileSet();
@@ -366,23 +432,33 @@ class UserController extends Controller
         })->pluck('id');
         $eapFocal = str_replace(['[', ']'], '', $eapFocal);
 
+        $noProfile = User::doesntHave('profile')->pluck('id');
+        $noProfile = str_replace(['[', ']'], '', $noProfile);
+
+        $noApplication = User::doesntHave('application')->pluck('id');
+        $noApplication = str_replace(['[', ']'], '', $noApplication);
+
         if ($request->statusFilter == 'eapFocal') {
             $query = $query . " AND users.id IN ($eapFocal)";
         } elseif ($request->statusFilter == 'student') {
             $query = $query . " AND users.id NOT IN ($eapFocal)";
+        } elseif ($request->statusFilter == 'new') {
+            $query = $query . " AND users.id NOT IN ($eapFocal) AND users.id IN ($noProfile)";
+        } elseif ($request->statusFilter == 'noApplication') {
+            $query = $query . " AND users.id NOT IN ($eapFocal) AND users.id IN ($noApplication)";
         }
 
         if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
         } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
-            if ($request->statusFilter == 'eapFocal') {
-                $query = $query . " AND SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2);
-            } elseif ($request->statusFilter == 'student') {
-                $query = $query . " AND (SUBSTRING(profiles.psgCode,1,2) = " . substr(Auth::user()->region, 0, 2) . " OR users.region IS NULL)";
+            if ($request->statusFilter == 'eapFocal' || $request->statusFilter == 'student') {
+                $query = $query . " AND users.region = " . Auth::user()->region;
+            } else {
+                $query = $query . " AND (users.region = " . Auth::user()->region . " OR users.region IS NULL)";
             }
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
-            if ($request->statusFilter == 'eapFocal') {
+            if ($request->statusFilter == 'eapFocal' || $request->statusFilter == 'student') {
                 $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
-            } elseif ($request->statusFilter == 'student') {
+            } else {
                 $query = $query . " AND (SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4) . " OR users.region IS NULL)";
             }
         }
@@ -416,10 +492,44 @@ class UserController extends Controller
                     $btnUserDel = '';
                 }
 
-                return  $btnUserEdit . $btnUserDel;
+                // if (Auth::user()->can('profile-edit')) {
+                //     $btnProfileCreate = '<button onclick="profileEdit(this)" data-id="' . $data->id . '" data-url="' . route("profiles.edit", $data->id) . '" class="btn btn-warning btn-sm mr-1 mb-1">Create Profile</button>';
+                // } else {
+                //     $btnProfileCreate = '';
+                // }
+
+                if ($data->firstName != '') {
+                    if (Auth::user()->can('profile-edit')) {
+                        $btnProfileCreate = '<button onclick="profileEdit(this)" data-id="' . $data->id . '" data-url="' . route("profiles.edit", $data->id) . '" class="btn btn-primary btn-sm mr-1 mb-1">Update Profile</button>';
+                    } else {
+                        $btnProfileCreate = '';
+                    }
+
+                    if (Auth::user()->can('application-add')) {
+                        $btnApply = '<button onclick="userApply(this)" data-id="' . $data->id . '" class="btn btn-success btn-sm mr-1 mb-1 btn-add-application">Apply</button>';
+                    } else {
+                        $btnApply = '';
+                    }
+                } else {
+                    if (Auth::user()->can('profile-edit')) {
+                        $btnProfileCreate = '<button onclick="profileEdit(this)" data-id="' . $data->id . '" data-url="' . route("profiles.edit", $data->id) . '" class="btn btn-warning btn-sm mr-1 mb-1">Create Profile</button>';
+                    } else {
+                        $btnProfileCreate = '';
+                    }
+
+                    $btnApply = '';
+                }
+
+                if (route('noApplication') == request()->headers->get('referer')) {
+                    return    $btnProfileCreate . $btnApply;
+                } else {
+                    return  $btnUserEdit . $btnUserDel;
+                }
+
+                //return  $btnUserEdit . $btnUserDel . $btnProfileCreate . $btnApply;
             })
             ->request($request)
-            ->searchable(['firstName', 'middleName', 'lastName', 'users.email', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
+            ->searchable(['users.name', 'firstName', 'middleName', 'lastName', 'users.email', 'cityCode.name', 'provinceCode.name', 'regionCode.name'])
             //->orderBy('ORDER BY users.id DESC')
             ->make();
     }

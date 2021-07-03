@@ -129,6 +129,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
+    Route::get('users/newAccount', [UserController::class, 'newAccount'])->name('newAccount');
+    Route::get('users/noApplication', [UserController::class, 'noApplication'])->name('noApplication');
     Route::get('users/eapFocal', [UserController::class, 'eapFocal'])->name('eapFocal');
     Route::get('users/student', [UserController::class, 'student'])->name('student');
     Route::resource('users', UserController::class);

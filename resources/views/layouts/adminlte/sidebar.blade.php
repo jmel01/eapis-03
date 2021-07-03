@@ -26,18 +26,7 @@
 
                 @unlessrole('Applicant')
                 @can('user-browse')
-                <li class="nav-item">
-                    <a href="{{ route('newUser') }}" class="nav-link {{ request()->routeIs('newUser') ? 'active' : '' }}">
-                        <i class="far fa-address-card nav-icon">
-                            <!-- @if($totalNoApplication > 0)
-                            <span class="badge badge-warning navbar-badge">{{ $totalNoApplication }}</span>
-                            @else
-                            <span class="badge badge-danger navbar-badge">0</span>
-                            @endif -->
-                        </i>
-                        <p>New Registration</p>
-                    </a>
-                </li>
+
                 @endcan
                 @can('application-browse')
                 <li class="nav-item has-treeview {{ (request()->is('applications*')) ? 'menu-open' : '' }}">
@@ -48,44 +37,45 @@
                     <ul class="nav nav-treeview">
 
                         <li class="nav-item">
+                            <a href="{{ route('noApplication') }}" class="nav-link {{ request()->routeIs('noApplication') ? 'active' : '' }}">
+                                <i class="far fa-address-card nav-icon"></i>
+                                <p>No Application</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
                             <a href="{{ route('newOnProcess') }}" class="nav-link {{ request()->routeIs('newOnProcess') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>New Applicant</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('approved') }}" class="nav-link {{ request()->routeIs('approved') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>Ongoing Scholars</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('graduated') }}" class="nav-link {{ request()->routeIs('graduated') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>Graduated</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('terminated') }}" class="nav-link {{ request()->routeIs('terminated') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>Terminated</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('denied') }}" class="nav-link {{ request()->routeIs('denied') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>Denied</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('applications.index') }}" class="nav-link {{ request()->is('applications') ? 'active' : '' }}">
-                                <i class="far fa-list-alt nav-icon">
-                                </i>
+                                <i class="far fa-list-alt nav-icon"></i>
                                 <p>All Application</p>
                             </a>
                         </li>
@@ -211,6 +201,12 @@
                     </a>
                     <ul class="nav nav-treeview">
                         @can('user-browse')
+                        <li class="nav-item">
+                            <a href="{{ route('newAccount') }}" class="nav-link {{ request()->routeIs('newAccount') ? 'active' : '' }}">
+                                <i class="far fa-address-book nav-icon"></i>
+                                <p>Users without profile</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('student') }}" class="nav-link {{ request()->routeIs('student') ? 'active' : '' }}">
                                 <i class="far fa-address-book nav-icon"></i>

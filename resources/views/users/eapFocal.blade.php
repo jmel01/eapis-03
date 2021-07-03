@@ -204,11 +204,11 @@
                 '<"row"<"col-md-5"i><"col-md-7"p>>',
 
             buttons: [{
-                title: 'Applications_Management_{{ Auth::user()->name }}_{{ date("YmdHis") }}',
+                title: 'User_Management_{{ Auth::user()->name }}_{{ date("YmdHis") }}',
                 extend: 'excelHtml5',
                 text: '<i class="fas fa-file-excel"></i> Excel',
                 autoFilter: true,
-                sheetName: 'List of Applications',
+                sheetName: 'List of EAP Focal Person',
                 footer: true,
                 exportOptions: {
                     columns: ':visible',
