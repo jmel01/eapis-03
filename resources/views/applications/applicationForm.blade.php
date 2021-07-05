@@ -443,7 +443,7 @@
 
         <div class="form-group">
             <p>What are your plans after graduation?</p>
-            <textarea name="plans" rows="5" class="form-control" readonly>{{ $data->contribution }}</textarea>
+            <textarea name="plans" rows="5" class="form-control" readonly>{{ $data->plans }}</textarea>
         </div>
     </div>
 </div>
