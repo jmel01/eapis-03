@@ -1,6 +1,6 @@
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        /* To select provinces/district based on selected region */
+        /* To select Ethnographic Group based on selected region */
         jQuery('select[name="region"]').on('change', function() {
             var regionID = $(this).val() ?? $('#regionCode').val();
             if (regionID) {
@@ -16,7 +16,7 @@
                         let ethnoGroupID = $('#ethnoGroupID').val()
 
                         if(ethnoGroupID == ''){
-                            $('select[name="ethnoGroup"]').append('<option disabled selected> Select Ethnolinguistic Group </option>');
+                            $('select[name="ethnoGroup"]').append('<option value="" disabled selected> Select Ethnolinguistic Group </option>');
                         }
 
                         jQuery.each(data, function(key, value) {

@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/applications/showTerminated/{id}', [ApplicationController::class, 'showTerminated'])->name('showTerminated');
     Route::get('/applications/showOnProcess/{id}', [ApplicationController::class, 'showOnProcess'])->name('showOnProcess');
     Route::get('/applications/showGraduated/{id}', [ApplicationController::class, 'showGraduated'])->name('showGraduated');
+    Route::get('/applications/noApplication', [UserController::class, 'noApplication'])->name('noApplication');
     Route::resource('applications', ApplicationController::class);
 
     Route::post('/applications/indexDT', [ApplicationController::class, 'indexDT']);
@@ -130,7 +131,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/updateCredential', [UserController::class, 'updateCredential'])->name('updateCredential');
     Route::get('new-users', [UserController::class, 'newUser'])->name('newUser');
     Route::get('users/newAccount', [UserController::class, 'newAccount'])->name('newAccount');
-    Route::get('users/noApplication', [UserController::class, 'noApplication'])->name('noApplication');
+    //Route::get('users/noApplication', [UserController::class, 'noApplication'])->name('noApplication');
     Route::get('users/eapFocal', [UserController::class, 'eapFocal'])->name('eapFocal');
     Route::get('users/student', [UserController::class, 'student'])->name('student');
     Route::resource('users', UserController::class);

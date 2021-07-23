@@ -11,7 +11,34 @@
 @push('style')
 <link rel="stylesheet" href="{{ asset('/css/full-calendar.css') }}">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.css" />
+<style>
+    /* Hide all steps by default: */
+    .tab {
+        display: none;
+    }
 
+    /* Make circles that indicate the steps of the form: */
+    .step {
+        height: 10px;
+        width: 10px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    /* Mark the active step: */
+    .step.active {
+        opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+        background-color: #04AA6D;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -25,14 +52,27 @@
                     <!-- we are adding the .class so bootstrap.js collapse plugin detects it -->
                     <div class="card card-info card-outline">
                         <div class="card-header">
-                            <h4 class="card-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                    Personal Information
-                                </a>
-                            </h4>
+                            <div class="pull-left">
+                                <h4 class="card-title">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                        Personal Information
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="pull-right">
+                                <a href="{{ url()->previous() }}" class="btn btn-outline-primary btn-sm float-right mr-1 d-print-none">BACK</a>
+                                @can('profile-edit')
+                                @if($userProfile == '')
+                                <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-warning btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE!</button>
+                                @else
+                                <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-outline-primary btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE</button>
+                                @endif
+                                @endcan
+                            </div>
+
                         </div>
 
-                        <div id="collapseOne" class="panel-collapse collapse in collapse show">
+                        <div id="collapseOne" class="panel-collapse collapse collapse show">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="box-profile col-md-4">
@@ -46,16 +86,7 @@
                                     </div>
 
                                     <div class="col-md-8">
-                                        @can('profile-edit')
-                                        <div>
-                                            <a href="{{ url()->previous() }}" class="btn btn-outline-primary btn-sm float-right mr-1 d-print-none">BACK</a>
-                                            @if($userProfile == '')
-                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-warning btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE!</button>
-                                            @else
-                                            <button data-id="{{ $id }}" data-url="{{ route('profiles.edit', $id) }}" class="btn btn-outline-primary btn-sm float-right mr-1 btn-edit-profile">UPDATE PROFILE</button>
-                                            @endif
-                                        </div>
-                                        @endcan
+
                                         @if(!empty($student->profile))
                                         <p>Name: <strong>{{ $student->profile->firstName ?? '' }} {{ $student->profile->middleName ?? '' }} {{ $student->profile->lastName ?? '' }}</strong></p>
                                         <p>Age: <strong>{{ \Carbon\Carbon::parse($student->profile->birthdate)->diff(\Carbon\Carbon::now())->format('%y') }} years old</strong></p>
@@ -90,15 +121,15 @@
                                     Scholarship/Grant
                                 </a>
                             </h4>
+                            @can('application-add')
+                            @if($userProfile != '')
+                            <button data-id="{{ $id }}" class="btn btn-outline-success btn-sm float-right btn-add-application">APPLY SCHOLARSHIP</button>
+                            @endif
+                            @endcan
                         </div>
 
-                        <div id="collapseTwo" class="panel-collapse collapse">
+                        <div id="collapseTwo" class="panel-collapse collapse show">
                             <div class="card-body">
-                                @can('application-add')
-                                @if($userProfile != '')
-                                <button data-id="{{ $id }}" class="btn btn-outline-success btn-sm float-right btn-add-application">APPLY SCHOLARSHIP</button>
-                                @endif
-                                @endcan
 
                                 <table id="applicationList" class="table table-sm table-hover table-responsive-lg">
                                     <thead>
@@ -164,7 +195,7 @@
                             </h4>
                         </div>
 
-                        <div id="collapseThree" class="panel-collapse collapse">
+                        <div id="collapseThree" class="panel-collapse collapse show">
                             <div class="card-body">
                                 <table id="paymentList" class="table table-sm table-hover table-responsive-lg">
                                     <thead>
@@ -236,7 +267,7 @@
 </div>
 
 @include('layouts.adminlte.modalDelete')
-@include('profiles.modalProfile')
+@include('profiles.modalProfile2')
 @include('applications.modalApplication')
 @include('applications.modalApplicationNotAvailable')
 @include('documents.modalDocument')
@@ -244,8 +275,6 @@
 @endsection
 
 @push('scripts')
-@include('psgc.scriptPsgc')
-@include('ethnogroups.scriptEthno')
 
 <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.23/af-2.3.5/b-1.6.5/b-colvis-1.6.5/b-flash-1.6.5/b-html5-1.6.5/b-print-1.6.5/cr-1.5.3/fc-3.3.2/fh-3.1.7/kt-2.5.3/r-2.2.6/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.1/datatables.min.js"></script>
 
@@ -373,6 +402,5 @@
 
 <script src="{{ asset('/js/full-calendar.js') }}"></script>
 @include('calendars.scriptCalendarApplicant')
-@include('profiles.scriptAddSchool')
-@include('profiles.scriptAddSibling')
+
 @endpush

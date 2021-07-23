@@ -413,6 +413,33 @@ class UserController extends Controller
 
     public function indexDT(Request $request)
     {
+        if (Auth::user()->hasAnyRole(["Admin", 'Executive Officer'])) {
+            $eapFocal = User::whereHas('roles', function ($query) {
+                return $query->where('name', '!=', 'Applicant');
+            })->pluck('id');
+        } elseif (Auth::user()->hasAnyRole(['Regional Officer'])) {
+            $eapFocal = User::where(function ($query) {
+                $query->role(['Regional Officer', 'Provincial Officer', 'Community Service Officer']);
+            })->pluck('id');
+        } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
+            $eapFocal = User::where(function ($query) {
+                $query->role(['Provincial Officer', 'Community Service Officer']);
+            })->pluck('id');
+        }
+        $eapFocal = str_replace(['[', ']'], '', $eapFocal);
+
+        $student = User::where(function ($query) {
+            $query->role(['Applicant'])
+                ->ordoesntHave('roles');
+        })->pluck('id');
+        $student = str_replace(['[', ']'], '',  $student);
+
+        $noProfile = User::doesntHave('profile')->pluck('id');
+        $noProfile = str_replace(['[', ']'], '', $noProfile);
+
+        $noApplication = User::doesntHave('application')->pluck('id');
+        $noApplication = str_replace(['[', ']'], '', $noApplication);
+
         $query = "SELECT users.id, users.name, users.email, users.avatar, users.created_at, 
         profiles.firstName, profiles.middleName, profiles.lastName, profiles.psgCode,
         cityCode.name AS city_name, provinceCode.name AS province_name, regionCode.name AS region_name 
@@ -427,25 +454,16 @@ class UserController extends Controller
 
         WHERE users.deleted_at IS NULL";
 
-        $eapFocal = User::whereHas('roles', function ($query) {
-            return $query->where('name', '!=', 'Applicant');
-        })->pluck('id');
-        $eapFocal = str_replace(['[', ']'], '', $eapFocal);
-
-        $noProfile = User::doesntHave('profile')->pluck('id');
-        $noProfile = str_replace(['[', ']'], '', $noProfile);
-
-        $noApplication = User::doesntHave('application')->pluck('id');
-        $noApplication = str_replace(['[', ']'], '', $noApplication);
-
         if ($request->statusFilter == 'eapFocal') {
             $query = $query . " AND users.id IN ($eapFocal)";
         } elseif ($request->statusFilter == 'student') {
-            $query = $query . " AND users.id NOT IN ($eapFocal)";
+            // $query = $query . " AND users.id NOT IN ($eapFocal)";
+            $query = $query . " AND users.id IN ($student)";
         } elseif ($request->statusFilter == 'new') {
-            $query = $query . " AND users.id NOT IN ($eapFocal) AND users.id IN ($noProfile)";
+            $query = $query . " AND users.id IN ($student) AND users.id IN ($noProfile)";
         } elseif ($request->statusFilter == 'noApplication') {
-            $query = $query . " AND users.id NOT IN ($eapFocal) AND users.id IN ($noApplication)";
+            //$query = $query . " AND users.id NOT IN ($eapFocal) AND users.id IN ($noApplication)"; // shows user without profile and applications
+            $query = $query . " AND users.id IN ($student) AND users.id IN ($noApplication) AND users.id NOT IN ($noProfile)";
         }
 
         if (Auth::user()->hasAnyRole(['Admin', 'Executive Officer'])) {
@@ -458,8 +476,10 @@ class UserController extends Controller
         } elseif (Auth::user()->hasAnyRole(['Provincial Officer', 'Community Service Officer'])) {
             if ($request->statusFilter == 'eapFocal' || $request->statusFilter == 'student') {
                 $query = $query . " AND SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4);
-            } else {
+            } elseif ($request->statusFilter == 'noApplication') {
                 $query = $query . " AND (SUBSTRING(profiles.psgCode,1,4) = " . substr(Auth::user()->profile->psgCode, 0, 4) . " OR users.region IS NULL)";
+            } else {
+                $query = $query . " AND (users.region = " . Auth::user()->region . " OR users.region IS NULL)";
             }
         }
 

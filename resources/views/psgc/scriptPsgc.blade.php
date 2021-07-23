@@ -18,7 +18,7 @@
                         let provinceCode = $('#provinceCode').val()
 
                         if(provinceCode == ''){
-                            $('select[name="province"]').append('<option disabled selected> Select Province/District </option>');
+                            $('select[name="province"]').append('<option value="" disabled selected> Select Province/District </option>');
                         }
 
                         jQuery.each(data, function(key, value) {
@@ -54,7 +54,7 @@
                         jQuery('select[name="barangay"]').empty();
                         let cityCode = $('#cityCode').val()
                         if(cityCode == ''){
-                            $('select[name="city"]').append('<option disabled selected>Select City/Municipality/Sub-Municipality</option>');
+                            $('select[name="city"]').append('<option value="" disabled selected>Select City/Municipality/Sub-Municipality</option>');
                         }
                         jQuery.each(data, function(key, value) {
                             let isSelected = cityCode == value.code ? 'selected' : ''
@@ -87,7 +87,7 @@
                         jQuery('select[name="barangay"]').empty();
                         let brgyCode = $('#barangayCode').val()
                         if(brgyCode == ''){
-                            $('select[name="barangay"]').append('<option disabled selected>Select Barangay</option>');
+                            $('select[name="barangay"]').append('<option value="" disabled selected>Select Barangay</option>');
                         }
                         jQuery.each(data, function(key, value) {
                             let isSelected = brgyCode == value.code ? 'selected' : ''
