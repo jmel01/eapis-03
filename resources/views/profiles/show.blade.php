@@ -3,7 +3,34 @@
 @section('title', 'User Profile')
 
 @push('style')
+<style>
+    /* Hide all steps by default: */
+    .tab {
+        display: none;
+    }
 
+    /* Make circles that indicate the steps of the form: */
+    .step {
+        height: 10px;
+        width: 10px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none;
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+    }
+
+    /* Mark the active step: */
+    .step.active {
+        opacity: 1;
+    }
+
+    /* Mark the steps that are finished and valid: */
+    .step.finish {
+        background-color: #04AA6D;
+    }
+</style>
 @endpush
 
 @section('content')
@@ -316,7 +343,7 @@
 
     </div>
 </div>
-@include('profiles.modalProfile')
+@include('profiles.modalProfile2')
 @include('profiles.modalProfilePicture')
 @include('users.modalAuthUser')
 @endsection
@@ -332,38 +359,55 @@
             var url_id = $(this).attr('data-url');
             $('[name="id"]').val(id)
 
-            $.get(url_id, function(data) {
-                console.log(data)
-                $('[name="lastName"]').val(data.lastName)
-                $('[name="firstName"]').val(data.firstName)
-                $('[name="middleName"]').val(data.middleName)
-                $('[name="birthdate"]').val(data.birthdate)
-                $('[name="placeOfBirth"]').val(data.placeOfBirth)
-                $('[name="gender"]').val(data.gender)
-                $('[name="civilStatus"]').val(data.civilStatus)
-                $('[name="ethnoGroup"]').val(data.ethnoGroup)
-                $('[name="contactNumber"]').val(data.contactNumber)
-                $('[name="email"]').val(data.email)
-                $('[name="address"]').val(data.address)
-                $('[name="fatherName"]').val(data.fatherName)
-                $('[name="fatherAddress"]').val(data.fatherAddress)
-                $('[name="fatherOccupation"]').val(data.fatherOccupation)
-                $('[name="fatherOffice"]').val(data.fatherOffice)
-                $('[name="fatherEducation"]').val(data.fatherEducation)
-                $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
-                $('[name="fatherIncome"]').val(data.fatherIncome)
-                $('[name="motherName"]').val(data.motherName)
-                $('[name="motherAddress"]').val(data.motherAddress)
-                $('[name="motherOccupation"]').val(data.motherOccupation)
-                $('[name="motherOffice"]').val(data.motherOffice)
-                $('[name="motherEducation"]').val(data.motherEducation)
-                $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
-                $('[name="motherIncome"]').val(data.motherIncome)
-
+            $.ajax({
+                url: '/profile/update/show-modal',
+                type: 'GET',
+                data: {
+                    id: id
+                },
+            }).done(result => {
+                $('#modalProfile .modal-body').empty()
+                $('#modalProfile .modal-body').append(result)
                 $('#modalProfile').modal('show')
-                $('#region').trigger("change")
             })
-        })
+        });
+        // $('.btn-edit-profile').click(function() {
+        //     var id = $(this).attr('data-id');
+        //     var url_id = $(this).attr('data-url');
+        //     $('[name="id"]').val(id)
+
+        //     $.get(url_id, function(data) {
+        //         console.log(data)
+        //         $('[name="lastName"]').val(data.lastName)
+        //         $('[name="firstName"]').val(data.firstName)
+        //         $('[name="middleName"]').val(data.middleName)
+        //         $('[name="birthdate"]').val(data.birthdate)
+        //         $('[name="placeOfBirth"]').val(data.placeOfBirth)
+        //         $('[name="gender"]').val(data.gender)
+        //         $('[name="civilStatus"]').val(data.civilStatus)
+        //         $('[name="ethnoGroup"]').val(data.ethnoGroup)
+        //         $('[name="contactNumber"]').val(data.contactNumber)
+        //         $('[name="email"]').val(data.email)
+        //         $('[name="address"]').val(data.address)
+        //         $('[name="fatherName"]').val(data.fatherName)
+        //         $('[name="fatherAddress"]').val(data.fatherAddress)
+        //         $('[name="fatherOccupation"]').val(data.fatherOccupation)
+        //         $('[name="fatherOffice"]').val(data.fatherOffice)
+        //         $('[name="fatherEducation"]').val(data.fatherEducation)
+        //         $('[name="fatherEthnoGroup"]').val(data.fatherEthnoGroup)
+        //         $('[name="fatherIncome"]').val(data.fatherIncome)
+        //         $('[name="motherName"]').val(data.motherName)
+        //         $('[name="motherAddress"]').val(data.motherAddress)
+        //         $('[name="motherOccupation"]').val(data.motherOccupation)
+        //         $('[name="motherOffice"]').val(data.motherOffice)
+        //         $('[name="motherEducation"]').val(data.motherEducation)
+        //         $('[name="motherEthnoGroup"]').val(data.motherEthnoGroup)
+        //         $('[name="motherIncome"]').val(data.motherIncome)
+
+        //         $('#modalProfile').modal('show')
+        //         $('#region').trigger("change")
+        //     })
+        // })
 
         $('.btn-edit-user').click(function() {
             var url_id = $(this).attr('data-url');

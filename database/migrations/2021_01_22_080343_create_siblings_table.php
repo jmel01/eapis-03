@@ -18,7 +18,7 @@ class CreateSiblingsTable extends Migration
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('name');
-            $table->date('birthdate');
+            $table->date('birthdate')->nullable();
             $table->string('civilStatus');
             $table->string('scholarship')->nullable();
             $table->string('course_year_level')->nullable();
