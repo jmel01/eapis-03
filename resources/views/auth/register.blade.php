@@ -33,13 +33,30 @@
 
         <div class="card">
             <div class="card-body register-card-body">
-                <p class="login-box-msg">Register a new membership</p>
+                <p class="login-box-msg">Create Account Form</p>
 
                 <form method="POST" action="{{ route('register') }}">
                     @csrf
+                    @php $regions= \App\Models\Psgc::where('level','Reg')->get(); @endphp
+                    <div class="input-group mb-3">
+                        <select name="region" class="form-control @error('region') is-invalid @enderror" required autocomplete="region" autofocus>
+                            <option value="" disabled selected>Select Region</option>
+                            @foreach ($regions as $region)
+                            <option value="{{ $region->code }}" {{ old('region')==$region->code ? 'selected' : ''}}>{{ $region->name }}</option>
+                            @endforeach
+                        </select>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-map-marker-alt"></span>
+                            </div>
+                        </div>
+                        @error('region')
+                        <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                        @enderror
+                    </div>
 
                     <div class="input-group mb-3">
-                        <input type="text" placeholder="Username" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                        <input type="text" placeholder="Username" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
